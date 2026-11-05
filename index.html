@@ -365,6 +365,44 @@ footer strong {color:white}
   <button class="btn" onclick="showCatalog()">Explorar mais cursos</button>
 </section>
 
+<!-- PAINEL DO ADMINISTRADOR -->
+<section class="dashboard" id="adminDashboard">
+  <h1>Olá, Alcido! 👑</h1>
+  <p style="color:var(--muted)">
+    Bem-vindo ao painel de administração da Mussilipo Academy.
+  </p>
+
+  <div class="features" style="margin-top:25px">
+    <div class="feature">
+      <div class="emoji">📚</div>
+      <h3>Gerir cursos</h3>
+      <p>Criar, editar e publicar cursos.</p>
+      <button class="btn" onclick="alert('Vamos configurar esta função na próxima etapa.')">Gerir cursos</button>
+    </div>
+
+    <div class="feature">
+      <div class="emoji">👨‍🎓</div>
+      <h3>Alunos</h3>
+      <p>Consultar os alunos da plataforma.</p>
+      <button class="btn" onclick="alert('Vamos configurar esta função na próxima etapa.')">Ver alunos</button>
+    </div>
+
+    <div class="feature">
+      <div class="emoji">🎥</div>
+      <h3>Módulos e aulas</h3>
+      <p>Organizar e publicar conteúdos.</p>
+      <button class="btn" onclick="alert('Vamos configurar esta função na próxima etapa.')">Gerir aulas</button>
+    </div>
+
+    <div class="feature">
+      <div class="emoji">📝</div>
+      <h3>Matrículas</h3>
+      <p>Consultar e aprovar inscrições.</p>
+      <button class="btn" onclick="alert('Vamos configurar esta função na próxima etapa.')">Ver matrículas</button>
+    </div>
+  </div>
+</section>
+
 <footer>
   <strong>MUSSILIPO ACADEMY</strong>
   <p>Aprende. Desenvolve. Conquista.</p>
@@ -508,20 +546,50 @@ window.resetPassword = async function() {
   }
 };
 
+
 async function loadUser(user) {
+  // Consultar o papel do utilizador na base de dados
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('role, full_name')
+    .eq('id', user.id)
+    .single();
+
+  if (error || !profile) {
+    console.error('Erro ao verificar perfil:', error);
+    alert('Não foi possível verificar o teu perfil. Tenta novamente.');
+    return;
+  }
+
   currentUser = user;
+
+  // Esconder todos os painéis antes de abrir o correcto
   $('mainContent').classList.add('hidden');
-  $('dashboard').classList.add('show');
+  $('dashboard').classList.remove('show');
+  $('adminDashboard').classList.remove('show');
+
+  // Actualizar os dados da conta
+  const name = profile.full_name || user.user_metadata?.full_name || user.email.split('@')[0];
+
+  $('studentName').textContent = name;
+  $('studentEmail').textContent = user.email;
+
+  // Mostrar o painel correspondente ao papel
+  if (profile.role === 'admin') {
+    $('adminDashboard').classList.add('show');
+    $('adminDashboard').scrollIntoView({behavior:'smooth'});
+  } else {
+    $('dashboard').classList.add('show');
+    renderEnrollments();
+    $('dashboard').scrollIntoView({behavior:'smooth'});
+  }
+
+  // Actualizar os botões do cabeçalho
   $('loginBtn').classList.add('hidden');
   $('registerBtn').classList.add('hidden');
   $('logoutBtn').classList.remove('hidden');
-
-  $('studentName').textContent =
-    user.user_metadata?.full_name || user.email.split('@')[0];
-  $('studentEmail').textContent = user.email;
-
-  renderEnrollments();
 }
+
 
 function renderEnrollments() {
   const container = $('myCourses');
@@ -569,27 +637,36 @@ window.enroll = function(name,type) {
   alert('Inscrição adicionada à tua sessão! A gravação permanente das inscrições será configurada na próxima etapa.');
 };
 
+
 window.showCatalog = function() {
   $('dashboard').classList.remove('show');
+  $('adminDashboard').classList.remove('show');
   $('mainContent').classList.remove('hidden');
   $('cursos').scrollIntoView({behavior:'smooth'});
 };
 
 window.logout = async function() {
   const {error} = await supabase.auth.signOut();
+
   if(error) {
     alert(error.message);
     return;
   }
+
   currentUser = null;
   enrollments = [];
+
   $('dashboard').classList.remove('show');
+  $('adminDashboard').classList.remove('show');
   $('mainContent').classList.remove('hidden');
+
   $('loginBtn').classList.remove('hidden');
   $('registerBtn').classList.remove('hidden');
   $('logoutBtn').classList.add('hidden');
+
   window.scrollTo({top:0,behavior:'smooth'});
 };
+
 
 window.filterCourses = function(type,button) {
   document.querySelectorAll('.filter').forEach(b=>b.classList.remove('active'));
