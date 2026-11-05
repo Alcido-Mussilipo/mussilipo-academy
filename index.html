@@ -1,0 +1,618 @@
+
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10051f">
+<title>Mussilipo Academy | Aprende e Conquista</title>
+<meta name="description" content="Mussilipo Academy - Aprende online, desenvolve competências e constrói o teu futuro.">
+
+<style>
+:root {
+  --bg:#10051f;
+  --panel:#1c1030;
+  --panel2:#26163d;
+  --purple:#873cff;
+  --light:#b994ff;
+  --white:#fff;
+  --muted:#b9adc9;
+  --green:#20c997;
+}
+* {box-sizing:border-box;margin:0;padding:0}
+body {
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  line-height:1.6;
+}
+button,input {font:inherit}
+button {cursor:pointer}
+header {
+  position:sticky;top:0;z-index:20;
+  background:rgba(16,5,31,.96);
+  border-bottom:1px solid #38234f;
+  padding:15px 6%;
+  display:flex;align-items:center;
+  justify-content:space-between;gap:15px;
+}
+.logo {font-size:21px;font-weight:900;color:white}
+.logo span {color:var(--light)}
+nav {display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+nav a {color:#ddd;text-decoration:none;font-size:14px}
+nav a:hover {color:var(--light)}
+.btn {
+  background:var(--purple);color:white;
+  border:0;padding:11px 19px;
+  border-radius:9px;font-weight:bold;
+}
+.btn:hover {background:#a16bff}
+.btn-outline {
+  background:transparent;border:1px solid var(--light);
+  color:white;padding:10px 17px;border-radius:9px;
+}
+.hero {
+  padding:85px 7% 75px;
+  background:radial-gradient(ellipse at 75% 35%,#462079 0%,#24113e 35%,#10051f 75%);
+  text-align:center;
+}
+.hero small {color:#d1b4ff;font-weight:bold;letter-spacing:2px}
+.hero h1 {
+  font-size:clamp(35px,6vw,62px);
+  line-height:1.12;margin:20px auto;
+  max-width:850px;
+}
+.hero h1 span {color:#b58aff}
+.hero p {color:#d1c6df;max-width:650px;margin:0 auto 28px}
+.hero-actions {display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.stats {
+  display:flex;justify-content:center;gap:45px;
+  flex-wrap:wrap;margin-top:48px;
+}
+.stats strong {display:block;font-size:23px;color:#c5a3ff}
+.stats small {letter-spacing:0;color:var(--muted)}
+section {padding:65px 7%}
+.section-title {text-align:center;margin-bottom:35px}
+.section-title h2 {font-size:30px;margin-bottom:8px}
+.section-title p {color:var(--muted)}
+.filters {
+  display:flex;justify-content:center;
+  gap:10px;flex-wrap:wrap;margin-bottom:25px;
+}
+.filter {
+  background:var(--panel);border:1px solid #49305f;
+  color:white;padding:9px 17px;border-radius:30px;
+}
+.filter.active {background:var(--purple);border-color:var(--purple)}
+.courses {
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));
+  gap:22px;
+}
+.course {
+  background:var(--panel);border:1px solid #38234e;
+  border-radius:15px;overflow:hidden;
+  transition:.25s;
+}
+.course:hover {transform:translateY(-5px);border-color:var(--purple)}
+.course-cover {
+  height:145px;display:flex;align-items:center;
+  justify-content:center;font-size:52px;
+  background:linear-gradient(135deg,#46216e,#21103a);
+}
+.course-content {padding:19px}
+.course-content h3 {margin:10px 0}
+.course-content p {font-size:13px;color:var(--muted);min-height:42px}
+.tag {
+  display:inline-block;padding:4px 9px;
+  border-radius:20px;font-size:11px;
+  background:#392254;color:#d8c1ff;
+}
+.price {font-size:20px;font-weight:bold;margin:15px 0}
+.free {color:#41d6a1}
+.course-content button {width:100%}
+.features {
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
+.feature {
+  padding:25px;background:var(--panel);
+  border:1px solid #38234e;border-radius:14px;
+}
+.feature .emoji {font-size:30px}
+.feature h3 {margin:12px 0 5px}
+.feature p {color:var(--muted);font-size:14px}
+.cta {
+  text-align:center;background:linear-gradient(135deg,#54258c,#271242);
+  border-radius:18px;padding:45px 20px;
+}
+footer {
+  border-top:1px solid #38234e;
+  padding:30px 7%;text-align:center;
+  color:var(--muted);font-size:13px;
+}
+footer strong {color:white}
+.modal {
+  display:none;position:fixed;inset:0;z-index:100;
+  background:#000b;align-items:center;justify-content:center;
+  padding:15px;
+}
+.modal.show {display:flex}
+.modal-box {
+  background:#211334;border:1px solid #64418a;
+  border-radius:16px;padding:28px;
+  width:100%;max-width:420px;position:relative;
+}
+.modal-box h2 {margin-bottom:8px}
+.modal-box p {color:var(--muted);font-size:13px;margin-bottom:18px}
+.modal-box input {
+  display:block;width:100%;padding:13px;
+  margin:12px 0;background:#120a1e;
+  border:1px solid #50346c;border-radius:8px;
+  color:white;outline:none;
+}
+.modal-box input:focus {border-color:var(--purple)}
+.close {
+  position:absolute;right:18px;top:12px;
+  background:none;border:0;color:white;font-size:25px;
+}
+.modal-box .btn {width:100%;margin-top:8px}
+.switch {text-align:center;margin-top:16px;color:var(--muted)}
+.switch a {color:#c5a3ff;cursor:pointer}
+.message {font-size:13px;margin-top:12px;color:#61e0af}
+.message.error {color:#ff8585}
+.dashboard {display:none;padding:45px 7%;min-height:65vh}
+.dashboard.show {display:block}
+.dash-card {
+  background:var(--panel);padding:25px;
+  border-radius:15px;margin:20px 0;
+  border:1px solid #38234e;
+}
+.dash-card p {color:var(--muted)}
+.hidden {display:none!important}
+#mainContent.hidden {display:none}
+@media(max-width:650px) {
+  header {padding:13px 4%;flex-wrap:wrap}
+  nav {gap:12px}
+  nav a {font-size:12px}
+  .hero {padding:65px 5%}
+  section {padding:50px 5%}
+  .stats {gap:20px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">MUSSILIPO <span>ACADEMY</span></div>
+  <nav>
+    <a href="#inicio">Início</a>
+    <a href="#cursos">Cursos</a>
+    <a href="#vantagens">Vantagens</a>
+    <button class="btn-outline" id="loginBtn" onclick="openModal('login')">Entrar</button>
+    <button class="btn" id="registerBtn" onclick="openModal('register')">Criar conta</button>
+    <button class="btn hidden" id="logoutBtn" onclick="logout()">Sair</button>
+  </nav>
+</header>
+
+<div id="mainContent">
+
+<section class="hero" id="inicio">
+  <small>🎓 BEM-VINDO À MUSSILIPO ACADEMY</small>
+  <h1>Aprende hoje.<br><span>Conquista amanhã.</span></h1>
+  <p>
+    Desenvolve novas competências, aprende com cursos online
+    e prepara-te para novas oportunidades.
+    O teu futuro começa com conhecimento!
+  </p>
+  <div class="hero-actions">
+    <button class="btn" onclick="document.getElementById('cursos').scrollIntoView({behavior:'smooth'})">
+      Explorar cursos 🚀
+    </button>
+    <button class="btn-outline" onclick="openModal('register')">
+      Criar conta gratuita
+    </button>
+  </div>
+  <div class="stats">
+    <div><strong>Online</strong><small>Aprende onde estiveres</small></div>
+    <div><strong>24/7</strong><small>Acesso à aprendizagem</small></div>
+    <div><strong>MT</strong><small>Preços em Meticais</small></div>
+  </div>
+</section>
+
+<section id="cursos">
+  <div class="section-title">
+    <h2>Explora os nossos cursos 📚</h2>
+    <p>Escolhe o teu próximo passo rumo ao conhecimento.</p>
+  </div>
+
+  <div class="filters">
+    <button class="filter active" onclick="filterCourses('todos',this)">Todos</button>
+    <button class="filter" onclick="filterCourses('gratuito',this)">Gratuitos</button>
+    <button class="filter" onclick="filterCourses('pago',this)">Pagos</button>
+  </div>
+
+  <div class="courses" id="courseList">
+
+    <article class="course" data-type="gratuito">
+      <div class="course-cover">📱</div>
+      <div class="course-content">
+        <span class="tag">Marketing</span>
+        <h3>Marketing Digital</h3>
+        <p>Aprende os fundamentos para divulgar produtos e serviços online.</p>
+        <div class="price free">GRATUITO</div>
+        <button class="btn" onclick="enroll('Marketing Digital','gratuito')">Inscrever-me</button>
+      </div>
+    </article>
+
+    <article class="course" data-type="pago">
+      <div class="course-cover">🌏</div>
+      <div class="course-content">
+        <span class="tag">Importação</span>
+        <h3>Importação da China</h3>
+        <p>Conhece fornecedores, plataformas e processos de importação.</p>
+        <div class="price">A anunciar</div>
+        <button class="btn" onclick="enroll('Importação da China','pago')">Ver curso</button>
+      </div>
+    </article>
+
+    <article class="course" data-type="gratuito">
+      <div class="course-cover">💡</div>
+      <div class="course-content">
+        <span class="tag">Empreendedorismo</span>
+        <h3>Empreendedorismo</h3>
+        <p>Descobre como desenvolver ideias e criar oportunidades.</p>
+        <div class="price free">GRATUITO</div>
+        <button class="btn" onclick="enroll('Empreendedorismo','gratuito')">Inscrever-me</button>
+      </div>
+    </article>
+
+    <article class="course" data-type="pago">
+      <div class="course-cover">🤖</div>
+      <div class="course-content">
+        <span class="tag">Tecnologia</span>
+        <h3>Inteligência Artificial</h3>
+        <p>Descobre ferramentas de IA e aprende a utilizá-las.</p>
+        <div class="price">A anunciar</div>
+        <button class="btn" onclick="enroll('Inteligência Artificial','pago')">Ver curso</button>
+      </div>
+    </article>
+
+    <article class="course" data-type="gratuito">
+      <div class="course-cover">🛒</div>
+      <div class="course-content">
+        <span class="tag">Comércio</span>
+        <h3>Vendas Online</h3>
+        <p>Aprende técnicas para apresentar e vender produtos na internet.</p>
+        <div class="price free">GRATUITO</div>
+        <button class="btn" onclick="enroll('Vendas Online','gratuito')">Inscrever-me</button>
+      </div>
+    </article>
+
+    <article class="course" data-type="pago">
+      <div class="course-cover">📈</div>
+      <div class="course-content">
+        <span class="tag">Desenvolvimento</span>
+        <h3>Desenvolvimento Pessoal</h3>
+        <p>Trabalha competências pessoais e profissionais.</p>
+        <div class="price">A anunciar</div>
+        <button class="btn" onclick="enroll('Desenvolvimento Pessoal','pago')">Ver curso</button>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="vantagens">
+  <div class="section-title">
+    <h2>Por que aprender connosco?</h2>
+    <p>Conhecimento que abre portas.</p>
+  </div>
+  <div class="features">
+    <div class="feature">
+      <div class="emoji">📲</div>
+      <h3>Aprende online</h3>
+      <p>Estuda através do teu telemóvel ou computador.</p>
+    </div>
+    <div class="feature">
+      <div class="emoji">🎯</div>
+      <h3>Aprendizagem organizada</h3>
+      <p>Cursos estruturados por módulos e aulas.</p>
+    </div>
+    <div class="feature">
+      <div class="emoji">🔐</div>
+      <h3>Conta individual</h3>
+      <p>A tua área pessoal para acompanhar a aprendizagem.</p>
+    </div>
+    <div class="feature">
+      <div class="emoji">🌍</div>
+      <h3>Sem fronteiras</h3>
+      <p>Aprende a partir de qualquer lugar.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="cta">
+    <h2>O teu futuro merece investimento!</h2>
+    <p style="margin:12px 0 22px;color:#e0d2f2">
+      Cria a tua conta e começa a explorar a Mussilipo Academy.
+    </p>
+    <button class="btn" onclick="openModal('register')">Começar agora 🚀</button>
+  </div>
+</section>
+
+</div>
+
+<!-- PAINEL DO ALUNO -->
+<section class="dashboard" id="dashboard">
+  <h1>Olá, <span id="studentName">Aluno</span>! 👋</h1>
+  <p style="color:var(--muted)">Bem-vindo à tua área de aprendizagem.</p>
+
+  <div class="dash-card">
+    <h2>👤 Minha conta</h2>
+    <p id="studentEmail"></p>
+    <p style="margin-top:10px">Bem-vindo à comunidade Mussilipo Academy.</p>
+  </div>
+
+  <div class="dash-card">
+    <h2>📚 Minhas inscrições</h2>
+    <div id="myCourses" style="margin-top:15px">
+      Ainda não tens inscrições.
+    </div>
+  </div>
+
+  <button class="btn" onclick="showCatalog()">Explorar mais cursos</button>
+</section>
+
+<footer>
+  <strong>MUSSILIPO ACADEMY</strong>
+  <p>Aprende. Desenvolve. Conquista.</p>
+  <p style="margin-top:12px">© 2026 Mussilipo Investimento. Todos os direitos reservados.</p>
+</footer>
+
+<!-- MODAL DE AUTENTICAÇÃO -->
+<div class="modal" id="authModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal()">×</button>
+
+    <div id="authTitle">
+      <h2>Entrar na tua conta</h2>
+      <p>Acede à tua área de aprendizagem.</p>
+    </div>
+
+    <form id="authForm">
+      <input type="text" id="fullName" placeholder="O teu nome completo" class="hidden">
+      <input type="email" id="email" placeholder="O teu e-mail" required>
+      <input type="password" id="password" placeholder="Palavra-passe" minlength="8" required>
+      <button class="btn" type="submit" id="submitBtn">Entrar</button>
+    </form>
+
+    <div id="authMessage" class="message"></div>
+
+    <div class="switch" id="switchText">
+      Ainda não tens conta?
+      <a onclick="openModal('register')">Criar conta</a>
+    </div>
+    <div class="switch">
+      <a onclick="resetPassword()">Esqueci a palavra-passe</a>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from
+'https://esm.sh/@supabase/supabase-js@2';
+
+// CONFIGURAÇÃO DO TEU SUPABASE
+const SUPABASE_URL = 'https://hmfkqylquuzjoezixvbf.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_625CruX_1usvAZyThTlBrQ_akv3a4WM';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let authMode = 'login';
+let currentUser = null;
+let enrollments = [];
+
+const $ = id => document.getElementById(id);
+
+window.openModal = function(mode) {
+  authMode = mode;
+  $('authModal').classList.add('show');
+  $('authMessage').textContent = '';
+  $('authMessage').className = 'message';
+  $('fullName').classList.toggle('hidden',mode !== 'register');
+
+  if(mode === 'register') {
+    $('authTitle').innerHTML = '<h2>Criar conta 🎓</h2><p>Junta-te à Mussilipo Academy.</p>';
+    $('submitBtn').textContent = 'Criar minha conta';
+    $('switchText').innerHTML = 'Já tens conta? <a onclick="openModal(\'login\')">Entrar</a>';
+  } else {
+    $('authTitle').innerHTML = '<h2>Entrar na tua conta</h2><p>Acede à tua área de aprendizagem.</p>';
+    $('submitBtn').textContent = 'Entrar';
+    $('switchText').innerHTML = 'Ainda não tens conta? <a onclick="openModal(\'register\')">Criar conta</a>';
+  }
+};
+
+window.closeModal = function() {
+  $('authModal').classList.remove('show');
+};
+
+function showMessage(message,error=false) {
+  $('authMessage').textContent = message;
+  $('authMessage').className = error ? 'message error' : 'message';
+}
+
+$('authForm').addEventListener('submit',async e => {
+  e.preventDefault();
+  const email = $('email').value.trim();
+  const password = $('password').value;
+  const name = $('fullName').value.trim();
+
+  $('submitBtn').disabled = true;
+  $('submitBtn').textContent = 'A processar...';
+
+  try {
+    if(authMode === 'register') {
+      if(!name) throw new Error('Introduz o teu nome.');
+
+      const {data,error} = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {full_name:name},
+          emailRedirectTo:window.location.origin + window.location.pathname
+        }
+      });
+
+      if(error) throw error;
+
+      if(data.session) {
+        showMessage('Conta criada com sucesso!');
+        await loadUser(data.session.user);
+      } else {
+        showMessage('Conta criada! Confirma o teu e-mail através do link enviado para a tua caixa de entrada.');
+      }
+
+    } else {
+      const {data,error} = await supabase.auth.signInWithPassword({
+        email,password
+      });
+      if(error) throw error;
+      await loadUser(data.user);
+      closeModal();
+    }
+  } catch(error) {
+    showMessage(error.message || 'Ocorreu um erro.',true);
+  } finally {
+    $('submitBtn').disabled = false;
+    $('submitBtn').textContent = authMode === 'register' ? 'Criar minha conta' : 'Entrar';
+  }
+});
+
+window.resetPassword = async function() {
+  const email = $('email').value.trim();
+  if(!email) {
+    showMessage('Escreve primeiro o teu e-mail.',true);
+    return;
+  }
+
+  try {
+    const {error} = await supabase.auth.resetPasswordForEmail(email,{
+      redirectTo:window.location.origin + window.location.pathname
+    });
+    if(error) throw error;
+    showMessage('Verifica o teu e-mail para recuperar a palavra-passe.');
+  } catch(error) {
+    showMessage(error.message,true);
+  }
+};
+
+async function loadUser(user) {
+  currentUser = user;
+  $('mainContent').classList.add('hidden');
+  $('dashboard').classList.add('show');
+  $('loginBtn').classList.add('hidden');
+  $('registerBtn').classList.add('hidden');
+  $('logoutBtn').classList.remove('hidden');
+
+  $('studentName').textContent =
+    user.user_metadata?.full_name || user.email.split('@')[0];
+  $('studentEmail').textContent = user.email;
+
+  renderEnrollments();
+}
+
+function renderEnrollments() {
+  const container = $('myCourses');
+
+  if(!enrollments.length) {
+    container.textContent = 'Ainda não tens inscrições.';
+    return;
+  }
+
+  container.innerHTML = enrollments.map(c =>
+    `<div class="dash-card">
+      <strong>${escapeHTML(c.name)}</strong>
+      <p>${c.type === 'gratuito' ? 'Curso gratuito' : 'Curso pago - acesso pendente'}</p>
+    </div>`
+  ).join('');
+}
+
+function escapeHTML(str) {
+  return String(str).replace(/[&<>"']/g, char => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;',
+    '"':'&quot;',"'":'&#39;'
+  })[char]);
+}
+
+window.enroll = function(name,type) {
+  if(!currentUser) {
+    openModal('login');
+    showMessage('Entra na tua conta para continuar.');
+    return;
+  }
+
+  if(type === 'pago') {
+    alert('Este curso é pago. O sistema de pagamentos e confirmação de acesso será configurado na próxima etapa.');
+    return;
+  }
+
+  if(enrollments.some(c => c.name === name)) {
+    alert('Já estás inscrito neste curso.');
+    return;
+  }
+
+  enrollments.push({name,type});
+  renderEnrollments();
+  $('dashboard').scrollIntoView({behavior:'smooth'});
+  alert('Inscrição adicionada à tua sessão! A gravação permanente das inscrições será configurada na próxima etapa.');
+};
+
+window.showCatalog = function() {
+  $('dashboard').classList.remove('show');
+  $('mainContent').classList.remove('hidden');
+  $('cursos').scrollIntoView({behavior:'smooth'});
+};
+
+window.logout = async function() {
+  const {error} = await supabase.auth.signOut();
+  if(error) {
+    alert(error.message);
+    return;
+  }
+  currentUser = null;
+  enrollments = [];
+  $('dashboard').classList.remove('show');
+  $('mainContent').classList.remove('hidden');
+  $('loginBtn').classList.remove('hidden');
+  $('registerBtn').classList.remove('hidden');
+  $('logoutBtn').classList.add('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+window.filterCourses = function(type,button) {
+  document.querySelectorAll('.filter').forEach(b=>b.classList.remove('active'));
+  button.classList.add('active');
+
+  document.querySelectorAll('.course').forEach(course=>{
+    course.style.display =
+      type === 'todos' || course.dataset.type === type ? '' : 'none';
+  });
+};
+
+supabase.auth.onAuthStateChange((event,session)=>{
+  if(event === 'SIGNED_IN' && session?.user) {
+    loadUser(session.user);
+  }
+  if(event === 'SIGNED_OUT') {
+    currentUser = null;
+  }
+});
+
+const {data:{session}} = await supabase.auth.getSession();
+if(session?.user) await loadUser(session.user);
+
+</script>
+</body>
+</html>
