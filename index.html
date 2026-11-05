@@ -372,6 +372,52 @@ footer strong {color:white}
     Bem-vindo ao painel de administração da Mussilipo Academy.
   </p>
 
+<!-- FORMULÁRIO DE CRIAÇÃO DE CURSOS -->
+<div class="dash-card" style="margin-top:25px">
+  <h2>➕ Criar novo curso</h2>
+  <p style="color:var(--muted)">Preenche os dados para adicionar um curso à academia.</p>
+
+  <form id="courseForm" onsubmit="createCourse(event)">
+
+    <label for="courseTitle">Nome do curso</label>
+    <input id="courseTitle" type="text" placeholder="Ex.: Marketing Digital" required>
+
+    <label for="courseDescription">Descrição</label>
+    <textarea id="courseDescription" placeholder="Explica o que o aluno vai aprender..." rows="4"></textarea>
+
+    <label for="coursePrice">Preço em MT</label>
+    <input id="coursePrice" type="number" min="0" step="0.01" value="0">
+
+    <label for="courseType">Tipo de acesso</label>
+    <select id="courseType">
+      <option value="free">Gratuito</option>
+      <option value="paid">Pago</option>
+    </select>
+
+    <label for="courseImage">Imagem de capa</label>
+    <input id="courseImage" type="file" accept="image/*">
+
+    <label style="display:flex;align-items:center;gap:8px;margin:15px 0">
+      <input id="coursePublished" type="checkbox" style="width:auto">
+      Publicar curso imediatamente
+    </label>
+
+    <button class="btn" type="submit" id="saveCourseBtn">
+      Publicar / Guardar curso
+    </button>
+
+    <p id="courseMessage" style="margin-top:12px"></p>
+  </form>
+</div>
+
+<!-- LISTA DOS CURSOS CRIADOS -->
+<div class="dash-card" style="margin-top:20px">
+  <h2>📚 Cursos cadastrados</h2>
+  <div id="adminCourses">
+    A carregar cursos...
+  </div>
+</div>
+
   <div class="features" style="margin-top:25px">
     <div class="feature">
       <div class="emoji">📚</div>
@@ -577,6 +623,7 @@ async function loadUser(user) {
   // Mostrar o painel correspondente ao papel
   if (profile.role === 'admin') {
     $('adminDashboard').classList.add('show');
+  await loadAdminCourses();
     $('adminDashboard').scrollIntoView({behavior:'smooth'});
   } else {
     $('dashboard').classList.add('show');
@@ -676,6 +723,130 @@ window.filterCourses = function(type,button) {
     course.style.display =
       type === 'todos' || course.dataset.type === type ? '' : 'none';
   });
+};
+
+window.createCourse = async function(event) {
+  event.preventDefault();
+
+  const title = $('courseTitle').value.trim();
+  const description = $('courseDescription').value.trim();
+  const price = Number($('coursePrice').value);
+  const accessType = $('courseType').value;
+  const imageFile = $('courseImage').files[0];
+  const published = $('coursePublished').checked;
+  const message = $('courseMessage');
+  const saveButton = $('saveCourseBtn');
+
+  if (!title) {
+    message.textContent = 'Escreve o nome do curso.';
+    return;
+  }
+
+  if (accessType === 'paid' && price <= 0) {
+    message.textContent = 'Indica um preço válido para o curso pago.';
+    return;
+  }
+
+  saveButton.disabled = true;
+  message.textContent = 'A guardar o curso...';
+
+  try {
+    let thumbnail = null;
+
+    if (imageFile) {
+      const extension = imageFile.name.split('.').pop();
+      const fileName = `${crypto.randomUUID()}.${extension}`;
+      const filePath = fileName;
+
+      const { error: uploadError } = await supabase.storage
+        .from('course-thumbnails')
+        .upload(filePath, imageFile);
+
+      if (uploadError) throw uploadError;
+
+      const { data: imageData } = supabase.storage
+        .from('course-thumbnails')
+        .getPublicUrl(filePath);
+
+      thumbnail = imageData.publicUrl;
+    }
+
+    const slug = title
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+
+    const { error } = await supabase
+      .from('courses')
+      .insert({
+        title,
+        slug,
+        description,
+        price_mzn: accessType === 'paid' ? price : 0,
+        access_type: accessType === 'paid' ? 'paid' : 'free',
+        thumbnail,
+        is_published: published
+      });
+
+    if (error) throw error;
+
+  message.textContent = '✅ Curso guardado com sucesso!';
+$('courseForm').reset();
+await loadAdminCourses();
+
+  } catch (error) {
+    console.error('Erro ao criar curso:', error);
+    message.textContent = 'Erro: ' + error.message;
+  } finally {
+    saveButton.disabled = false;
+  }
+};
+
+window.loadAdminCourses = async function() {
+  const container = $('adminCourses');
+
+  container.textContent = 'A carregar cursos...';
+
+  const { data: courses, error } = await supabase
+    .from('courses')
+    .select('id, title, description, price_mzn, access_type, thumbnail, is_published')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    container.textContent = 'Erro ao carregar cursos: ' + error.message;
+    return;
+  }
+
+if (!courses || courses.length === 0) {
+    container.textContent = 'Ainda não existem cursos cadastrados.';
+    return;
+  }
+
+  container.innerHTML = courses.map(course => `
+    <div class="dash-card" style="margin-top:15px">
+      ${course.thumbnail ? `
+        <img src="${escapeHTML(course.thumbnail)}"
+             alt="Capa do curso"
+             style="width:100%;max-width:220px;border-radius:12px">
+      ` : ''}
+
+      <h3>${escapeHTML(course.title)}</h3>
+
+      <p>${escapeHTML(course.description || 'Sem descrição')}</p>
+
+      <p>
+        ${course.access_type === 'free'
+          ? 'Gratuito'
+          : Number(course.price_mzn).toLocaleString('pt-MZ') + ' MT'}
+      </p>
+
+      <p>
+        ${course.is_published ? '🟢 Publicado' : '🟡 Rascunho'}
+      </p>
+    </div>
+  `).join('');
 };
 
 supabase.auth.onAuthStateChange((event,session)=>{
