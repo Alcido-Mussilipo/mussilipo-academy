@@ -179,6 +179,19 @@ footer strong {color:white}
   .stats {gap:20px}
 }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://hmfkqylquuzjoezixvbf.supabase.co";
+const SUPABASE_KEY = "sb_publishable_625CruX_1usvAZyThTlBrQ_akv3a4WM";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
 </head>
 
 <body>
