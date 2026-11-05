@@ -233,73 +233,9 @@ footer strong {color:white}
   </div>
 
   <div class="courses" id="courseList">
-
-    <article class="course" data-type="gratuito">
-      <div class="course-cover">📱</div>
-      <div class="course-content">
-        <span class="tag">Marketing</span>
-        <h3>Marketing Digital</h3>
-        <p>Aprende os fundamentos para divulgar produtos e serviços online.</p>
-        <div class="price free">GRATUITO</div>
-        <button class="btn" onclick="enroll('Marketing Digital','gratuito')">Inscrever-me</button>
-      </div>
-    </article>
-
-    <article class="course" data-type="pago">
-      <div class="course-cover">🌏</div>
-      <div class="course-content">
-        <span class="tag">Importação</span>
-        <h3>Importação da China</h3>
-        <p>Conhece fornecedores, plataformas e processos de importação.</p>
-        <div class="price">A anunciar</div>
-        <button class="btn" onclick="enroll('Importação da China','pago')">Ver curso</button>
-      </div>
-    </article>
-
-    <article class="course" data-type="gratuito">
-      <div class="course-cover">💡</div>
-      <div class="course-content">
-        <span class="tag">Empreendedorismo</span>
-        <h3>Empreendedorismo</h3>
-        <p>Descobre como desenvolver ideias e criar oportunidades.</p>
-        <div class="price free">GRATUITO</div>
-        <button class="btn" onclick="enroll('Empreendedorismo','gratuito')">Inscrever-me</button>
-      </div>
-    </article>
-
-    <article class="course" data-type="pago">
-      <div class="course-cover">🤖</div>
-      <div class="course-content">
-        <span class="tag">Tecnologia</span>
-        <h3>Inteligência Artificial</h3>
-        <p>Descobre ferramentas de IA e aprende a utilizá-las.</p>
-        <div class="price">A anunciar</div>
-        <button class="btn" onclick="enroll('Inteligência Artificial','pago')">Ver curso</button>
-      </div>
-    </article>
-
-    <article class="course" data-type="gratuito">
-      <div class="course-cover">🛒</div>
-      <div class="course-content">
-        <span class="tag">Comércio</span>
-        <h3>Vendas Online</h3>
-        <p>Aprende técnicas para apresentar e vender produtos na internet.</p>
-        <div class="price free">GRATUITO</div>
-        <button class="btn" onclick="enroll('Vendas Online','gratuito')">Inscrever-me</button>
-      </div>
-    </article>
-
-    <article class="course" data-type="pago">
-      <div class="course-cover">📈</div>
-      <div class="course-content">
-        <span class="tag">Desenvolvimento</span>
-        <h3>Desenvolvimento Pessoal</h3>
-        <p>Trabalha competências pessoais e profissionais.</p>
-        <div class="price">A anunciar</div>
-        <button class="btn" onclick="enroll('Desenvolvimento Pessoal','pago')">Ver curso</button>
-      </div>
-    </article>
-
+  <p>A carregar cursos...</p>
+</div>
+  
   </div>
 </section>
 
@@ -715,13 +651,18 @@ window.logout = async function() {
 };
 
 
-window.filterCourses = function(type,button) {
-  document.querySelectorAll('.filter').forEach(b=>b.classList.remove('active'));
+window.filterCourses = function(type, button) {
+  document.querySelectorAll('.filter').forEach(b => {
+    b.classList.remove('active');
+  });
+
   button.classList.add('active');
 
-  document.querySelectorAll('.course').forEach(course=>{
+  document.querySelectorAll('#courseList .course').forEach(course => {
+    const courseType = course.dataset.type;
+
     course.style.display =
-      type === 'todos' || course.dataset.type === type ? '' : 'none';
+      type === 'todos' || courseType === type ? '' : 'none';
   });
 };
 
@@ -792,10 +733,10 @@ window.createCourse = async function(event) {
 
     if (error) throw error;
 
-  message.textContent = '✅ Curso guardado com sucesso!';
+ message.textContent = '✅ Curso guardado com sucesso!';
 $('courseForm').reset();
 await loadAdminCourses();
-
+await loadPublicCourses();
   } catch (error) {
     console.error('Erro ao criar curso:', error);
     message.textContent = 'Erro: ' + error.message;
@@ -803,7 +744,54 @@ await loadAdminCourses();
     saveButton.disabled = false;
   }
 };
+window.loadPublicCourses = async function() {
+  const container = $('courseList');
 
+  container.innerHTML = '<p>A carregar cursos...</p>';
+
+  const { data: courses, error } = await supabase
+    .from('courses')
+    .select('id, title, description, price_mzn, access_type, thumbnail')
+    .eq('is_published', true)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Erro ao carregar catálogo:', error);
+    container.innerHTML = '<p>Não foi possível carregar os cursos.</p>';
+    return;
+  }
+
+  if (!courses || courses.length === 0) {
+    container.innerHTML = '<p>Ainda não existem cursos publicados.</p>';
+    return;
+  }
+
+  container.innerHTML = courses.map(course => `
+    <article class="course" data-type="${course.access_type === 'free' ? 'gratuito' : 'pago'}">
+
+      ${course.thumbnail
+        ? `<img src="${escapeHTML(course.thumbnail)}" alt="${escapeHTML(course.title)}" class="course-cover">`
+        : '<div class="course-cover">📚</div>'}
+
+      <div class="course-content">
+        <h3>${escapeHTML(course.title)}</h3>
+
+        <p>${escapeHTML(course.description || 'Conhece este curso na Mussilipo Academy.')}</p>
+
+        <div class="price ${course.access_type === 'free' ? 'free' : ''}">
+          ${course.access_type === 'free'
+            ? 'GRATUITO'
+            : Number(course.price_mzn).toLocaleString('pt-MZ') + ' MT'}
+        </div>
+
+        <button class="btn"
+          onclick="enroll('${escapeHTML(course.title).replace(/'/g, '&#39;')}', '${course.access_type === 'free' ? 'gratuito' : 'pago'}')">
+          ${course.access_type === 'free' ? 'Inscrever-me' : 'Ver curso'}
+        </button>
+      </div>
+    </article>
+  `).join('');
+};
 window.loadAdminCourses = async function() {
   const container = $('adminCourses');
 
@@ -857,6 +845,8 @@ supabase.auth.onAuthStateChange((event,session)=>{
     currentUser = null;
   }
 });
+
+await loadPublicCourses();
 
 const {data:{session}} = await supabase.auth.getSession();
 if(session?.user) await loadUser(session.user);
