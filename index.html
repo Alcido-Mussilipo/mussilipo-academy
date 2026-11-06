@@ -418,6 +418,9 @@ footer strong {color:white}
     <label for="adminModuleSelect">Selecionar módulo</label>
 
     <select id="adminModuleSelect"
+            onchange="loadAdminLessons()"
+            required
+            style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
             required
             style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
       <option value="">Primeiro cria um módulo</option>
@@ -675,7 +678,6 @@ async function loadUser(user) {
     $('adminDashboard').classList.add('show');
   await loadAdminCourses();
     await loadAdminContentCourses();
-    $('adminModuleSelect').addEventListener('change', loadAdminLessons);
     $('adminDashboard').scrollIntoView({behavior:'smooth'});
 } else {
   $('dashboard').classList.add('show');
@@ -701,7 +703,6 @@ function renderEnrollments() {
   container.innerHTML = enrollments.map(c => `
     <div class="dash-card">
       <strong>${escapeHTML(c.course?.title || 'Curso')}</strong>
-
       <p>
         ${c.status === 'pending'
           ? '⏳ Inscrição enviada — aguarda confirmação.'
@@ -711,10 +712,8 @@ function renderEnrollments() {
           ? '❌ Inscrição rejeitada.'
           : escapeHTML(c.status)}
       </p>
-
       ${c.status === 'active'
-        ? `<button class="btn open-learning"
-             data-course-id="${c.course_id}">
+        ? `<button class="btn open-learning" data-course-id="${c.course_id}">
              Abrir curso 📚
            </button>`
         : ''}
@@ -726,19 +725,6 @@ function renderEnrollments() {
       window.openLearningCourse(button.dataset.courseId);
     });
   });
-}
-  container.innerHTML = enrollments.map(c => `
-    <div class="dash-card">
-      <strong>${escapeHTML(c.course?.title || 'Curso')}</strong>
-      <p>
-        ${c.status === 'pending'
-          ? '⏳ Inscrição enviada — aguarda confirmação.'
-          : c.status === 'approved'
-          ? '✅ Inscrição aprovada.'
-          : escapeHTML(c.status)}
-      </p>
-    </div>
-  `).join('');
 }
 async function loadEnrollments() {
   if (!currentUser) return;
