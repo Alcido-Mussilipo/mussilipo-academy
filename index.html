@@ -1008,7 +1008,7 @@ window.loadAdminEnrollments = async function() {
       <p>
         <strong>Estado:</strong>
         ${row.status === 'pending' ? '⏳ Pendente' :
-          row.status === 'approved' ? '✅ Aprovada' :
+          row.status === 'active' ? '✅ Aprovada' :
           escapeHTML(row.status || 'Desconhecido')}
       </p>
 
@@ -1038,7 +1038,7 @@ window.approveEnrollment = async function(enrollmentId) {
 
   const { error } = await supabase
     .from('enrollments')
-    .update({ status: 'approved' })
+    .update({ status: 'active' })
     .eq('id', enrollmentId);
 
   if (error) {
@@ -1049,14 +1049,6 @@ window.approveEnrollment = async function(enrollmentId) {
   alert('🎉 Inscrição aprovada com sucesso!');
   await window.loadAdminEnrollments();
 };
-supabase.auth.onAuthStateChange((event,session)=>{
-  if(event === 'SIGNED_IN' && session?.user) {
-    loadUser(session.user);
-  }
-  if(event === 'SIGNED_OUT') {
-    currentUser = null;
-  }
-});
 
 await loadPublicCourses();
 
