@@ -185,14 +185,15 @@ footer strong {color:white}
 
 <header>
   <div class="logo">MUSSILIPO <span>ACADEMY</span></div>
-  <nav>
-    <a href="#inicio">Início</a>
-    <a href="#cursos">Cursos</a>
-    <a href="#vantagens">Vantagens</a>
-    <button class="btn-outline" id="loginBtn" onclick="openModal('login')">Entrar</button>
-    <button class="btn" id="registerBtn" onclick="openModal('register')">Criar conta</button>
-    <button class="btn hidden" id="logoutBtn" onclick="logout()">Sair</button>
-  </nav>
+ <nav>
+  <a href="#inicio" onclick="showPublicSection('inicio'); return false;">Início</a>
+  <a href="#cursos" onclick="showPublicSection('cursos'); return false;">Cursos</a>
+  <a href="#vantagens" onclick="showPublicSection('vantagens'); return false;">Vantagens</a>
+
+  <button class="btn-outline" id="loginBtn" onclick="openModal('login')">Entrar</button>
+  <button class="btn" id="registerBtn" onclick="openModal('register')">Criar conta</button>
+  <button class="btn hidden" id="logoutBtn" onclick="logout()">Sair</button>
+</nav>
 </header>
 
 <div id="mainContent">
@@ -626,7 +627,21 @@ window.showCatalog = function() {
   $('mainContent').classList.remove('hidden');
   $('cursos').scrollIntoView({behavior:'smooth'});
 };
+window.showPublicSection = function(sectionId) {
+  $('dashboard').classList.remove('show');
+  $('adminDashboard').classList.remove('show');
 
+  $('mainContent').classList.remove('hidden');
+
+  const section = document.getElementById(sectionId);
+
+  if (section) {
+    section.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+};
 window.logout = async function() {
   const {error} = await supabase.auth.signOut();
 
