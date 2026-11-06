@@ -297,7 +297,28 @@ footer strong {color:white}
       Ainda não tens inscrições.
     </div>
   </div>
+<!-- ÁREA DE APRENDIZAGEM -->
+<div class="dash-card hidden" id="learningPanel">
 
+  <button class="btn-outline"
+          onclick="closeLearningCourse()">
+    ← Voltar às minhas inscrições
+  </button>
+
+  <h2 id="learningCourseTitle" style="margin-top:20px">
+    Curso
+  </h2>
+
+  <p id="learningCourseDescription"
+     style="color:var(--muted);margin-top:8px"></p>
+
+  <div id="learningProgress" style="margin-top:15px"></div>
+
+  <div id="learningModules" style="margin-top:20px">
+    A carregar aulas...
+  </div>
+
+</div>
   <button class="btn" onclick="showCatalog()">Explorar mais cursos</button>
 </section>
 
@@ -353,6 +374,87 @@ footer strong {color:white}
     A carregar cursos...
   </div>
 </div>
+  <!-- GESTÃO DE MÓDULOS E AULAS -->
+<div class="dash-card" id="adminContentPanel" style="margin-top:20px">
+
+  <h2>🎥 Gestão de módulos e aulas</h2>
+  <p style="color:var(--muted)">
+    Escolhe um curso, cria módulos e adiciona aulas.
+  </p>
+
+  <label for="adminContentCourse">Selecionar curso</label>
+  <select id="adminContentCourse"
+          onchange="loadAdminModules()"
+          style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+    <option value="">A carregar cursos...</option>
+  </select>
+
+  <hr style="border-color:#38234e;margin:22px 0">
+
+  <h3>➕ Criar módulo</h3>
+
+  <form id="moduleForm" onsubmit="createModule(event)">
+    <input id="moduleTitle"
+           type="text"
+           placeholder="Nome do módulo"
+           required
+           style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+
+    <button class="btn" type="submit">
+      Criar módulo
+    </button>
+  </form>
+
+  <div id="adminModules" style="margin-top:20px">
+    Seleciona um curso.
+  </div>
+
+  <hr style="border-color:#38234e;margin:22px 0">
+
+  <h3>➕ Adicionar aula</h3>
+
+  <form id="lessonForm" onsubmit="createLesson(event)">
+
+    <label for="adminModuleSelect">Selecionar módulo</label>
+
+    <select id="adminModuleSelect"
+            required
+            style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+      <option value="">Primeiro cria um módulo</option>
+    </select>
+
+    <input id="lessonTitle"
+           type="text"
+           placeholder="Título da aula"
+           required
+           style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+
+    <textarea id="lessonDescription"
+              placeholder="Descrição da aula"
+              rows="3"
+              style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px"></textarea>
+
+    <input id="lessonVideo"
+           type="url"
+           placeholder="Link do vídeo (YouTube, por exemplo)"
+           style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+
+    <textarea id="lessonContent"
+              placeholder="Conteúdo ou explicação da aula"
+              rows="5"
+              style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px"></textarea>
+
+    <button class="btn" type="submit">
+      Publicar aula
+    </button>
+
+  </form>
+
+  <div id="adminLessons" style="margin-top:20px">
+    Seleciona um módulo para consultar as aulas.
+  </div>
+
+</div>
 <!-- PAINEL DE APROVAÇÃO DE MATRÍCULAS -->
 <div class="dash-card" id="adminEnrollmentPanel" style="margin-top:20px">
   <h2>📝 Inscrições dos alunos</h2>
@@ -380,7 +482,9 @@ footer strong {color:white}
       <div class="emoji">🎥</div>
       <h3>Módulos e aulas</h3>
       <p>Organizar e publicar conteúdos.</p>
-      <button class="btn" onclick="alert('Vamos configurar esta função na próxima etapa.')">Gerir aulas</button>
+     <button class="btn" onclick="document.getElementById('adminContentPanel').scrollIntoView({behavior:'smooth'});">
+  Gerir aulas
+</button>
     </div>
 
     <div class="feature">
@@ -442,6 +546,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 let authMode = 'login';
 let currentUser = null;
 let enrollments = [];
+let currentLearningCourseId = null;
 
 const $ = id => document.getElementById(id);
 
@@ -569,6 +674,8 @@ async function loadUser(user) {
   if (profile.role === 'admin') {
     $('adminDashboard').classList.add('show');
   await loadAdminCourses();
+    await loadAdminContentCourses();
+    $('adminModuleSelect').addEventListener('change', loadAdminLessons);
     $('adminDashboard').scrollIntoView({behavior:'smooth'});
 } else {
   $('dashboard').classList.add('show');
@@ -589,6 +696,36 @@ function renderEnrollments() {
     container.textContent = 'Ainda não tens inscrições.';
     return;
   }
+
+  container.innerHTML = enrollments.map(c => `
+    <div class="dash-card">
+      <strong>${escapeHTML(c.course?.title || 'Curso')}</strong>
+
+      <p>
+        ${c.status === 'pending'
+          ? '⏳ Inscrição enviada — aguarda confirmação.'
+          : c.status === 'active'
+          ? '✅ Inscrição aprovada. Já podes aprender!'
+          : c.status === 'rejected'
+          ? '❌ Inscrição rejeitada.'
+          : escapeHTML(c.status)}
+      </p>
+
+      ${c.status === 'active'
+        ? `<button class="btn open-learning"
+             data-course-id="${c.course_id}">
+             Abrir curso 📚
+           </button>`
+        : ''}
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.open-learning').forEach(button => {
+    button.addEventListener('click', () => {
+      openLearningCourse(button.dataset.courseId);
+    });
+  });
+}
 
   container.innerHTML = enrollments.map(c => `
     <div class="dash-card">
@@ -651,6 +788,248 @@ async function loadEnrollments() {
 
   renderEnrollments();
 }
+  // ABRIR CURSO NA ÁREA DE APRENDIZAGEM
+window.openLearningCourse = async function(courseId) {
+  if (!currentUser) {
+    alert('Entra na tua conta para continuar.');
+    return;
+  }
+
+  currentLearningCourseId = courseId;
+
+  const panel = $('learningPanel');
+  const modulesContainer = $('learningModules');
+
+  panel.classList.remove('hidden');
+  $('learningCourseTitle').textContent = 'A carregar curso...';
+  $('learningCourseDescription').textContent = '';
+  $('learningProgress').textContent = '';
+  modulesContainer.textContent = 'A carregar aulas...';
+
+  panel.scrollIntoView({ behavior: 'smooth' });
+
+  // CONFIRMAR SE A MATRÍCULA ESTÁ ATIVA
+  const { data: enrollment, error: enrollmentError } = await supabase
+    .from('enrollments')
+    .select('id')
+    .eq('user_id', currentUser.id)
+    .eq('course_id', courseId)
+    .eq('status', 'active')
+    .maybeSingle();
+
+  if (enrollmentError) {
+    modulesContainer.textContent =
+      'Erro ao verificar a matrícula: ' + enrollmentError.message;
+    return;
+  }
+
+  if (!enrollment) {
+    modulesContainer.textContent =
+      '🔒 Ainda não tens autorização para aceder a este curso.';
+    return;
+  }
+
+  // CARREGAR INFORMAÇÕES DO CURSO
+  const { data: course, error: courseError } = await supabase
+    .from('courses')
+    .select('id, title, description')
+    .eq('id', courseId)
+    .single();
+
+  if (courseError || !course) {
+    modulesContainer.textContent = 'Não foi possível carregar o curso.';
+    return;
+  }
+
+  $('learningCourseTitle').textContent = course.title;
+  $('learningCourseDescription').textContent =
+    course.description || 'Bem-vindo à tua aprendizagem!';
+
+  // CARREGAR MÓDULOS
+  const { data: modules, error: modulesError } = await supabase
+    .from('modules')
+    .select('id, title, position')
+    .eq('course_id', courseId)
+    .order('position', { ascending: true });
+
+  if (modulesError) {
+    modulesContainer.textContent =
+      'Erro ao carregar módulos: ' + modulesError.message;
+    return;
+  }
+
+  if (!modules || modules.length === 0) {
+    modulesContainer.textContent =
+      'Este curso ainda não tem módulos publicados.';
+    return;
+  }
+
+  const moduleIds = modules.map(module => module.id);
+
+  // CARREGAR AULAS PUBLICADAS
+  const { data: lessons, error: lessonsError } = await supabase
+    .from('lessons')
+    .select('id, module_id, title, description, video_url, content, position')
+    .in('module_id', moduleIds)
+    .eq('is_published', true)
+    .order('position', { ascending: true });
+
+  if (lessonsError) {
+    modulesContainer.textContent =
+      'Erro ao carregar aulas: ' + lessonsError.message;
+    return;
+  }
+
+  const lessonIds = (lessons || []).map(lesson => lesson.id);
+
+  // CARREGAR PROGRESSO DO ALUNO
+  let progress = [];
+
+  if (lessonIds.length > 0) {
+    const { data: progressRows, error: progressError } = await supabase
+      .from('lesson_progress')
+      .select('lesson_id, completed')
+      .eq('user_id', currentUser.id)
+      .in('lesson_id', lessonIds);
+
+    if (progressError) {
+      modulesContainer.textContent =
+        'Erro ao carregar progresso: ' + progressError.message;
+      return;
+    }
+
+    progress = progressRows || [];
+  }
+
+  const completedIds = new Set(
+    progress
+      .filter(item => item.completed)
+      .map(item => item.lesson_id)
+  );
+
+  const totalLessons = lessonIds.length;
+  const completedCount = completedIds.size;
+  const percentage = totalLessons
+    ? Math.round((completedCount / totalLessons) * 100)
+    : 0;
+
+  $('learningProgress').innerHTML = `
+    <div style="display:flex;justify-content:space-between;gap:10px">
+      <strong>📊 O teu progresso</strong>
+      <strong>${percentage}%</strong>
+    </div>
+
+    <div style="height:10px;background:#38234e;border-radius:20px;margin-top:10px;overflow:hidden">
+      <div style="height:100%;width:${percentage}%;background:var(--green);border-radius:20px"></div>
+    </div>
+
+    <p style="margin-top:8px">
+      ${completedCount} de ${totalLessons} aulas concluídas.
+    </p>
+  `;
+
+  // MOSTRAR MÓDULOS E AULAS
+  modulesContainer.innerHTML = modules.map((module, index) => {
+    const moduleLessons = (lessons || []).filter(
+      lesson => lesson.module_id === module.id
+    );
+
+    return `
+      <div class="dash-card">
+        <h3>📚 Módulo ${index + 1}: ${escapeHTML(module.title)}</h3>
+
+        ${moduleLessons.length
+          ? moduleLessons.map((lesson, lessonIndex) => {
+              const completed = completedIds.has(lesson.id);
+
+              return `
+                <div style="border-top:1px solid #49305f;margin-top:15px;padding-top:15px">
+
+                  <h4>
+                    Aula ${lessonIndex + 1}: ${escapeHTML(lesson.title)}
+                  </h4>
+
+                  <p style="margin-top:8px">
+                    ${escapeHTML(lesson.description || '')}
+                  </p>
+
+                  ${lesson.video_url ? `
+                    <p style="margin-top:12px">
+                      🎥 <a href="${escapeHTML(lesson.video_url)}"
+                         target="_blank"
+                         rel="noopener noreferrer"
+                         style="color:#c5a3ff">
+                         Assistir ao vídeo da aula
+                      </a>
+                    </p>
+                  ` : ''}
+
+                  ${lesson.content ? `
+                    <div style="white-space:pre-wrap;margin-top:12px;color:#ddd">
+                      ${escapeHTML(lesson.content)}
+                    </div>
+                  ` : ''}
+
+                  <div style="margin-top:15px">
+                    ${completed
+                      ? '<span style="color:#41d6a1;font-weight:bold">✅ Aula concluída</span>'
+                      : `<button class="btn complete-lesson"
+                           data-lesson-id="${lesson.id}">
+                           Marcar como concluída
+                         </button>`
+                    }
+                  </div>
+
+                </div>
+              `;
+            }).join('')
+          : '<p style="margin-top:12px">Ainda não existem aulas publicadas neste módulo.</p>'
+        }
+
+      </div>
+    `;
+  }).join('');
+
+  // LIGAR OS BOTÕES DE CONCLUSÃO
+  modulesContainer.querySelectorAll('.complete-lesson').forEach(button => {
+    button.addEventListener('click', () => {
+      markLessonComplete(button.dataset.lessonId);
+    });
+  });
+};
+
+
+// MARCAR AULA COMO CONCLUÍDA
+window.markLessonComplete = async function(lessonId) {
+  if (!currentUser) return;
+
+  const { error } = await supabase
+    .from('lesson_progress')
+    .upsert({
+      user_id: currentUser.id,
+      lesson_id: lessonId,
+      completed: true,
+      completed_at: new Date().toISOString()
+    }, {
+      onConflict: 'user_id,lesson_id'
+    });
+
+  if (error) {
+    alert('Não foi possível guardar o progresso: ' + error.message);
+    return;
+  }
+
+  alert('🎉 Aula concluída! O teu progresso foi atualizado.');
+
+  await window.openLearningCourse(currentLearningCourseId);
+};
+
+
+// VOLTAR À LISTA DE INSCRIÇÕES
+window.closeLearningCourse = function() {
+  $('learningPanel').classList.add('hidden');
+  $('dashboard').scrollIntoView({ behavior: 'smooth' });
+};
 function escapeHTML(str) {
   return String(str).replace(/[&<>"']/g, char => ({
     '&': '&amp;',
@@ -951,6 +1330,234 @@ if (!courses || courses.length === 0) {
       </p>
     </div>
   `).join('');
+};
+  // CARREGAR CURSOS NO PAINEL DE GESTÃO DE CONTEÚDOS
+window.loadAdminContentCourses = async function() {
+  const select = $('adminContentCourse');
+
+  const { data: courses, error } = await supabase
+    .from('courses')
+    .select('id, title')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    select.innerHTML = '<option value="">Erro ao carregar cursos</option>';
+    console.error(error);
+    return;
+  }
+
+  if (!courses || courses.length === 0) {
+    select.innerHTML = '<option value="">Não existem cursos</option>';
+    return;
+  }
+
+  select.innerHTML = `
+    <option value="">Seleciona um curso</option>
+    ${courses.map(course => `
+      <option value="${course.id}">${escapeHTML(course.title)}</option>
+    `).join('')}
+  `;
+};
+
+
+// CRIAR MÓDULO
+window.createModule = async function(event) {
+  event.preventDefault();
+
+  const courseId = $('adminContentCourse').value;
+  const title = $('moduleTitle').value.trim();
+
+  if (!courseId) {
+    alert('Seleciona primeiro um curso.');
+    return;
+  }
+
+  if (!title) {
+    alert('Introduz o nome do módulo.');
+    return;
+  }
+
+  const { data: existing, error: readError } = await supabase
+    .from('modules')
+    .select('position')
+    .eq('course_id', courseId)
+    .order('position', { ascending: false });
+
+  if (readError) {
+    alert('Erro ao consultar módulos: ' + readError.message);
+    return;
+  }
+
+  const position = existing && existing.length
+    ? Number(existing[0].position) + 1
+    : 1;
+
+  const { error } = await supabase
+    .from('modules')
+    .insert({
+      course_id: courseId,
+      title,
+      position
+    });
+
+  if (error) {
+    alert('Não foi possível criar o módulo: ' + error.message);
+    return;
+  }
+
+  $('moduleForm').reset();
+
+  alert('✅ Módulo criado com sucesso!');
+  await loadAdminModules();
+};
+
+
+// CARREGAR MÓDULOS DO CURSO SELECIONADO
+window.loadAdminModules = async function() {
+  const courseId = $('adminContentCourse').value;
+  const container = $('adminModules');
+  const moduleSelect = $('adminModuleSelect');
+
+  if (!courseId) {
+    container.textContent = 'Seleciona um curso.';
+    moduleSelect.innerHTML = '<option value="">Primeiro seleciona um curso</option>';
+    $('adminLessons').textContent = 'Seleciona um módulo.';
+    return;
+  }
+
+  container.textContent = 'A carregar módulos...';
+
+  const { data: modules, error } = await supabase
+    .from('modules')
+    .select('id, title, position')
+    .eq('course_id', courseId)
+    .order('position', { ascending: true });
+
+  if (error) {
+    container.textContent = 'Erro ao carregar módulos: ' + error.message;
+    return;
+  }
+
+  if (!modules || modules.length === 0) {
+    container.textContent = 'Este curso ainda não tem módulos.';
+    moduleSelect.innerHTML = '<option value="">Cria primeiro um módulo</option>';
+    $('adminLessons').textContent = 'Ainda não existem aulas.';
+    return;
+  }
+
+  moduleSelect.innerHTML = modules.map(module => `
+    <option value="${module.id}">
+      ${escapeHTML(module.title)}
+    </option>
+  `).join('');
+
+  container.innerHTML = modules.map((module, index) => `
+    <div class="dash-card" style="margin-top:12px">
+      <strong>Módulo ${index + 1}: ${escapeHTML(module.title)}</strong>
+    </div>
+  `).join('');
+
+  await loadAdminLessons();
+};
+
+
+// CARREGAR AULAS DO MÓDULO SELECIONADO
+window.loadAdminLessons = async function() {
+  const moduleId = $('adminModuleSelect').value;
+  const container = $('adminLessons');
+
+  if (!moduleId) {
+    container.textContent = 'Seleciona um módulo.';
+    return;
+  }
+
+  container.textContent = 'A carregar aulas...';
+
+  const { data: lessons, error } = await supabase
+    .from('lessons')
+    .select('id, title, description, is_published, position')
+    .eq('module_id', moduleId)
+    .order('position', { ascending: true });
+
+  if (error) {
+    container.textContent = 'Erro ao carregar aulas: ' + error.message;
+    return;
+  }
+
+  if (!lessons || lessons.length === 0) {
+    container.textContent = 'Este módulo ainda não tem aulas.';
+    return;
+  }
+
+  container.innerHTML = `
+    <h3 style="margin-bottom:12px">📖 Aulas deste módulo</h3>
+    ${lessons.map((lesson, index) => `
+      <div class="dash-card" style="margin-top:12px">
+        <strong>${index + 1}. ${escapeHTML(lesson.title)}</strong>
+        <p>${escapeHTML(lesson.description || 'Sem descrição')}</p>
+        <p>${lesson.is_published ? '🟢 Publicada' : '🟡 Não publicada'}</p>
+      </div>
+    `).join('')}
+  `;
+};
+
+
+// CRIAR AULA
+window.createLesson = async function(event) {
+  event.preventDefault();
+
+  const moduleId = $('adminModuleSelect').value;
+  const title = $('lessonTitle').value.trim();
+  const description = $('lessonDescription').value.trim();
+  const videoUrl = $('lessonVideo').value.trim();
+  const content = $('lessonContent').value.trim();
+
+  if (!moduleId) {
+    alert('Seleciona primeiro um módulo.');
+    return;
+  }
+
+  if (!title) {
+    alert('Introduz o título da aula.');
+    return;
+  }
+
+  const { data: existing, error: readError } = await supabase
+    .from('lessons')
+    .select('position')
+    .eq('module_id', moduleId)
+    .order('position', { ascending: false });
+
+  if (readError) {
+    alert('Erro ao consultar aulas: ' + readError.message);
+    return;
+  }
+
+  const position = existing && existing.length
+    ? Number(existing[0].position) + 1
+    : 1;
+
+  const { error } = await supabase
+    .from('lessons')
+    .insert({
+      module_id: moduleId,
+      title,
+      description,
+      video_url: videoUrl || null,
+      content,
+      position,
+      is_published: true
+    });
+
+  if (error) {
+    alert('Não foi possível criar a aula: ' + error.message);
+    return;
+  }
+
+  $('lessonForm').reset();
+
+  alert('🎉 Aula publicada com sucesso!');
+  await loadAdminLessons();
 };
 // CARREGAR MATRÍCULAS PARA O ADMINISTRADOR
 window.loadAdminEnrollments = async function() {
