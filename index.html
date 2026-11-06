@@ -561,12 +561,11 @@ async function loadUser(user) {
     $('adminDashboard').classList.add('show');
   await loadAdminCourses();
     $('adminDashboard').scrollIntoView({behavior:'smooth'});
-  } else {
-    $('dashboard').classList.add('show');
-    renderEnrollments();
-    $('dashboard').scrollIntoView({behavior:'smooth'});
-  }
-
+} else {
+  $('dashboard').classList.add('show');
+  await loadEnrollments();
+  $('dashboard').scrollIntoView({behavior:'smooth'});
+}
   // Actualizar os botões do cabeçalho
   $('loginBtn').classList.add('hidden');
   $('registerBtn').classList.add('hidden');
@@ -577,19 +576,72 @@ async function loadUser(user) {
 function renderEnrollments() {
   const container = $('myCourses');
 
-  if(!enrollments.length) {
+  if (!enrollments.length) {
     container.textContent = 'Ainda não tens inscrições.';
     return;
   }
 
-  container.innerHTML = enrollments.map(c =>
-    `<div class="dash-card">
-      <strong>${escapeHTML(c.name)}</strong>
-      <p>${c.type === 'gratuito' ? 'Curso gratuito' : 'Curso pago - acesso pendente'}</p>
-    </div>`
-  ).join('');
+  container.innerHTML = enrollments.map(c => `
+    <div class="dash-card">
+      <strong>${escapeHTML(c.course?.title || 'Curso')}</strong>
+      <p>
+        ${c.status === 'pending'
+          ? '⏳ Inscrição enviada — aguarda confirmação.'
+          : c.status === 'approved'
+          ? '✅ Inscrição aprovada.'
+          : escapeHTML(c.status)}
+      </p>
+    </div>
+  `).join('');
 }
+async function loadEnrollments() {
+  if (!currentUser) return;
 
+  const container = $('myCourses');
+  container.textContent = 'A carregar inscrições...';
+
+  const { data: rows, error } = await supabase
+    .from('enrollments')
+    .select('id, course_id, status, created_at')
+    .eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Erro ao carregar inscrições:', error);
+    container.textContent = 'Não foi possível carregar as inscrições.';
+    return;
+  }
+
+  if (!rows || rows.length === 0) {
+    enrollments = [];
+    renderEnrollments();
+    return;
+  }
+
+  const courseIds = [...new Set(rows.map(row => row.course_id))];
+
+  const { data: courses, error: coursesError } = await supabase
+    .from('courses')
+    .select('id, title')
+    .in('id', courseIds);
+
+  if (coursesError) {
+    console.error('Erro ao carregar cursos inscritos:', coursesError);
+    container.textContent = 'Não foi possível carregar os cursos.';
+    return;
+  }
+
+  const courseMap = Object.fromEntries(
+    (courses || []).map(course => [course.id, course])
+  );
+
+  enrollments = rows.map(row => ({
+    ...row,
+    course: courseMap[row.course_id]
+  }));
+
+  renderEnrollments();
+}
 function escapeHTML(str) {
   return String(str).replace(/[&<>"']/g, char => ({
     '&':'&amp;','<':'&lt;','>':'&gt;',
@@ -597,29 +649,55 @@ function escapeHTML(str) {
   })[char]);
 }
 
-window.enroll = function(name,type) {
-  if(!currentUser) {
+window.enroll = async function(courseId, name, type) {
+  if (!currentUser) {
     openModal('login');
     showMessage('Entra na tua conta para continuar.');
     return;
   }
 
-  if(type === 'pago') {
-    alert('Este curso é pago. O sistema de pagamentos e confirmação de acesso será configurado na próxima etapa.');
+  if (type === 'pago') {
+    alert('Este curso é pago. O sistema de pagamentos será configurado na próxima etapa.');
     return;
   }
 
-  if(enrollments.some(c => c.name === name)) {
-    alert('Já estás inscrito neste curso.');
-    return;
-  }
+  try {
+    const { data: existing, error: checkError } = await supabase
+      .from('enrollments')
+      .select('id')
+      .eq('user_id', currentUser.id)
+      .eq('course_id', courseId)
+      .maybeSingle();
 
-  enrollments.push({name,type});
-  renderEnrollments();
-  $('dashboard').scrollIntoView({behavior:'smooth'});
-  alert('Inscrição adicionada à tua sessão! A gravação permanente das inscrições será configurada na próxima etapa.');
+    if (checkError) throw checkError;
+
+    if (existing) {
+      alert('Já tens uma inscrição neste curso.');
+      await loadEnrollments();
+      return;
+    }
+
+    const { error } = await supabase
+      .from('enrollments')
+      .insert({
+        user_id: currentUser.id,
+        course_id: courseId,
+        status: 'pending'
+      });
+
+    if (error) throw error;
+
+    await loadEnrollments();
+
+    $('dashboard').scrollIntoView({ behavior: 'smooth' });
+
+    alert('🎉 Inscrição enviada com sucesso! Aguarda a confirmação do administrador.');
+
+  } catch (error) {
+    console.error('Erro na inscrição:', error);
+    alert('Não foi possível realizar a inscrição: ' + error.message);
+  }
 };
-
 
 window.showCatalog = function() {
   $('dashboard').classList.remove('show');
@@ -798,14 +876,25 @@ window.loadPublicCourses = async function() {
             : Number(course.price_mzn).toLocaleString('pt-MZ') + ' MT'}
         </div>
 
-        <button class="btn"
-          onclick="enroll('${escapeHTML(course.title).replace(/'/g, '&#39;')}', '${course.access_type === 'free' ? 'gratuito' : 'pago'}')">
-          ${course.access_type === 'free' ? 'Inscrever-me' : 'Ver curso'}
-        </button>
+        <button class="btn enroll-button"
+  data-course-id="${course.id}"
+  data-course-name="${escapeHTML(course.title)}"
+  data-course-type="${course.access_type === 'free' ? 'gratuito' : 'pago'}">
+  ${course.access_type === 'free' ? 'Inscrever-me' : 'Ver curso'}
+</button>
       </div>
     </article>
   `).join('');
 };
+    container.querySelectorAll('.enroll-button').forEach(button => {
+    button.addEventListener('click', () => {
+      window.enroll(
+        button.dataset.courseId,
+        button.dataset.courseName,
+        button.dataset.courseType
+      );
+    });
+  });
 window.loadAdminCourses = async function() {
   const container = $('adminCourses');
 
