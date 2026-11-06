@@ -689,6 +689,7 @@ async function loadUser(user) {
 }
 
 
+// MOSTRAR INSCRIÇÕES DO ALUNO
 function renderEnrollments() {
   const container = $('myCourses');
 
@@ -722,11 +723,10 @@ function renderEnrollments() {
 
   container.querySelectorAll('.open-learning').forEach(button => {
     button.addEventListener('click', () => {
-      openLearningCourse(button.dataset.courseId);
+      window.openLearningCourse(button.dataset.courseId);
     });
   });
 }
-
   container.innerHTML = enrollments.map(c => `
     <div class="dash-card">
       <strong>${escapeHTML(c.course?.title || 'Curso')}</strong>
