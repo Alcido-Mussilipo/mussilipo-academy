@@ -353,7 +353,14 @@ footer strong {color:white}
     A carregar cursos...
   </div>
 </div>
-
+<!-- PAINEL DE APROVAÇÃO DE MATRÍCULAS -->
+<div class="dash-card" id="adminEnrollmentPanel" style="margin-top:20px">
+  <h2>📝 Inscrições dos alunos</h2>
+  <p style="color:var(--muted)">Consulta as inscrições e aprova os alunos.</p>
+  <div id="adminEnrollments">
+    Clica em "Ver matrículas" para carregar as inscrições.
+  </div>
+</div>
   <div class="features" style="margin-top:25px">
     <div class="feature">
       <div class="emoji">📚</div>
@@ -380,7 +387,9 @@ footer strong {color:white}
       <div class="emoji">📝</div>
       <h3>Matrículas</h3>
       <p>Consultar e aprovar inscrições.</p>
-      <button class="btn" onclick="alert('Vamos configurar esta função na próxima etapa.')">Ver matrículas</button>
+      <button class="btn" onclick="loadAdminEnrollments(); document.getElementById('adminEnrollmentPanel').scrollIntoView({behavior:'smooth'});">
+  Ver matrículas
+</button>
     </div>
   </div>
 </section>
@@ -943,7 +952,103 @@ if (!courses || courses.length === 0) {
     </div>
   `).join('');
 };
+// CARREGAR MATRÍCULAS PARA O ADMINISTRADOR
+window.loadAdminEnrollments = async function() {
+  const container = $('adminEnrollments');
+  container.textContent = 'A carregar inscrições...';
 
+  const { data: rows, error } = await supabase
+    .from('enrollments')
+    .select('id, user_id, course_id, status, created_at')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(error);
+    container.textContent = 'Erro ao carregar inscrições: ' + error.message;
+    return;
+  }
+
+  if (!rows || rows.length === 0) {
+    container.textContent = 'Ainda não existem inscrições.';
+    return;
+  }
+
+  const userIds = [...new Set(rows.map(row => row.user_id))];
+  const courseIds = [...new Set(rows.map(row => row.course_id))];
+
+  const [profilesResult, coursesResult] = await Promise.all([
+    supabase.from('profiles').select('id, full_name').in('id', userIds),
+    supabase.from('courses').select('id, title').in('id', courseIds)
+  ]);
+
+  if (profilesResult.error || coursesResult.error) {
+    const error = profilesResult.error || coursesResult.error;
+    console.error(error);
+    container.textContent = 'Erro ao consultar alunos ou cursos: ' + error.message;
+    return;
+  }
+
+  const profileMap = Object.fromEntries(
+    (profilesResult.data || []).map(p => [p.id, p])
+  );
+
+  const courseMap = Object.fromEntries(
+    (coursesResult.data || []).map(c => [c.id, c])
+  );
+
+  container.innerHTML = rows.map(row => `
+    <div class="dash-card" style="margin-top:15px">
+      <h3>${escapeHTML(profileMap[row.user_id]?.full_name || 'Aluno')}</h3>
+
+      <p>
+        <strong>Curso:</strong>
+        ${escapeHTML(courseMap[row.course_id]?.title || 'Curso indisponível')}
+      </p>
+
+      <p>
+        <strong>Estado:</strong>
+        ${row.status === 'pending' ? '⏳ Pendente' :
+          row.status === 'approved' ? '✅ Aprovada' :
+          escapeHTML(row.status || 'Desconhecido')}
+      </p>
+
+      <p>
+        <strong>Data:</strong>
+        ${row.created_at ? new Date(row.created_at).toLocaleString('pt-MZ') : 'Não disponível'}
+      </p>
+
+      ${row.status === 'pending'
+        ? `<button class="btn approve-enrollment" data-enrollment-id="${row.id}">
+             Aprovar inscrição
+           </button>`
+        : ''}
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.approve-enrollment').forEach(button => {
+    button.addEventListener('click', () => {
+      approveEnrollment(button.dataset.enrollmentId);
+    });
+  });
+};
+
+// APROVAR INSCRIÇÃO
+window.approveEnrollment = async function(enrollmentId) {
+  if (!confirm('Confirmas a aprovação desta inscrição?')) return;
+
+  const { error } = await supabase
+    .from('enrollments')
+    .update({ status: 'approved' })
+    .eq('id', enrollmentId);
+
+  if (error) {
+    alert('Não foi possível aprovar: ' + error.message);
+    return;
+  }
+
+  alert('🎉 Inscrição aprovada com sucesso!');
+  await window.loadAdminEnrollments();
+};
 supabase.auth.onAuthStateChange((event,session)=>{
   if(event === 'SIGNED_IN' && session?.user) {
     loadUser(session.user);
