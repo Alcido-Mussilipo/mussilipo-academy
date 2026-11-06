@@ -644,8 +644,11 @@ async function loadEnrollments() {
 }
 function escapeHTML(str) {
   return String(str).replace(/[&<>"']/g, char => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;',
-    '"':'&quot;',"'":'&#39;'
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
   })[char]);
 }
 
@@ -884,9 +887,9 @@ window.loadPublicCourses = async function() {
 </button>
       </div>
     </article>
-  `).join('');
-};
-    container.querySelectorAll('.enroll-button').forEach(button => {
+    `).join('');
+
+  container.querySelectorAll('.enroll-button').forEach(button => {
     button.addEventListener('click', () => {
       window.enroll(
         button.dataset.courseId,
@@ -895,6 +898,7 @@ window.loadPublicCourses = async function() {
       );
     });
   });
+};
 window.loadAdminCourses = async function() {
   const container = $('adminCourses');
 
