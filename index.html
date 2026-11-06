@@ -327,7 +327,35 @@ footer strong {color:white}
   <p style="color:var(--muted)">
     Bem-vindo ao painel de administração da Mussilipo Academy.
   </p>
+<!-- RESUMO E CONSULTA DE ALUNOS -->
+<div class="dash-card" style="margin-top:25px">
+  <h2>📊 Visão geral da academia</h2>
 
+  <div id="adminOverview"
+       style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:18px">
+    <div class="dash-card">A carregar estatísticas...</div>
+  </div>
+</div>
+
+<div class="dash-card" style="margin-top:20px">
+  <h2>👨‍🎓 Gestão e acompanhamento dos alunos</h2>
+
+  <p style="color:var(--muted)">
+    Pesquisa um aluno para consultar as inscrições e o progresso das aulas.
+  </p>
+
+  <input
+    id="adminStudentSearch"
+    type="search"
+    placeholder="🔎 Pesquisar pelo nome ou código do aluno..."
+    oninput="filterAdminStudents()"
+    style="width:100%;padding:13px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px"
+  >
+
+  <div id="adminStudents">
+    A carregar alunos...
+  </div>
+</div>
 <!-- FORMULÁRIO DE CRIAÇÃO DE CURSOS -->
 <div class="dash-card" style="margin-top:25px">
   <h2>➕ Criar novo curso</h2>
@@ -670,11 +698,14 @@ async function loadUser(user) {
   $('studentEmail').textContent = user.email;
 
   // Mostrar o painel correspondente ao papel
-  if (profile.role === 'admin') {
-    $('adminDashboard').classList.add('show');
+ if (profile.role === 'admin') {
+  $('adminDashboard').classList.add('show');
+
   await loadAdminCourses();
-    await loadAdminContentCourses();
-    $('adminDashboard').scrollIntoView({behavior:'smooth'});
+  await loadAdminContentCourses();
+  await loadAdminOverview();
+
+  $('adminDashboard').scrollIntoView({behavior:'smooth'});
 } else {
   $('dashboard').classList.add('show');
   await loadEnrollments();
@@ -1705,7 +1736,301 @@ window.approveEnrollment = async function(enrollmentId) {
   alert('🎉 Inscrição aprovada com sucesso!');
   await window.loadAdminEnrollments();
 };
+// ==========================================
+// GESTÃO E ACOMPANHAMENTO DOS ALUNOS
+// ==========================================
 
+window.adminStudentsCache = [];
+
+window.loadAdminOverview = async function() {
+  const overview = document.getElementById('adminOverview');
+  const studentsBox = document.getElementById('adminStudents');
+
+  if (!overview || !studentsBox) return;
+
+  overview.innerHTML = 'A carregar estatísticas...';
+  studentsBox.innerHTML = 'A carregar alunos...';
+
+  try {
+    const [
+      profilesResult,
+      enrollmentsResult,
+      coursesResult,
+      modulesResult,
+      lessonsResult,
+      progressResult
+    ] = await Promise.all([
+      supabase.from('profiles')
+        .select('id, full_name, role')
+        .eq('role', 'student'),
+
+      supabase.from('enrollments')
+        .select('id, user_id, course_id, status'),
+
+      supabase.from('courses')
+        .select('id, title'),
+
+      supabase.from('modules')
+        .select('id, course_id'),
+
+      supabase.from('lessons')
+        .select('id, module_id, is_published')
+        .eq('is_published', true),
+
+      supabase.from('lesson_progress')
+        .select('user_id, lesson_id, completed')
+        .eq('completed', true)
+    ]);
+
+    const results = [
+      profilesResult,
+      enrollmentsResult,
+      coursesResult,
+      modulesResult,
+      lessonsResult,
+      progressResult
+    ];
+
+    const failed = results.find(result => result.error);
+
+    if (failed) {
+      throw new Error(failed.error.message);
+    }
+
+    const students = profilesResult.data || [];
+    const enrollments = enrollmentsResult.data || [];
+    const courses = coursesResult.data || [];
+    const modules = modulesResult.data || [];
+    const lessons = lessonsResult.data || [];
+    const progress = progressResult.data || [];
+
+    const pending = enrollments.filter(e => e.status === 'pending').length;
+    const active = enrollments.filter(e => e.status === 'active').length;
+
+    overview.innerHTML = `
+      <div class="dash-card">
+        <h3>👨‍🎓 Alunos</h3>
+        <p style="font-size:28px;font-weight:bold;color:#c5a3ff">
+          ${students.length}
+        </p>
+      </div>
+
+      <div class="dash-card">
+        <h3>📚 Cursos</h3>
+        <p style="font-size:28px;font-weight:bold;color:#c5a3ff">
+          ${courses.length}
+        </p>
+      </div>
+
+      <div class="dash-card">
+        <h3>⏳ Pendentes</h3>
+        <p style="font-size:28px;font-weight:bold;color:#fbbf24">
+          ${pending}
+        </p>
+      </div>
+
+      <div class="dash-card">
+        <h3>✅ Inscrições ativas</h3>
+        <p style="font-size:28px;font-weight:bold;color:#4ade80">
+          ${active}
+        </p>
+      </div>
+    `;
+
+    const courseMap = new Map(
+      courses.map(course => [course.id, course])
+    );
+
+    const moduleCourseMap = new Map(
+      modules.map(module => [module.id, module.course_id])
+    );
+
+    const lessonsByCourse = new Map();
+
+    lessons.forEach(lesson => {
+      const courseId = moduleCourseMap.get(lesson.module_id);
+
+      if (!courseId) return;
+
+      if (!lessonsByCourse.has(courseId)) {
+        lessonsByCourse.set(courseId, []);
+      }
+
+      lessonsByCourse.get(courseId).push(lesson.id);
+    });
+
+    window.adminStudentsCache = students.map(student => {
+      const studentEnrollments = enrollments.filter(
+        enrollment => enrollment.user_id === student.id
+      );
+
+      const studentCourses = studentEnrollments.map(enrollment => {
+        const course = courseMap.get(enrollment.course_id);
+        const courseLessons = lessonsByCourse.get(enrollment.course_id) || [];
+
+        const completedLessons = progress.filter(item =>
+          item.user_id === student.id &&
+          courseLessons.includes(item.lesson_id)
+        ).length;
+
+        const totalLessons = courseLessons.length;
+
+        const percentage = totalLessons > 0
+          ? Math.round((completedLessons / totalLessons) * 100)
+          : 0;
+
+        return {
+          title: course ? course.title : 'Curso não encontrado',
+          status: enrollment.status,
+          completed: completedLessons,
+          total: totalLessons,
+          percentage
+        };
+      });
+
+      return {
+        id: student.id,
+        name: student.full_name || 'Aluno sem nome',
+        courses: studentCourses
+      };
+    });
+
+    window.filterAdminStudents();
+
+  } catch (error) {
+    console.error('Erro ao carregar painel dos alunos:', error);
+
+    overview.innerHTML = `
+      <p style="color:#f87171">
+        Não foi possível carregar as estatísticas.
+      </p>
+    `;
+
+    studentsBox.innerHTML = `
+      <p style="color:#f87171">
+        Erro ao consultar alunos: ${escapeHTML(error.message)}
+      </p>
+    `;
+  }
+};
+
+
+// ==========================================
+// PESQUISAR E MOSTRAR ALUNOS
+// ==========================================
+
+window.filterAdminStudents = function() {
+  const searchInput = document.getElementById('adminStudentSearch');
+  const container = document.getElementById('adminStudents');
+
+  if (!container) return;
+
+  const search = (searchInput?.value || '').trim().toLowerCase();
+
+  const students = window.adminStudentsCache || [];
+
+  const filtered = students.filter(student =>
+    student.name.toLowerCase().includes(search) ||
+    student.id.toLowerCase().includes(search)
+  );
+
+  if (!filtered.length) {
+    container.innerHTML = `
+      <p style="color:var(--muted);padding:15px 0">
+        Nenhum aluno encontrado.
+      </p>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(student => {
+    const coursesHTML = student.courses.length
+      ? student.courses.map(course => {
+          const statusLabel = {
+            active: 'Ativa',
+            pending: 'Pendente',
+            rejected: 'Rejeitada'
+          }[course.status] || course.status;
+
+          const statusColor = {
+            active: '#4ade80',
+            pending: '#fbbf24',
+            rejected: '#f87171'
+          }[course.status] || '#c5a3ff';
+
+          return `
+            <div style="
+              background:#120a1e;
+              border:1px solid #50346c;
+              border-radius:10px;
+              padding:13px;
+              margin-top:10px
+            ">
+              <strong>${escapeHTML(course.title)}</strong>
+
+              <p style="margin:8px 0;color:${statusColor}">
+                Inscrição: ${escapeHTML(statusLabel)}
+              </p>
+
+              ${
+                course.total > 0
+                ? `
+                  <p style="font-size:13px;color:var(--muted)">
+                    Aulas concluídas: ${course.completed}/${course.total}
+                  </p>
+
+                  <div style="
+                    width:100%;
+                    height:9px;
+                    background:#38264b;
+                    border-radius:20px;
+                    overflow:hidden;
+                    margin-top:8px
+                  ">
+                    <div style="
+                      width:${course.percentage}%;
+                      height:100%;
+                      background:#a855f7;
+                      border-radius:20px
+                    "></div>
+                  </div>
+
+                  <p style="margin-top:7px;color:#c5a3ff;font-weight:bold">
+                    ${course.percentage}% concluído
+                  </p>
+                `
+                : `
+                  <p style="color:var(--muted);font-size:13px">
+                    Ainda não existem aulas publicadas neste curso.
+                  </p>
+                `
+              }
+            </div>
+          `;
+        }).join('')
+      : `
+        <p style="color:var(--muted);margin-top:10px">
+          Este aluno ainda não tem inscrições.
+        </p>
+      `;
+
+    return `
+      <div class="dash-card" style="margin-top:15px">
+        <h3>👤 ${escapeHTML(student.name)}</h3>
+
+        <p style="font-size:12px;color:var(--muted);word-break:break-all">
+          Código: ${escapeHTML(student.id)}
+        </p>
+
+        <h4 style="margin-top:15px">
+          📚 Cursos e progresso
+        </h4>
+
+        ${coursesHTML}
+      </div>
+    `;
+  }).join('');
+};
 await loadPublicCourses();
 
 const {data:{session}} = await supabase.auth.getSession();
