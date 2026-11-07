@@ -471,6 +471,46 @@ footer strong {color:white}
               rows="5"
               style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px"></textarea>
 
+<!-- BIBLIOTECA DE MATERIAIS -->
+<div class="dash-card" style="margin-top:20px">
+  <h2>📂 Materiais de estudo</h2>
+  <p style="color:var(--muted)">
+    Carrega documentos e ficheiros para uma aula específica.
+  </p>
+
+  <label for="materialLessonSelect">Seleccionar aula</label>
+  <select id="materialLessonSelect"
+    style="width:100%;padding:12px;margin:10px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+    <option value="">A carregar aulas...</option>
+  </select>
+
+  <label for="materialTitle">Nome do material</label>
+  <input id="materialTitle" type="text"
+    placeholder="Ex.: Manual da primeira aula"
+    style="width:100%;padding:12px;margin:10px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+
+  <label for="materialFile">Escolher ficheiro</label>
+  <input id="materialFile" type="file"
+    accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.jpeg,.png,.webp"
+    style="width:100%;padding:12px;margin:10px 0">
+
+  <p style="font-size:12px;color:var(--muted)">
+    Formatos: PDF, Word, PowerPoint, Excel e imagens. Máximo: 50 MB.
+  </p>
+
+  <button type="button" onclick="uploadLessonMaterial()">
+    📤 Carregar material
+  </button>
+
+  <button type="button" onclick="loadMaterialLessons()"
+    style="margin-left:8px">
+    🔄 Actualizar aulas
+  </button>
+
+  <div id="materialUploadMessage"
+    style="margin-top:12px"></div>
+</div>
+
     <button class="btn" type="submit">
       Publicar aula
     </button>
@@ -704,7 +744,8 @@ async function loadUser(user) {
   await loadAdminCourses();
   await loadAdminContentCourses();
   await loadAdminOverview();
-
+  await loadMaterialLessons();
+   
   $('adminDashboard').scrollIntoView({behavior:'smooth'});
 } else {
   $('dashboard').classList.add('show');
@@ -2031,6 +2072,151 @@ window.filterAdminStudents = function() {
     `;
   }).join('');
 };
+
+// ==========================================
+// BIBLIOTECA DE MATERIAIS DAS AULAS
+// ==========================================
+
+window.loadMaterialLessons = async function() {
+  const select = document.getElementById('materialLessonSelect');
+  if (!select) return;
+
+  select.innerHTML = '<option value="">A carregar...</option>';
+
+  try {
+    const { data, error } = await supabase
+      .from('lessons')
+      .select(`
+        id,
+        title,
+        modules (
+          title,
+          courses (title)
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (!data || !data.length) {
+      select.innerHTML = '<option value="">Nenhuma aula encontrada</option>';
+      return;
+    }
+
+    select.innerHTML =
+      '<option value="">Selecciona uma aula</option>' +
+      data.map(lesson => {
+        const course = lesson.modules?.courses?.title || 'Curso';
+        const module = lesson.modules?.title || 'Módulo';
+
+        return `
+          <option value="${escapeHTML(lesson.id)}">
+            ${escapeHTML(course)} — ${escapeHTML(module)} — ${escapeHTML(lesson.title)}
+          </option>
+        `;
+      }).join('');
+
+  } catch (error) {
+    console.error('Erro ao carregar aulas:', error);
+    select.innerHTML = '<option value="">Erro ao carregar aulas</option>';
+  }
+};
+
+
+// ==========================================
+// CARREGAR FICHEIRO PARA A SUPABASE
+// ==========================================
+
+window.uploadLessonMaterial = async function() {
+  const lessonId = document.getElementById('materialLessonSelect')?.value;
+  const titleInput = document.getElementById('materialTitle');
+  const fileInput = document.getElementById('materialFile');
+  const message = document.getElementById('materialUploadMessage');
+
+  const file = fileInput?.files?.[0];
+
+  if (!lessonId) {
+    message.textContent = 'Selecciona uma aula.';
+    return;
+  }
+
+  if (!file) {
+    message.textContent = 'Selecciona um ficheiro.';
+    return;
+  }
+
+  if (file.size > 50 * 1024 * 1024) {
+    message.textContent = 'O ficheiro ultrapassa o limite de 50 MB.';
+    return;
+  }
+
+  const allowedExtensions = /\.(pdf|doc|docx|ppt|pptx|xls|xlsx|jpg|jpeg|png|webp)$/i;
+
+  if (!allowedExtensions.test(file.name)) {
+    message.textContent = 'Formato de ficheiro não permitido.';
+    return;
+  }
+
+  const title = titleInput.value.trim() || file.name;
+
+  const safeName = file.name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9._-]/g, '_');
+
+  const storagePath = `${lessonId}/${Date.now()}-${safeName}`;
+
+  message.textContent = 'A carregar ficheiro...';
+
+  try {
+    const { data: userData, error: userError } =
+      await supabase.auth.getUser();
+
+    if (userError || !userData.user) {
+      throw new Error('Sessão não encontrada. Entra novamente.');
+    }
+
+    const { error: uploadError } = await supabase
+      .storage
+      .from('course-materials')
+      .upload(storagePath, file, {
+        upsert: false,
+        contentType: file.type || 'application/octet-stream'
+      });
+
+    if (uploadError) throw uploadError;
+
+    const { error: insertError } = await supabase
+      .from('lesson_materials')
+      .insert({
+        lesson_id: lessonId,
+        title: title,
+        file_name: file.name,
+        storage_path: storagePath,
+        mime_type: file.type || null,
+        file_size: file.size,
+        uploaded_by: userData.user.id
+      });
+
+    if (insertError) {
+      await supabase.storage
+        .from('course-materials')
+        .remove([storagePath]);
+
+      throw insertError;
+    }
+
+    message.textContent = '✅ Material carregado com sucesso!';
+
+    titleInput.value = '';
+    fileInput.value = '';
+
+  } catch (error) {
+    console.error('Erro ao carregar material:', error);
+    message.textContent = '❌ Erro: ' + error.message;
+  }
+};
+  
 await loadPublicCourses();
 
 const {data:{session}} = await supabase.auth.getSession();
