@@ -1027,12 +1027,12 @@ window.openLearningCourse = async function(courseId) {
       <div class="dash-card">
         <h3>📚 Módulo ${index + 1}: ${escapeHTML(module.title)}</h3>
 
-        ${moduleLessons.length
-          ? moduleLessons.map((lesson, lessonIndex) => {  }
-const completed = completedIds.has(lesson.id);
-const lessonMaterials = materialsByLesson.get(lesson.id) || [];
+     ${moduleLessons.length
+         ? moduleLessons.map((lesson, lessonIndex) => {
+             const completed = completedIds.has(lesson.id);
+             const lessonMaterials = materialsByLesson.get(lesson.id) || [];
 
-return `
+             return `
                 <div style="border-top:1px solid #49305f;margin-top:15px;padding-top:15px">
 
                   <h4>
