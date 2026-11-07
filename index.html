@@ -936,6 +936,41 @@ window.openLearningCourse = async function(courseId) {
 
   const lessonIds = (lessons || []).map(lesson => lesson.id);
 
+  // CARREGAR MATERIAIS DAS AULAS
+  const materialsByLesson = new Map();
+
+  if (lessonIds.length > 0) {
+    const { data: materials, error: materialsError } = await supabase
+      .from('lesson_materials')
+      .select('id, lesson_id, title, file_name, storage_path, file_size')
+      .in('lesson_id', lessonIds);
+
+    if (materialsError) {
+      console.error('Erro ao carregar materiais:', materialsError);
+    } else {
+      for (const material of (materials || [])) {
+        const { data: signedData, error: signedError } = await supabase
+          .storage
+          .from('course-materials')
+          .createSignedUrl(material.storage_path, 3600);
+
+        if (signedError) {
+          console.error('Erro ao gerar link do material:', signedError);
+          continue;
+        }
+
+        if (!materialsByLesson.has(material.lesson_id)) {
+          materialsByLesson.set(material.lesson_id, []);
+        }
+
+        materialsByLesson.get(material.lesson_id).push({
+          ...material,
+          signedUrl: signedData.signedUrl
+        });
+      }
+    }
+  }
+
   // CARREGAR PROGRESSO DO ALUNO
   let progress = [];
 
@@ -993,10 +1028,11 @@ window.openLearningCourse = async function(courseId) {
         <h3>📚 Módulo ${index + 1}: ${escapeHTML(module.title)}</h3>
 
         ${moduleLessons.length
-          ? moduleLessons.map((lesson, lessonIndex) => {
-              const completed = completedIds.has(lesson.id);
+          ? moduleLessons.map((lesson, lessonIndex) => {  }
+const completed = completedIds.has(lesson.id);
+const lessonMaterials = materialsByLesson.get(lesson.id) || [];
 
-              return `
+return `
                 <div style="border-top:1px solid #49305f;margin-top:15px;padding-top:15px">
 
                   <h4>
@@ -1044,12 +1080,62 @@ window.openLearningCourse = async function(courseId) {
     </p>
   `;
 })() : ''}
+${lesson.content ? `
+  <div style="white-space:pre-wrap;margin-top:12px;color:#ddd">
+    ${escapeHTML(lesson.content)}
+  </div>
+` : ''}
+             
+  ${lessonMaterials.length ? `
+    <div style="
+      margin-top:18px;
+      padding:15px;
+      background:#120a1e;
+      border:1px solid #50346c;
+      border-radius:12px;
+    ">
+      <h4 style="margin-bottom:12px;color:#c5a3ff">
+        📂 Materiais de estudo
+      </h4>
 
-                  ${lesson.content ? `
-                    <div style="white-space:pre-wrap;margin-top:12px;color:#ddd">
-                      ${escapeHTML(lesson.content)}
-                    </div>
-                  ` : ''}
+      ${lessonMaterials.map(material => `
+        <div style="
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          flex-wrap:wrap;
+          gap:10px;
+          padding:10px 0;
+          border-top:1px solid #38234e;
+        ">
+          <div>
+            <strong>${escapeHTML(material.title)}</strong>
+            <p style="font-size:12px;color:var(--muted)">
+              ${escapeHTML(material.file_name)}
+            </p>
+          </div>
+
+          <a
+            href="${escapeHTML(material.signedUrl)}"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="
+              display:inline-block;
+              background:var(--purple);
+              color:white;
+              padding:9px 13px;
+              border-radius:8px;
+              text-decoration:none;
+              font-size:13px;
+              font-weight:bold;
+            ">
+            📥 Abrir / Descarregar
+          </a>
+        </div>
+      `).join('')}
+    </div>
+  ` : ''}
+   
 
                   <div style="margin-top:15px">
                     ${completed
