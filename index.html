@@ -169,7 +169,110 @@ footer strong {color:white}
 .dash-card p {color:var(--muted)}
 .hidden {display:none!important}
 #mainContent.hidden {display:none}
-@media(max-width:650px) {
+
+/* =================================
+   PAINEL ADMINISTRATIVO COM MENU LATERAL
+================================= */
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 235px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  margin-top: 28px;
+}
+
+.admin-sidebar {
+  background: var(--panel);
+  border: 1px solid #38234e;
+  border-radius: 14px;
+  padding: 14px;
+  position: sticky;
+  top: 95px;
+}
+
+.admin-sidebar h3 {
+  color: var(--light);
+  font-size: 13px;
+  margin: 8px 10px 15px;
+  letter-spacing: 1px;
+}
+
+.admin-menu-button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 12px;
+  margin: 5px 0;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #ddd;
+  text-align: left;
+  font-size: 14px;
+}
+
+.admin-menu-button:hover,
+.admin-menu-button.active {
+  background: #382254;
+  color: white;
+}
+
+.admin-menu-button.active {
+  border-left: 3px solid var(--purple);
+}
+
+.admin-workspace {
+  min-width: 0;
+}
+
+.admin-page {
+  display: none;
+}
+
+.admin-page.active {
+  display: block;
+}
+
+.admin-page > .dash-card:first-child {
+  margin-top: 0;
+}
+
+.admin-page-title {
+  font-size: 25px;
+  margin: 5px 0;
+}
+
+.admin-page-description {
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+@media(max-width:800px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    position: static;
+    overflow-x: auto;
+  }
+
+  .admin-sidebar nav {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+    overflow-x: auto;
+  }
+
+  .admin-menu-button {
+    width: auto;
+    min-width: max-content;
+  }
+}
+
+  @media(max-width:650px) {
   header {padding:13px 4%;flex-wrap:wrap}
   nav {gap:12px}
   nav a {font-size:12px}
@@ -335,9 +438,71 @@ footer strong {color:white}
   <h1>Olá, Alcido! 👑</h1>
   <p style="color:var(--muted)">
     Bem-vindo ao painel de administração da Mussilipo Academy.
+    
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <h3>MENU ADMINISTRATIVO</h3>
+
+    <nav>
+      <button class="admin-menu-button active"
+        data-admin-panel="overview"
+        onclick="showAdminPanel('overview')">
+        📊 Visão geral
+      </button>
+
+      <button class="admin-menu-button"
+        data-admin-panel="students"
+        onclick="showAdminPanel('students')">
+        👨‍🎓 Alunos
+      </button>
+
+      <button class="admin-menu-button"
+        data-admin-panel="courses"
+        onclick="showAdminPanel('courses')">
+        📚 Cursos
+      </button>
+
+      <button class="admin-menu-button"
+        data-admin-panel="content"
+        onclick="showAdminPanel('content')">
+        🎥 Módulos e aulas
+      </button>
+
+      <button class="admin-menu-button"
+        data-admin-panel="materials"
+        onclick="showAdminPanel('materials')">
+        📂 Materiais
+      </button>
+
+      <button class="admin-menu-button"
+        data-admin-panel="enrollments"
+        onclick="showAdminPanel('enrollments')">
+        📝 Matrículas
+      </button>
+    </nav>
+  </aside>
+
+  <main class="admin-workspace">
+
+    <div id="adminPageOverview" class="admin-page active"></div>
+
+    <div id="adminPageStudents" class="admin-page"></div>
+
+    <div id="adminPageCourses" class="admin-page"></div>
+
+    <div id="adminPageContent" class="admin-page"></div>
+
+    <div id="adminPageMaterials" class="admin-page"></div>
+
+    <div id="adminPageEnrollments" class="admin-page"></div>
+
+  </main>
+</div>
+
   </p>
 <!-- RESUMO E CONSULTA DE ALUNOS -->
-<div class="dash-card" style="margin-top:25px">
+<div class="dash-card" id="adminOverviewCard" style="margin-top:25px">
   <h2>📊 Visão geral da academia</h2>
 
   <div id="adminOverview"
@@ -366,7 +531,7 @@ footer strong {color:white}
   </div>
 </div>
 <!-- FORMULÁRIO DE CRIAÇÃO DE CURSOS -->
-<div class="dash-card" style="margin-top:25px">
+<div class="dash-card" id="adminCreateCoursePanel" style="margin-top:25px">
   <h2>➕ Criar novo curso</h2>
   <p style="color:var(--muted)">Preenche os dados para adicionar um curso à academia.</p>
 
@@ -487,7 +652,7 @@ footer strong {color:white}
 
   </form>
 <!-- BIBLIOTECA DE MATERIAIS -->
-<div class="dash-card" style="margin-top:20px">
+<div class="dash-card" id="adminMaterialsPanel" style="margin-top:20px">
   <h2>📂 Materiais de estudo</h2>
   <p style="color:var(--muted)">
     Carrega documentos e ficheiros para uma aula específica.
@@ -539,7 +704,7 @@ footer strong {color:white}
     Clica em "Ver matrículas" para carregar as inscrições.
   </div>
 </div>
-  <div class="features" style="margin-top:25px">
+  <div class="features hidden" id="adminQuickLinks" style="margin-top:25px">
     <div class="feature">
       <div class="emoji">📚</div>
       <h3>Gerir cursos</h3>
@@ -571,7 +736,7 @@ footer strong {color:white}
       <div class="emoji">📝</div>
       <h3>Matrículas</h3>
       <p>Consultar e aprovar inscrições.</p>
-      <button class="btn" onclick="loadAdminEnrollments(); document.getElementById('adminEnrollmentPanel').scrollIntoView({behavior:'smooth'});">
+      <button class="btn" onclick="showAdminPanel('enrollments')">
   Ver matrículas
 </button>
     </div>
@@ -751,15 +916,23 @@ async function loadUser(user) {
   $('studentEmail').textContent = user.email;
 
   // Mostrar o painel correspondente ao papel
- if (profile.role === 'admin') {
+if (profile.role === 'admin') {
+
   $('adminDashboard').classList.add('show');
+
+  window.organizeAdminPanels();
 
   await loadAdminCourses();
   await loadAdminContentCourses();
   await loadAdminOverview();
   await loadMaterialLessons();
-   
-  $('adminDashboard').scrollIntoView({behavior:'smooth'});
+
+  window.showAdminPanel('overview');
+
+  $('adminDashboard').scrollIntoView({
+    behavior: 'smooth'
+  });
+
 } else {
   $('dashboard').classList.add('show');
   await loadEnrollments();
@@ -2186,6 +2359,118 @@ window.createLesson = async function(event) {
   alert('🎉 Aula publicada com sucesso!');
   await loadAdminLessons();
 };
+ 
+/* ==========================================
+   NAVEGAÇÃO DO PAINEL ADMINISTRATIVO
+========================================== */
+
+window.organizeAdminPanels = function() {
+
+  const destinations = {
+    overview: 'adminPageOverview',
+    students: 'adminPageStudents',
+    courses: 'adminPageCourses',
+    content: 'adminPageContent',
+    materials: 'adminPageMaterials',
+    enrollments: 'adminPageEnrollments'
+  };
+
+  const elements = {
+    overview: ['adminOverviewCard'],
+    students: ['adminStudentPanel'],
+    courses: ['adminCreateCoursePanel', 'adminCoursesPanel'],
+    content: ['adminContentPanel'],
+    materials: ['adminMaterialsPanel'],
+    enrollments: ['adminEnrollmentPanel']
+  };
+
+  for (const [panel, ids] of Object.entries(elements)) {
+    const destination = document.getElementById(destinations[panel]);
+
+    if (!destination) continue;
+
+    ids.forEach(id => {
+      const element = document.getElementById(id);
+
+      if (element) {
+        destination.appendChild(element);
+      }
+    });
+  }
+};
+
+
+// ABRIR UM PAINEL DO MENU LATERAL
+window.showAdminPanel = function(panelName) {
+
+  const validPanels = [
+    'overview',
+    'students',
+    'courses',
+    'content',
+    'materials',
+    'enrollments'
+  ];
+
+  if (!validPanels.includes(panelName)) return;
+
+  document.querySelectorAll('.admin-page').forEach(panel => {
+    panel.classList.remove('active');
+  });
+
+  document.querySelectorAll('.admin-menu-button').forEach(button => {
+    button.classList.toggle(
+      'active',
+      button.dataset.adminPanel === panelName
+    );
+  });
+
+  const destination = document.getElementById(
+    'adminPage' +
+    panelName.charAt(0).toUpperCase() +
+    panelName.slice(1)
+  );
+
+  if (destination) {
+    destination.classList.add('active');
+  }
+
+  if (panelName === 'courses') {
+    window.loadAdminCourses();
+  }
+
+  if (panelName === 'content') {
+    window.loadAdminContentCourses();
+  }
+
+  if (panelName === 'materials') {
+    window.loadMaterialLessons();
+  }
+
+  if (panelName === 'enrollments') {
+    window.loadAdminEnrollments();
+  }
+
+  if (panelName === 'students' || panelName === 'overview') {
+    window.loadAdminOverview();
+  }
+
+  document.getElementById('adminDashboard').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+};
+
+
+// ATALHOS ANTIGOS PASSAM A USAR O MENU
+window.goToAdminCourses = function() {
+  window.showAdminPanel('courses');
+};
+
+window.goToAdminStudents = function() {
+  window.showAdminPanel('students');
+};
+ 
 // CARREGAR MATRÍCULAS PARA O ADMINISTRADOR
 window.loadAdminEnrollments = async function() {
   const container = $('adminEnrollments');
