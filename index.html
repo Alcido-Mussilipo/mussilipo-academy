@@ -337,7 +337,7 @@ footer strong {color:white}
   </div>
 </div>
 
-<div class="dash-card" style="margin-top:20px">
+<div class="dash-card" id="adminStudentPanel" style="margin-top:20px">
   <h2>👨‍🎓 Gestão e acompanhamento dos alunos</h2>
 
   <p style="color:var(--muted)">
@@ -1760,51 +1760,6 @@ window.editAdminModule = async function(moduleId) {
 
   await loadAdminModules();
 };
-  const courseId = $('adminContentCourse').value;
-  const container = $('adminModules');
-  const moduleSelect = $('adminModuleSelect');
-
-  if (!courseId) {
-    container.textContent = 'Seleciona um curso.';
-    moduleSelect.innerHTML = '<option value="">Primeiro seleciona um curso</option>';
-    $('adminLessons').textContent = 'Seleciona um módulo.';
-    return;
-  }
-
-  container.textContent = 'A carregar módulos...';
-
-  const { data: modules, error } = await supabase
-    .from('modules')
-    .select('id, title, position')
-    .eq('course_id', courseId)
-    .order('position', { ascending: true });
-
-  if (error) {
-    container.textContent = 'Erro ao carregar módulos: ' + error.message;
-    return;
-  }
-
-  if (!modules || modules.length === 0) {
-    container.textContent = 'Este curso ainda não tem módulos.';
-    moduleSelect.innerHTML = '<option value="">Cria primeiro um módulo</option>';
-    $('adminLessons').textContent = 'Ainda não existem aulas.';
-    return;
-  }
-
-  moduleSelect.innerHTML = modules.map(module => `
-    <option value="${module.id}">
-      ${escapeHTML(module.title)}
-    </option>
-  `).join('');
-
-  container.innerHTML = modules.map((module, index) => `
-    <div class="dash-card" style="margin-top:12px">
-      <strong>Módulo ${index + 1}: ${escapeHTML(module.title)}</strong>
-    </div>
-  `).join('');
-
-  await loadAdminLessons();
-};
 
 
 // CARREGAR AULAS DO MÓDULO SELECIONADO
@@ -2005,44 +1960,6 @@ window.editAdminLesson = async function(lessonId) {
 
   await loadAdminLessons();
 };
-  const moduleId = $('adminModuleSelect').value;
-  const container = $('adminLessons');
-
-  if (!moduleId) {
-    container.textContent = 'Seleciona um módulo.';
-    return;
-  }
-
-  container.textContent = 'A carregar aulas...';
-
-  const { data: lessons, error } = await supabase
-    .from('lessons')
-    .select('id, title, description, is_published, position')
-    .eq('module_id', moduleId)
-    .order('position', { ascending: true });
-
-  if (error) {
-    container.textContent = 'Erro ao carregar aulas: ' + error.message;
-    return;
-  }
-
-  if (!lessons || lessons.length === 0) {
-    container.textContent = 'Este módulo ainda não tem aulas.';
-    return;
-  }
-
-  container.innerHTML = `
-    <h3 style="margin-bottom:12px">📖 Aulas deste módulo</h3>
-    ${lessons.map((lesson, index) => `
-      <div class="dash-card" style="margin-top:12px">
-        <strong>${index + 1}. ${escapeHTML(lesson.title)}</strong>
-        <p>${escapeHTML(lesson.description || 'Sem descrição')}</p>
-        <p>${lesson.is_published ? '🟢 Publicada' : '🟡 Não publicada'}</p>
-      </div>
-    `).join('')}
-  `;
-};
-
 
 // CRIAR AULA
 window.createLesson = async function(event) {
