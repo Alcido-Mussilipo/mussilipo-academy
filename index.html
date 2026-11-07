@@ -378,6 +378,11 @@ footer strong {color:white}
 .support-user-list{display:grid;gap:8px;margin:12px 0}
 .support-user-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;background:#211334;border:1px solid #49305f;border-radius:10px}
 @media(max-width:520px){.chat-compose{flex-direction:column}.chat-compose .btn{width:100%}.chat-message{max-width:96%}}
+.community-admin-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.community-admin-actions button{font-size:11px;padding:6px 9px}
+.community-ban-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;background:#211334;border:1px solid #49305f;border-radius:9px;margin:7px 0}
+.admin-help-note{padding:14px;border:1px solid #7350a0;border-radius:10px;background:#211334;margin:12px 0 18px}
+.admin-help-note li{margin:7px 0 7px 20px;color:#e2d7ef}
 </style>
 </head>
 
@@ -672,6 +677,11 @@ footer strong {color:white}
         onclick="showAdminPanel('support')">
         🛟 Suporte aos alunos
       </button>
+      <button class="admin-menu-button"
+        data-admin-panel="community"
+        onclick="showAdminPanel('community')">
+        💬 Comunidade e moderação
+      </button>
     </nav>
   </aside>
 
@@ -694,6 +704,17 @@ footer strong {color:white}
     <div id="adminPageEnrollments" class="admin-page"></div>
     <div id="adminPageSupport" class="admin-page">
       <h2>🛟 Suporte aos alunos</h2>
+      <div class="admin-help-note">
+        <strong>🔐 Procedimento seguro para recuperar conta quando o aluno perdeu o e-mail</strong>
+        <ol>
+          <li>Atende o pedido por um canal já conhecido da academia; não alteres a conta apenas com base numa mensagem de alguém desconhecido.</li>
+          <li>Confirma a identidade com pelo menos dois elementos que já constem dos registos: nome e curso/matrícula, comprovativo ou referência de pagamento, e número de contacto anteriormente associado. Nunca peças a palavra-passe.</li>
+          <li>Confirma com o aluno um novo e-mail ao qual tenha acesso e regista internamente a data e a verificação realizada.</li>
+          <li>No Supabase, abre <strong>Authentication → Users</strong>, localiza o utilizador pelo UUID e actualiza o e-mail através da ferramenta administrativa. Não alteres o UUID nem cries uma conta nova.</li>
+          <li>Solicita a verificação do novo endereço e orienta o aluno a usar “Esqueci a palavra-passe” para definir uma palavra-passe nova. Confirma que as matrículas e o progresso continuam associados ao mesmo UUID.</li>
+        </ol>
+        <small>Não uses a chave service_role no HTML nem partilhes credenciais. Se não for possível confirmar a identidade, mantém a conta inalterada e pede verificação adicional.</small>
+      </div>
       <p style="color:var(--muted);margin:6px 0 14px">Selecciona um aluno para consultar e responder à conversa privada.</p>
       <div id="adminSupportUsers" class="support-user-list">A carregar conversas...</div>
       <div class="chat-box">
@@ -703,6 +724,24 @@ footer strong {color:white}
           <textarea id="adminSupportInput" maxlength="3000" required placeholder="Escreve uma resposta ao aluno..."></textarea>
           <button class="btn" type="submit" id="sendAdminSupportBtn">Responder</button>
         </form>
+      </div>
+    </div>
+
+    <div id="adminPageCommunity" class="admin-page">
+      <h2>💬 Comunidade e moderação</h2>
+      <p style="color:var(--muted);margin:6px 0 14px">Participa na conversa, remove mensagens inadequadas e impede temporária ou permanentemente um aluno de publicar.</p>
+      <div class="chat-box">
+        <h3>Conversa da comunidade</h3>
+        <div id="adminCommunityMessages" class="chat-messages" aria-live="polite"><p>A carregar comunidade...</p></div>
+        <form id="adminCommunityMessageForm" class="chat-compose">
+          <textarea id="adminCommunityMessageInput" maxlength="3000" required placeholder="Escreve como administração..."></textarea>
+          <button class="btn" type="submit" id="sendAdminCommunityMessageBtn">Publicar</button>
+        </form>
+      </div>
+      <div class="dash-card">
+        <h3>🚫 Alunos impedidos de publicar</h3>
+        <p style="margin:5px 0 10px">Podes retirar o bloqueio quando entenderes que o aluno pode voltar a participar.</p>
+        <div id="communityBansList">A carregar lista...</div>
       </div>
     </div>
 
@@ -1334,9 +1373,12 @@ if (profile.role === 'admin') {
   if (profile.role === 'student') {
     await window.loadStudentNotifications();
     await loadCommunityMessages();
+    await checkStudentCommunityBan();
     await loadStudentSupportMessages();
   } else if (profile.role === 'admin') {
     await loadAdminSupportUsers();
+    await loadAdminCommunityMessages();
+    await loadCommunityBans();
   }
   // Actualizar os botões do cabeçalho
   $('loginBtn').classList.add('hidden');
@@ -1451,6 +1493,24 @@ function renderChatMessages(containerId, rows) {
   container.scrollTop = container.scrollHeight;
 }
 
+async function checkStudentCommunityBan() {
+  if (!currentUser || currentUserRole !== 'student') return;
+  const input = $('communityMessageInput');
+  const button = $('sendCommunityMessageBtn');
+  const { data, error } = await supabase.from('community_bans')
+    .select('reason').eq('user_id', currentUser.id).maybeSingle();
+  if (error) {
+    console.error('Não foi possível verificar o estado da comunidade:', error);
+    return;
+  }
+  const banned = Boolean(data);
+  if (input) {
+    input.disabled = banned;
+    input.placeholder = banned ? 'A tua participação na comunidade está suspensa. Contacta o suporte.' : 'Escreve uma mensagem para a comunidade...';
+  }
+  if (button) button.disabled = banned;
+}
+
 async function loadCommunityMessages() {
   if (!currentUser) return;
   const { data, error } = await supabase.from('community_messages')
@@ -1463,6 +1523,88 @@ async function loadCommunityMessages() {
   }
   renderChatMessages('communityMessages', data || []);
 }
+
+async function loadAdminCommunityMessages() {
+  if (!currentUser || currentUserRole !== 'admin') return;
+  const container = $('adminCommunityMessages');
+  if (!container) return;
+  const { data, error } = await supabase.from('community_messages')
+    .select('id, sender_id, sender_name, sender_role, message, created_at')
+    .order('created_at', { ascending: true }).limit(200);
+  if (error) {
+    console.error('Erro ao carregar comunidade administrativa:', error);
+    container.textContent = 'Não foi possível carregar a comunidade: ' + error.message;
+    return;
+  }
+  if (!data || !data.length) {
+    container.innerHTML = '<p style="color:var(--muted)">Ainda não existem mensagens.</p>';
+    return;
+  }
+  container.innerHTML = data.map(row => `
+    <article class="chat-message ${row.sender_id === currentUser.id ? 'mine' : ''}">
+      <strong>${escapeHTML(row.sender_name || 'Utilizador')} ${row.sender_role === 'admin' ? '👑 Administração' : '🎓 Aluno'}</strong>
+      <div>${escapeHTML(row.message || '')}</div>
+      <small>${chatDate(row.created_at)}</small>
+      ${row.sender_role === 'student' ? `<div class="community-admin-actions"><button type="button" class="btn-outline" onclick="banCommunityUser('${row.sender_id}')">🚫 Impedir de publicar</button><button type="button" class="btn-outline" onclick="deleteCommunityMessage('${row.id}')">🗑️ Eliminar mensagem</button></div>` : `<div class="community-admin-actions"><button type="button" class="btn-outline" onclick="deleteCommunityMessage('${row.id}')">🗑️ Eliminar mensagem</button></div>`}
+    </article>`).join('');
+  container.scrollTop = container.scrollHeight;
+}
+
+async function loadCommunityBans() {
+  if (!currentUser || currentUserRole !== 'admin') return;
+  const container = $('communityBansList');
+  if (!container) return;
+  const { data, error } = await supabase.from('community_bans')
+    .select('user_id, reason, created_at').order('created_at', { ascending: false });
+  if (error) {
+    container.textContent = 'Não foi possível carregar os bloqueios: ' + error.message;
+    return;
+  }
+  if (!data || !data.length) {
+    container.innerHTML = '<p style="color:var(--muted)">Nenhum aluno está impedido de publicar.</p>';
+    return;
+  }
+  const ids = data.map(item => item.user_id);
+  const { data: profiles, error: profileError } = await supabase.from('profiles')
+    .select('id, full_name').in('id', ids);
+  if (profileError) {
+    container.textContent = 'Os bloqueios foram carregados, mas não foi possível consultar os nomes: ' + profileError.message;
+    return;
+  }
+  const names = new Map((profiles || []).map(profile => [profile.id, profile.full_name || 'Aluno']));
+  container.innerHTML = data.map(item => `
+    <div class="community-ban-item"><div><strong>${escapeHTML(names.get(item.user_id) || 'Aluno')}</strong><br><small>${escapeHTML(item.reason || 'Sem motivo registado')}</small></div><button type="button" class="btn-outline" onclick="unbanCommunityUser('${item.user_id}')">🔓 Permitir novamente</button></div>
+  `).join('');
+}
+
+window.banCommunityUser = async function(userId) {
+  if (!currentUser || currentUserRole !== 'admin' || !userId) return;
+  const reason = prompt('Indica o motivo para impedir este aluno de publicar na comunidade:');
+  if (reason === null) return;
+  if (!reason.trim()) { alert('Regista um motivo antes de aplicar o bloqueio.'); return; }
+  if (!confirm('Confirmas que queres impedir este aluno de enviar mensagens à comunidade? A conta e o acesso aos cursos não serão bloqueados.')) return;
+  const { error } = await supabase.from('community_bans').insert({ user_id: userId, banned_by: currentUser.id, reason: reason.trim() });
+  if (error) { alert('Não foi possível aplicar o bloqueio: ' + error.message); return; }
+  await Promise.all([loadAdminCommunityMessages(), loadCommunityBans()]);
+  alert('O aluno já não pode publicar na comunidade.');
+};
+
+window.unbanCommunityUser = async function(userId) {
+  if (!currentUser || currentUserRole !== 'admin' || !userId) return;
+  if (!confirm('Queres permitir novamente que este aluno envie mensagens?')) return;
+  const { error } = await supabase.from('community_bans').delete().eq('user_id', userId);
+  if (error) { alert('Não foi possível retirar o bloqueio: ' + error.message); return; }
+  await Promise.all([loadAdminCommunityMessages(), loadCommunityBans()]);
+};
+
+window.deleteCommunityMessage = async function(messageId) {
+  if (!currentUser || currentUserRole !== 'admin' || !messageId) return;
+  if (!confirm('Eliminar definitivamente esta mensagem da comunidade?')) return;
+  const { error } = await supabase.from('community_messages').delete().eq('id', messageId);
+  if (error) { alert('Não foi possível eliminar a mensagem: ' + error.message); return; }
+  await loadAdminCommunityMessages();
+  await loadCommunityMessages();
+};
 
 async function loadStudentSupportMessages() {
   if (!currentUser || currentUserRole !== 'student') return;
@@ -1545,6 +1687,18 @@ $('communityMessageForm')?.addEventListener('submit', event => {
   }), 'sendCommunityMessageBtn', 'communityMessageInput', loadCommunityMessages);
 });
 
+$('adminCommunityMessageForm')?.addEventListener('submit', event => {
+  event.preventDefault();
+  if (currentUserRole !== 'admin') return;
+  sendChatMessage('community_messages', message => ({
+    sender_id: currentUser.id, sender_name: currentProfileName,
+    sender_role: 'admin', message
+  }), 'sendAdminCommunityMessageBtn', 'adminCommunityMessageInput', async () => {
+    await loadAdminCommunityMessages();
+    await loadCommunityMessages();
+  });
+});
+
 $('studentSupportForm')?.addEventListener('submit', event => {
   event.preventDefault();
   sendChatMessage('support_messages', message => ({
@@ -1572,6 +1726,11 @@ async function startAcademyRealtime() {
   realtimeChannel = supabase.channel('academy-live-' + userId)
     .on('postgres_changes', { event: '*', schema: 'public', table: 'community_messages' }, () => {
       loadCommunityMessages();
+      if (currentUserRole === 'admin') loadAdminCommunityMessages();
+    })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'community_bans', ...(currentUserRole === 'student' ? { filter: 'user_id=eq.' + userId } : {}) }, () => {
+      if (currentUserRole === 'student') checkStudentCommunityBan();
+      else loadCommunityBans();
     })
     .on('postgres_changes', { event: '*', schema: 'public', table: 'notifications', filter: 'user_id=eq.' + userId }, () => {
       window.loadStudentNotifications?.();
@@ -3095,7 +3254,8 @@ window.showAdminPanel = function(panelName) {
     'content',
     'materials',
     'enrollments',
-    'support'
+    'support',
+    'community'
   ];
 
   if (!validPanels.includes(panelName)) return;
@@ -3121,7 +3281,7 @@ window.showAdminPanel = function(panelName) {
     destination.classList.add('active');
   }
 
-  const sectionNames = {overview:'Visão geral',students:'Gestão dos alunos',courses:'Gestão dos cursos',content:'Módulos e aulas',materials:'Materiais de estudo',enrollments:'Matrículas',support:'Suporte aos alunos'};
+  const sectionNames = {overview:'Visão geral',students:'Gestão dos alunos',courses:'Gestão dos cursos',content:'Módulos e aulas',materials:'Materiais de estudo',enrollments:'Matrículas',support:'Suporte aos alunos',community:'Comunidade e moderação'};
   const currentSection = document.getElementById('adminCurrentSection');
   if (currentSection) currentSection.textContent = sectionNames[panelName] || 'Painel administrativo';
 
@@ -3136,6 +3296,11 @@ window.showAdminPanel = function(panelName) {
   if (panelName === 'materials') {
     window.loadMaterialLessons();
     window.loadAdminMaterials?.();
+  }
+
+  if (panelName === 'community') {
+    loadAdminCommunityMessages();
+    loadCommunityBans();
   }
 
   if (panelName === 'enrollments') {
