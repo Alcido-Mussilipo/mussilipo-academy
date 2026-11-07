@@ -2608,9 +2608,9 @@ window.loadAdminOverview = async function() {
       lessonsResult,
       progressResult
     ] = await Promise.all([
-      supabase.from('profiles')
-        .select('id, full_name, role')
-        .eq('role', 'student'),
+     supabase.from('profiles')
+  .select('id, full_name, role, is_blocked')
+  .eq('role', 'student'),
 
       supabase.from('enrollments')
         .select('id, user_id, course_id, status'),
@@ -2736,11 +2736,12 @@ window.loadAdminOverview = async function() {
         };
       });
 
-      return {
-        id: student.id,
+     return {
+       id: student.id,
         name: student.full_name || 'Aluno sem nome',
-        courses: studentCourses
-      };
+          is_blocked: student.is_blocked === true,
+           courses: studentCourses
+     };
     });
 
     window.filterAdminStudents();
@@ -2774,7 +2775,6 @@ window.filterAdminStudents = function() {
   if (!container) return;
 
   const search = (searchInput?.value || '').trim().toLowerCase();
-
   const students = window.adminStudentsCache || [];
 
   const filtered = students.filter(student =>
@@ -2864,20 +2864,229 @@ window.filterAdminStudents = function() {
 
     return `
       <div class="dash-card" style="margin-top:15px">
-        <h3>👤 ${escapeHTML(student.name)}</h3>
 
-        <p style="font-size:12px;color:var(--muted);word-break:break-all">
-          Código: ${escapeHTML(student.id)}
-        </p>
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          align-items:flex-start;
+          gap:12px;
+          flex-wrap:wrap
+        ">
+          <div>
+            <h3>👤 ${escapeHTML(student.name)}</h3>
 
-        <h4 style="margin-top:15px">
+            <p style="font-size:12px;color:var(--muted);word-break:break-all">
+              Código: ${escapeHTML(student.id)}
+            </p>
+
+            <p style="
+              margin-top:8px;
+              font-size:13px;
+              font-weight:bold;
+              color:${student.is_blocked ? '#f87171' : '#4ade80'}
+            ">
+              ${student.is_blocked ? '🔒 Conta bloqueada' : '🟢 Conta activa'}
+            </p>
+          </div>
+
+          <details style="position:relative">
+            <summary style="
+              cursor:pointer;
+              list-style:none;
+              background:#382254;
+              border:1px solid #64418a;
+              padding:8px 13px;
+              border-radius:8px;
+              font-size:13px;
+            ">
+              ⋮ Acções
+            </summary>
+
+            <div style="
+              position:absolute;
+              right:0;
+              top:42px;
+              z-index:10;
+              width:190px;
+              padding:8px;
+              background:#211334;
+              border:1px solid #64418a;
+              border-radius:10px;
+              box-shadow:0 8px 25px #0008;
+            ">
+
+              <button
+                type="button"
+                class="student-action-btn"
+                data-action="block"
+                data-student-id="${student.id}"
+                style="
+                  width:100%;
+                  padding:10px;
+                  margin-bottom:5px;
+                  border:0;
+                  border-radius:7px;
+                  background:#382254;
+                  color:white;
+                  text-align:left;
+                ">
+                ${student.is_blocked ? '🔓 Desbloquear' : '🔒 Bloquear'}
+              </button>
+
+              <button
+                type="button"
+                class="student-action-btn"
+                data-action="delete"
+                data-student-id="${student.id}"
+                style="
+                  width:100%;
+                  padding:10px;
+                  border:0;
+                  border-radius:7px;
+                  background:#5b202b;
+                  color:#fff;
+                  text-align:left;
+                ">
+                🗑️ Expulsar aluno
+              </button>
+
+            </div>
+          </details>
+        </div>
+
+        <h4 style="margin-top:18px">
           📚 Cursos e progresso
         </h4>
 
         ${coursesHTML}
+
       </div>
     `;
   }).join('');
+
+  container.querySelectorAll('.student-action-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+      const studentId = button.dataset.studentId;
+      const action = button.dataset.action;
+
+      await window.adminStudentAction(studentId, action);
+    });
+  });
+};
+  // ==========================================
+// ACÇÕES ADMINISTRATIVAS SOBRE OS ALUNOS
+// ==========================================
+
+window.adminStudentAction = async function(studentId, action) {
+
+  const student = (window.adminStudentsCache || [])
+    .find(item => item.id === studentId);
+
+  if (!student) {
+    alert('Aluno não encontrado.');
+    return;
+  }
+
+  // BLOQUEAR OU DESBLOQUEAR
+  if (action === 'block') {
+
+    const newBlockedState = !student.is_blocked;
+
+    let reason = null;
+
+    if (newBlockedState) {
+      reason = prompt(
+        'Motivo do bloqueio (opcional):'
+      );
+
+      if (reason === null) return;
+
+      if (!confirm(
+        `Confirmas o bloqueio da conta de ${student.name}?`
+      )) return;
+
+    } else {
+      if (!confirm(
+        `Confirmas o desbloqueio da conta de ${student.name}?`
+      )) return;
+    }
+
+    try {
+      const { data, error } = await supabase.rpc(
+        'admin_set_student_block',
+        {
+          p_user_id: studentId,
+          p_blocked: newBlockedState,
+          p_reason: reason
+        }
+      );
+
+      if (error) throw error;
+
+      if (!data?.success) {
+        throw new Error('Não foi possível actualizar a conta.');
+      }
+
+      alert(
+        newBlockedState
+          ? '🔒 Conta do aluno bloqueada com sucesso.'
+          : '🔓 Conta do aluno desbloqueada com sucesso.'
+      );
+
+      await window.loadAdminOverview();
+
+    } catch (error) {
+      console.error('Erro na gestão do aluno:', error);
+      alert('Erro: ' + error.message);
+    }
+
+    return;
+  }
+
+  // EXPULSAR ALUNO
+  if (action === 'delete') {
+
+    const confirmation = prompt(
+      `ATENÇÃO: esta operação é permanente!\n\n` +
+      `O aluno ${student.name} será removido da plataforma, ` +
+      `incluindo a conta e os dados associados.\n\n` +
+      `Para confirmar, escreve EXPULSAR:`
+    );
+
+    if (confirmation !== 'EXPULSAR') {
+      alert('Operação cancelada.');
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase.functions.invoke(
+        'admin-delete-student',
+        {
+          body: {
+            user_id: studentId
+          }
+        }
+      );
+
+      if (error) throw error;
+
+      if (data?.error) {
+        throw new Error(data.error);
+      }
+
+      if (!data?.success) {
+        throw new Error('A expulsão não foi confirmada pelo servidor.');
+      }
+
+      alert('🗑️ Aluno expulso com sucesso.');
+
+      await window.loadAdminOverview();
+
+    } catch (error) {
+      console.error('Erro ao expulsar aluno:', error);
+      alert('Não foi possível expulsar o aluno: ' + error.message);
+    }
+  }
 };
 // ABRIR A SECÇÃO DE GESTÃO DOS ALUNOS
 window.goToAdminStudents = async function() {
