@@ -395,7 +395,7 @@ footer strong {color:white}
 </div>
 
 <!-- LISTA DOS CURSOS CRIADOS -->
-<div class="dash-card" style="margin-top:20px">
+<div class="dash-card" id="adminCoursesPanel" style="margin-top:20px">
   <h2>📚 Cursos cadastrados</h2>
   <div id="adminCourses">
     A carregar cursos...
@@ -471,6 +471,12 @@ footer strong {color:white}
               rows="5"
               style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px"></textarea>
 
+
+    <button class="btn" type="submit">
+      Publicar aula
+    </button>
+
+  </form>
 <!-- BIBLIOTECA DE MATERIAIS -->
 <div class="dash-card" style="margin-top:20px">
   <h2>📂 Materiais de estudo</h2>
@@ -511,12 +517,6 @@ footer strong {color:white}
     style="margin-top:12px"></div>
 </div>
 
-    <button class="btn" type="submit">
-      Publicar aula
-    </button>
-
-  </form>
-
   <div id="adminLessons" style="margin-top:20px">
     Seleciona um módulo para consultar as aulas.
   </div>
@@ -535,10 +535,7 @@ footer strong {color:white}
       <div class="emoji">📚</div>
       <h3>Gerir cursos</h3>
       <p>Criar, editar e publicar cursos.</p>
-      <button class="btn" onclick="
-  document.getElementById('adminContentPanel').scrollIntoView({behavior:'smooth'});
-  loadAdminCourses();
-">
+     <button class="btn" onclick="goToAdminCourses()">
   Gerir cursos
 </button>
     </div>
@@ -547,11 +544,8 @@ footer strong {color:white}
       <div class="emoji">👨‍🎓</div>
       <h3>Alunos</h3>
       <p>Consultar os alunos da plataforma.</p>
-     <button class="btn" onclick="
-  document.getElementById('adminStudents').scrollIntoView({behavior:'smooth'});
-  loadAdminOverview();
-">
-  Ver alunos
+    <button class="btn" onclick="goToAdminStudents()">
+  Ver alunos 👨‍🎓
 </button>
     </div>
 
@@ -1548,6 +1542,22 @@ if (!courses || courses.length === 0) {
     </div>
   `).join('');
 };
+  // ABRIR A SECÇÃO DE GESTÃO DOS CURSOS
+window.goToAdminCourses = async function() {
+  const panel = document.getElementById('adminCoursesPanel');
+
+  if (!panel) {
+    alert('Não foi possível encontrar a lista de cursos.');
+    return;
+  }
+
+  await window.loadAdminCourses();
+
+  panel.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+};
   // CARREGAR CURSOS NO PAINEL DE GESTÃO DE CONTEÚDOS
 window.loadAdminContentCourses = async function() {
   const select = $('adminContentCourse');
@@ -2410,7 +2420,22 @@ window.filterAdminStudents = function() {
     `;
   }).join('');
 };
+// ABRIR A SECÇÃO DE GESTÃO DOS ALUNOS
+window.goToAdminStudents = async function() {
+  const panel = document.getElementById('adminStudentPanel');
 
+  if (!panel) {
+    alert('Não foi possível encontrar o painel de gestão dos alunos.');
+    return;
+  }
+
+  await window.loadAdminOverview();
+
+  panel.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+};
 // ==========================================
 // BIBLIOTECA DE MATERIAIS DAS AULAS
 // ==========================================
