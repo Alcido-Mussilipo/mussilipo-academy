@@ -1,0 +1,3451 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10051f">
+<title>Mussilipo Academy | Aprende e Conquista</title>
+<meta name="description" content="Mussilipo Academy - Aprende online, desenvolve competências e constrói o teu futuro.">
+
+<style>
+:root {
+  --bg:#10051f;
+  --panel:#1c1030;
+  --panel2:#26163d;
+  --purple:#873cff;
+  --light:#b994ff;
+  --white:#fff;
+  --muted:#b9adc9;
+  --green:#20c997;
+}
+* {box-sizing:border-box;margin:0;padding:0}
+body {
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  line-height:1.6;
+}
+button,input {font:inherit}
+button {cursor:pointer}
+header {
+  position:sticky;top:0;z-index:20;
+  background:rgba(16,5,31,.96);
+  border-bottom:1px solid #38234f;
+  padding:15px 6%;
+  display:flex;align-items:center;
+  justify-content:space-between;gap:15px;
+}
+.logo {font-size:21px;font-weight:900;color:white}
+.logo span {color:var(--light)}
+nav {display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+nav a {color:#ddd;text-decoration:none;font-size:14px}
+nav a:hover {color:var(--light)}
+.btn {
+  background:var(--purple);color:white;
+  border:0;padding:11px 19px;
+  border-radius:9px;font-weight:bold;
+}
+.btn:hover {background:#a16bff}
+.btn-outline {
+  background:transparent;border:1px solid var(--light);
+  color:white;padding:10px 17px;border-radius:9px;
+}
+.hero {
+  padding:85px 7% 75px;
+  background:radial-gradient(ellipse at 75% 35%,#462079 0%,#24113e 35%,#10051f 75%);
+  text-align:center;
+}
+.hero small {color:#d1b4ff;font-weight:bold;letter-spacing:2px}
+.hero h1 {
+  font-size:clamp(35px,6vw,62px);
+  line-height:1.12;margin:20px auto;
+  max-width:850px;
+}
+.hero h1 span {color:#b58aff}
+.hero p {color:#d1c6df;max-width:650px;margin:0 auto 28px}
+.hero-actions {display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.stats {
+  display:flex;justify-content:center;gap:45px;
+  flex-wrap:wrap;margin-top:48px;
+}
+.stats strong {display:block;font-size:23px;color:#c5a3ff}
+.stats small {letter-spacing:0;color:var(--muted)}
+section {padding:65px 7%}
+.section-title {text-align:center;margin-bottom:35px}
+.section-title h2 {font-size:30px;margin-bottom:8px}
+.section-title p {color:var(--muted)}
+.filters {
+  display:flex;justify-content:center;
+  gap:10px;flex-wrap:wrap;margin-bottom:25px;
+}
+.filter {
+  background:var(--panel);border:1px solid #49305f;
+  color:white;padding:9px 17px;border-radius:30px;
+}
+.filter.active {background:var(--purple);border-color:var(--purple)}
+.courses {
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));
+  gap:22px;
+}
+.course {
+  background:var(--panel);border:1px solid #38234e;
+  border-radius:15px;overflow:hidden;
+  transition:.25s;
+}
+.course:hover {transform:translateY(-5px);border-color:var(--purple)}
+.course-cover {
+  height:145px;display:flex;align-items:center;
+  justify-content:center;font-size:52px;
+  background:linear-gradient(135deg,#46216e,#21103a);
+}
+.course-content {padding:19px}
+.course-content h3 {margin:10px 0}
+.course-content p {font-size:13px;color:var(--muted);min-height:42px}
+.tag {
+  display:inline-block;padding:4px 9px;
+  border-radius:20px;font-size:11px;
+  background:#392254;color:#d8c1ff;
+}
+.price {font-size:20px;font-weight:bold;margin:15px 0}
+.free {color:#41d6a1}
+.course-content button {width:100%}
+.features {
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
+.feature {
+  padding:25px;background:var(--panel);
+  border:1px solid #38234e;border-radius:14px;
+}
+.feature .emoji {font-size:30px}
+.feature h3 {margin:12px 0 5px}
+.feature p {color:var(--muted);font-size:14px}
+.cta {
+  text-align:center;background:linear-gradient(135deg,#54258c,#271242);
+  border-radius:18px;padding:45px 20px;
+}
+footer {
+  border-top:1px solid #38234e;
+  padding:30px 7%;text-align:center;
+  color:var(--muted);font-size:13px;
+}
+footer strong {color:white}
+.modal {
+  display:none;position:fixed;inset:0;z-index:100;
+  background:#000b;align-items:center;justify-content:center;
+  padding:15px;
+}
+.modal.show {display:flex}
+.modal-box {
+  background:#211334;border:1px solid #64418a;
+  border-radius:16px;padding:28px;
+  width:100%;max-width:420px;position:relative;
+}
+.modal-box h2 {margin-bottom:8px}
+.modal-box p {color:var(--muted);font-size:13px;margin-bottom:18px}
+.modal-box input {
+  display:block;width:100%;padding:13px;
+  margin:12px 0;background:#120a1e;
+  border:1px solid #50346c;border-radius:8px;
+  color:white;outline:none;
+}
+.modal-box input:focus {border-color:var(--purple)}
+.close {
+  position:absolute;right:18px;top:12px;
+  background:none;border:0;color:white;font-size:25px;
+}
+.modal-box .btn {width:100%;margin-top:8px}
+.switch {text-align:center;margin-top:16px;color:var(--muted)}
+.switch a {color:#c5a3ff;cursor:pointer}
+.message {font-size:13px;margin-top:12px;color:#61e0af}
+.message.error {color:#ff8585}
+.dashboard {display:none;padding:45px 7%;min-height:65vh}
+.dashboard.show {display:block}
+.dash-card {
+  background:var(--panel);padding:25px;
+  border-radius:15px;margin:20px 0;
+  border:1px solid #38234e;
+}
+.dash-card p {color:var(--muted)}
+.hidden {display:none!important}
+#mainContent.hidden {display:none}
+
+/* =================================
+   PAINEL ADMINISTRATIVO COM MENU LATERAL
+================================= */
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 235px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  margin-top: 28px;
+}
+
+.admin-sidebar {
+  background: var(--panel);
+  border: 1px solid #38234e;
+  border-radius: 14px;
+  padding: 14px;
+  position: sticky;
+  top: 95px;
+}
+
+.admin-sidebar h3 {
+  color: var(--light);
+  font-size: 13px;
+  margin: 8px 10px 15px;
+  letter-spacing: 1px;
+}
+
+.admin-menu-button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 12px;
+  margin: 5px 0;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #ddd;
+  text-align: left;
+  font-size: 14px;
+}
+
+.admin-menu-button:hover,
+.admin-menu-button.active {
+  background: #382254;
+  color: white;
+}
+
+.admin-menu-button.active {
+  border-left: 3px solid var(--purple);
+}
+
+.admin-workspace {
+  min-width: 0;
+}
+
+.admin-page {
+  display: none;
+}
+
+.admin-page.active {
+  display: block;
+}
+
+.admin-page > .dash-card:first-child {
+  margin-top: 0;
+}
+
+.admin-page-title {
+  font-size: 25px;
+  margin: 5px 0;
+}
+
+.admin-page-description {
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+@media(max-width:800px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    position: static;
+    overflow-x: auto;
+  }
+
+  .admin-sidebar nav {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+    overflow-x: auto;
+  }
+
+  .admin-menu-button {
+    width: auto;
+    min-width: max-content;
+  }
+}
+
+  @media(max-width:650px) {
+  header {padding:13px 4%;flex-wrap:wrap}
+  nav {gap:12px}
+  nav a {font-size:12px}
+  .hero {padding:65px 5%}
+  section {padding:50px 5%}
+  .stats {gap:20px}
+}
+
+/* =================================
+   ÁREA DO ALUNO
+================================= */
+.student-dashboard {padding-top:34px}
+.student-welcome {display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:22px}
+.student-eyebrow {font-size:11px;letter-spacing:1.5px;font-weight:bold;color:var(--light)}
+.student-welcome h1 {font-size:clamp(25px,4vw,36px);margin:7px 0}
+.student-welcome p,.student-section-heading p {color:var(--muted)}
+.student-account-chip {padding:10px 14px;border:1px solid #49305f;border-radius:30px;background:#211334;color:#d9c5ff;font-size:13px}
+.student-menu {display:flex;gap:8px;flex-wrap:wrap;padding:10px;background:#1a0d2a;border:1px solid #38234e;border-radius:13px;margin:22px 0 25px;position:sticky;top:76px;z-index:12}
+.student-menu-button {border:0;border-radius:9px;background:transparent;color:#d8cce8;padding:11px 15px;font-size:14px;font-weight:bold}
+.student-menu-button:hover,.student-menu-button.active {background:#382254;color:white}
+.student-menu-button.active {box-shadow:inset 0 -2px 0 var(--purple)}
+.student-page {display:none}
+.student-page.active {display:block}
+.student-summary-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:28px}
+.student-summary-card {display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;padding:19px;background:var(--panel);border:1px solid #38234e;border-radius:14px}
+.student-summary-card span {grid-row:span 2;font-size:26px}
+.student-summary-card small {color:var(--muted)}
+.student-summary-card strong {font-size:27px;color:#d0b4ff}
+.student-section-heading {display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin:10px 0 16px}
+.student-section-heading h2 {font-size:22px}
+.student-course-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:15px}
+.student-course-card {background:var(--panel);border:1px solid #38234e;border-radius:14px;padding:20px;min-width:0}
+.student-course-card h3 {font-size:17px;margin-bottom:10px;overflow-wrap:anywhere}
+.student-course-card p {color:var(--muted);font-size:13px;margin:8px 0}
+.student-status {display:inline-flex;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:bold;margin:4px 0 10px}
+.student-status.pending {background:#4b3718;color:#ffd27a}
+.student-status.active {background:#123c31;color:#65e4b6}
+.student-status.rejected {background:#4b202a;color:#ff9aa5}
+.student-course-card .btn {width:100%;margin-top:12px}
+.student-profile-card {display:grid;grid-template-columns:70px 1fr;gap:18px;align-items:center}
+.student-profile-card > div:not(.student-avatar) {display:flex;flex-direction:column;gap:4px;min-width:0;overflow-wrap:anywhere}
+.student-profile-card small {color:var(--muted)}
+.student-avatar {width:58px;height:58px;display:grid;place-items:center;border-radius:50%;background:#382254;font-size:27px;grid-row:span 3}
+
+/* Navegação administrativa persistente */
+.admin-sidebar {position:sticky;top:84px;max-height:calc(100vh - 100px);overflow-y:auto;overscroll-behavior:contain}
+.admin-workspace {min-width:0}
+.admin-workspace-toolbar {position:sticky;top:76px;z-index:11;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 15px;margin-bottom:18px;background:rgba(28,16,48,.97);border:1px solid #49305f;border-radius:12px;backdrop-filter:blur(10px)}
+.admin-workspace-toolbar div {display:flex;flex-direction:column;gap:2px}
+.admin-workspace-toolbar span {font-size:12px;color:var(--muted)}
+.admin-menu-button {cursor:pointer}
+.admin-sidebar nav {display:flex;flex-direction:column}
+.admin-page {min-width:0;scroll-margin-top:100px}
+.admin-dashboard > h1 {margin-bottom:4px}
+.admin-dashboard > p {margin-bottom:0}
+
+@media(max-width:800px) {
+  .student-menu {top:70px;overflow-x:auto;flex-wrap:nowrap}
+  .student-menu-button {white-space:nowrap;min-width:max-content}
+  .student-summary-grid {grid-template-columns:1fr}
+  .admin-sidebar {position:sticky;top:70px;max-height:none;z-index:15}
+  .admin-sidebar nav {display:flex;flex-direction:row;flex-wrap:nowrap;overflow-x:auto}
+  .admin-workspace-toolbar {top:70px}
+}
+@media(max-width:520px) {
+  .student-profile-card {grid-template-columns:1fr}
+  .student-avatar {grid-row:auto}
+  .student-summary-card {padding:15px}
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">MUSSILIPO <span>ACADEMY</span></div>
+ <nav>
+  <a id="publicHomeLink" href="#inicio" onclick="showPublicSection('inicio'); return false;">Início</a>
+  <a id="publicCoursesLink" href="#cursos" onclick="showPublicSection('cursos'); return false;">Cursos</a>
+  <a id="publicAdvantagesLink" href="#vantagens" onclick="showPublicSection('vantagens'); return false;">Vantagens</a>
+
+  <button class="btn-outline" id="loginBtn" onclick="openModal('login')">Entrar</button>
+  <button class="btn" id="registerBtn" onclick="openModal('register')">Criar conta</button>
+  <button class="btn hidden" id="logoutBtn" onclick="logout()">Sair</button>
+</nav>
+</header>
+
+<div id="mainContent">
+
+<section class="hero" id="inicio">
+  <small>🎓 BEM-VINDO À MUSSILIPO ACADEMY</small>
+  <h1>Aprende hoje.<br><span>Conquista amanhã.</span></h1>
+  <p>
+    Desenvolve novas competências, aprende com cursos online
+    e prepara-te para novas oportunidades.
+    O teu futuro começa com conhecimento!
+  </p>
+  <div class="hero-actions">
+    <button class="btn" onclick="document.getElementById('cursos').scrollIntoView({behavior:'smooth'})">
+      Explorar cursos 🚀
+    </button>
+    <button class="btn-outline" onclick="openModal('register')">
+      Criar conta gratuita
+    </button>
+  </div>
+  <div class="stats">
+    <div><strong>Online</strong><small>Aprende onde estiveres</small></div>
+    <div><strong>24/7</strong><small>Acesso à aprendizagem</small></div>
+    <div><strong>MT</strong><small>Preços em Meticais</small></div>
+  </div>
+</section>
+
+<section id="cursos">
+  <button
+  type="button"
+  id="studentBackButton"
+  class="btn-outline hidden"
+  onclick="returnToStudentDashboard()"
+  style="margin-bottom:25px">
+  ← Voltar aos meus cursos
+</button>
+  
+  <div class="section-title">
+    <h2>Explora os nossos cursos 📚</h2>
+    <p>Escolhe o teu próximo passo rumo ao conhecimento.</p>
+  </div>
+
+  <div class="filters">
+    <button class="filter active" onclick="filterCourses('todos',this)">Todos</button>
+    <button class="filter" onclick="filterCourses('gratuito',this)">Gratuitos</button>
+    <button class="filter" onclick="filterCourses('pago',this)">Pagos</button>
+  </div>
+
+  <div class="courses" id="courseList">
+  <p>A carregar cursos...</p>
+</div>
+  
+</section>
+
+<section id="vantagens">
+  <div class="section-title">
+    <h2>Por que aprender connosco?</h2>
+    <p>Conhecimento que abre portas.</p>
+  </div>
+  <div class="features">
+    <div class="feature">
+      <div class="emoji">📲</div>
+      <h3>Aprende online</h3>
+      <p>Estuda através do teu telemóvel ou computador.</p>
+    </div>
+    <div class="feature">
+      <div class="emoji">🎯</div>
+      <h3>Aprendizagem organizada</h3>
+      <p>Cursos estruturados por módulos e aulas.</p>
+    </div>
+    <div class="feature">
+      <div class="emoji">🔐</div>
+      <h3>Conta individual</h3>
+      <p>A tua área pessoal para acompanhar a aprendizagem.</p>
+    </div>
+    <div class="feature">
+      <div class="emoji">🌍</div>
+      <h3>Sem fronteiras</h3>
+      <p>Aprende a partir de qualquer lugar.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="cta">
+    <h2>O teu futuro merece investimento!</h2>
+    <p style="margin:12px 0 22px;color:#e0d2f2">
+      Cria a tua conta e começa a explorar a Mussilipo Academy.
+    </p>
+    <button class="btn" onclick="openModal('register')">Começar agora 🚀</button>
+  </div>
+</section>
+
+</div>
+
+<!-- ÁREA DO ALUNO -->
+<section class="dashboard student-dashboard" id="dashboard">
+  <div class="student-welcome">
+    <div>
+      <span class="student-eyebrow">MUSSILIPO ACADEMY · ÁREA DO ALUNO</span>
+      <h1>Olá, <span id="studentName">Aluno</span>! 👋</h1>
+      <p>Continua a tua jornada de aprendizagem.</p>
+    </div>
+    <div class="student-account-chip">🎓 Conta de aluno</div>
+  </div>
+
+  <nav class="student-menu" aria-label="Menu do aluno">
+    <button type="button" class="student-menu-button active" data-student-panel="overview" onclick="showStudentPanel('overview')">🏠 Início</button>
+    <button type="button" class="student-menu-button" data-student-panel="courses" onclick="showStudentPanel('courses')">📚 Meus cursos</button>
+    <button type="button" class="student-menu-button" data-student-panel="learning" onclick="showStudentPanel('learning')">🎥 Aulas e materiais</button>
+    <button type="button" class="student-menu-button" data-student-panel="profile" onclick="showStudentPanel('profile')">👤 Minha conta</button>
+  </nav>
+
+  <div id="studentPageOverview" class="student-page active">
+    <div class="student-summary-grid">
+      <div class="student-summary-card"><span>📚</span><small>Cursos inscritos</small><strong id="studentCourseCount">0</strong></div>
+      <div class="student-summary-card"><span>⏳</span><small>Inscrições pendentes</small><strong id="studentPendingCount">0</strong></div>
+      <div class="student-summary-card"><span>✅</span><small>Cursos aprovados</small><strong id="studentActiveCount">0</strong></div>
+    </div>
+    <div class="student-section-heading">
+      <div><h2>O teu percurso</h2><p>Encontra rapidamente os cursos em que estás inscrito.</p></div>
+      <button type="button" class="btn" onclick="showStudentPanel('courses')">Ver meus cursos</button>
+    </div>
+    <div id="studentRecentCourses" class="student-course-grid">
+      <div class="dash-card">A carregar os teus cursos...</div>
+    </div>
+  </div>
+
+  <div id="studentPageCourses" class="student-page">
+    <div class="student-section-heading"><div><h2>📚 Meus cursos</h2><p>Consulta o estado das inscrições e continua a aprender.</p></div><button type="button" class="btn-outline" onclick="showCatalog()">Explorar catálogo</button></div>
+    <div id="myCourses" class="student-course-grid" style="margin-top:18px">Ainda não tens inscrições.</div>
+  </div>
+
+  <div id="studentPageLearning" class="student-page">
+    <div class="student-section-heading"><div><h2>🎥 Aulas e materiais</h2><p>Abre um curso aprovado para aceder às aulas, vídeos e ficheiros de estudo.</p></div></div>
+    <div id="studentLearningShortcut" class="dash-card">Escolhe um curso aprovado em “Meus cursos” para consultar as aulas e materiais.</div>
+    <div class="dash-card hidden" id="learningPanel">
+      <button class="btn-outline" onclick="closeLearningCourse()">← Voltar aos meus cursos</button>
+      <h2 id="learningCourseTitle" style="margin-top:20px">Curso</h2>
+      <p id="learningCourseDescription" style="color:var(--muted);margin-top:8px"></p>
+      <div id="learningProgress" style="margin-top:15px"></div>
+      <div id="learningModules" style="margin-top:20px">A carregar aulas...</div>
+    </div>
+  </div>
+
+  <div id="studentPageProfile" class="student-page">
+    <div class="student-section-heading"><div><h2>👤 Minha conta</h2><p>Consulta as informações da tua conta na academia.</p></div></div>
+    <div class="dash-card student-profile-card">
+      <div class="student-avatar">👤</div>
+      <div><small>Nome completo</small><strong id="studentProfileName">Aluno</strong></div>
+      <div><small>E-mail da conta</small><strong id="studentEmail">—</strong></div>
+      <div><small>Tipo de conta</small><strong>Aluno Mussilipo Academy</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- PAINEL DO ADMINISTRADOR -->
+<section class="dashboard" id="adminDashboard">
+  <h1>Olá, Alcido! 👑</h1>
+  <p style="color:var(--muted)">
+    Bem-vindo ao painel de administração da Mussilipo Academy.
+  </p>
+
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <h3>MENU ADMINISTRATIVO</h3>
+
+    <nav>
+      <button class="admin-menu-button active"
+        data-admin-panel="overview"
+        onclick="showAdminPanel('overview')">
+        📊 Visão geral
+      </button>
+
+      <button class="admin-menu-button"
+        data-admin-panel="students"
+        onclick="showAdminPanel('students')">
+        👨‍🎓 Alunos
+      </button>
+
+      <button class="admin-menu-button"
+        data-admin-panel="courses"
+        onclick="showAdminPanel('courses')">
+        📚 Cursos
+      </button>
+
+      <button class="admin-menu-button"
+        data-admin-panel="content"
+        onclick="showAdminPanel('content')">
+        🎥 Módulos e aulas
+      </button>
+
+      <button class="admin-menu-button"
+        data-admin-panel="materials"
+        onclick="showAdminPanel('materials')">
+        📂 Materiais
+      </button>
+
+      <button class="admin-menu-button"
+        data-admin-panel="enrollments"
+        onclick="showAdminPanel('enrollments')">
+        📝 Matrículas
+      </button>
+    </nav>
+  </aside>
+
+  <main class="admin-workspace">
+    <div class="admin-workspace-toolbar">
+      <div><strong>Painel administrativo</strong><span id="adminCurrentSection">Visão geral</span></div>
+      <button type="button" class="btn-outline" onclick="showAdminPanel('overview')">← Visão geral</button>
+    </div>
+
+    <div id="adminPageOverview" class="admin-page active"></div>
+
+    <div id="adminPageStudents" class="admin-page"></div>
+
+    <div id="adminPageCourses" class="admin-page"></div>
+
+    <div id="adminPageContent" class="admin-page"></div>
+
+    <div id="adminPageMaterials" class="admin-page"></div>
+
+    <div id="adminPageEnrollments" class="admin-page"></div>
+
+  </main>
+</div>
+
+<!-- RESUMO E CONSULTA DE ALUNOS -->
+<div class="dash-card" id="adminOverviewCard" style="margin-top:25px">
+  <h2>📊 Visão geral da academia</h2>
+
+  <div id="adminOverview"
+       style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:18px">
+    <div class="dash-card">A carregar estatísticas...</div>
+  </div>
+</div>
+
+<div class="dash-card" id="adminStudentPanel" style="margin-top:20px">
+  <h2>👨‍🎓 Gestão e acompanhamento dos alunos</h2>
+
+  <p style="color:var(--muted)">
+    Pesquisa um aluno para consultar as inscrições e o progresso das aulas.
+  </p>
+
+  <input
+    id="adminStudentSearch"
+    type="search"
+    placeholder="🔎 Pesquisar pelo nome ou código do aluno..."
+    oninput="filterAdminStudents()"
+    style="width:100%;padding:13px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px"
+  >
+
+  <div id="adminStudents">
+    A carregar alunos...
+  </div>
+</div>
+<!-- FORMULÁRIO DE CRIAÇÃO DE CURSOS -->
+<div class="dash-card" id="adminCreateCoursePanel" style="margin-top:25px">
+  <h2>➕ Criar novo curso</h2>
+  <p style="color:var(--muted)">Preenche os dados para adicionar um curso à academia.</p>
+
+  <form id="courseForm" onsubmit="createCourse(event)">
+
+    <label for="courseTitle">Nome do curso</label>
+    <input id="courseTitle" type="text" placeholder="Ex.: Marketing Digital" required>
+
+    <label for="courseDescription">Descrição</label>
+    <textarea id="courseDescription" placeholder="Explica o que o aluno vai aprender..." rows="4"></textarea>
+
+    <label for="coursePrice">Preço em MT</label>
+    <input id="coursePrice" type="number" min="0" step="0.01" value="0">
+
+    <label for="courseType">Tipo de acesso</label>
+    <select id="courseType">
+      <option value="free">Gratuito</option>
+      <option value="paid">Pago</option>
+    </select>
+
+    <label for="courseImage">Imagem de capa</label>
+    <input id="courseImage" type="file" accept="image/*">
+
+    <label style="display:flex;align-items:center;gap:8px;margin:15px 0">
+      <input id="coursePublished" type="checkbox" style="width:auto">
+      Publicar curso imediatamente
+    </label>
+
+    <button class="btn" type="submit" id="saveCourseBtn">
+      Publicar / Guardar curso
+    </button>
+
+    <p id="courseMessage" style="margin-top:12px"></p>
+  </form>
+</div>
+
+<!-- LISTA DOS CURSOS CRIADOS -->
+<div class="dash-card" id="adminCoursesPanel" style="margin-top:20px">
+  <h2>📚 Cursos cadastrados</h2>
+  <div id="adminCourses">
+    A carregar cursos...
+  </div>
+</div>
+  <!-- GESTÃO DE MÓDULOS E AULAS -->
+<div class="dash-card" id="adminContentPanel" style="margin-top:20px">
+
+  <h2>🎥 Gestão de módulos e aulas</h2>
+  <p style="color:var(--muted)">
+    Escolhe um curso, cria módulos e adiciona aulas.
+  </p>
+
+  <label for="adminContentCourse">Selecionar curso</label>
+  <select id="adminContentCourse"
+          onchange="loadAdminModules()"
+          style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+    <option value="">A carregar cursos...</option>
+  </select>
+
+  <hr style="border-color:#38234e;margin:22px 0">
+
+  <h3>➕ Criar módulo</h3>
+
+  <form id="moduleForm" onsubmit="createModule(event)">
+    <input id="moduleTitle"
+           type="text"
+           placeholder="Nome do módulo"
+           required
+           style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+
+    <button class="btn" type="submit">
+      Criar módulo
+    </button>
+  </form>
+
+  <div id="adminModules" style="margin-top:20px">
+    Seleciona um curso.
+  </div>
+
+  <hr style="border-color:#38234e;margin:22px 0">
+
+  <h3>➕ Adicionar aula</h3>
+
+  <form id="lessonForm" onsubmit="createLesson(event)">
+
+    <label for="adminModuleSelect">Selecionar módulo</label>
+<select id="adminModuleSelect"
+        onchange="loadAdminLessons()"
+        required
+        style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+      <option value="">Primeiro cria um módulo</option>
+    </select>
+
+    <input id="lessonTitle"
+           type="text"
+           placeholder="Título da aula"
+           required
+           style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+
+    <textarea id="lessonDescription"
+              placeholder="Descrição da aula"
+              rows="3"
+              style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px"></textarea>
+
+    <input id="lessonVideo"
+           type="url"
+           placeholder="Link do vídeo (YouTube, por exemplo)"
+           style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+
+    <textarea id="lessonContent"
+              placeholder="Conteúdo ou explicação da aula"
+              rows="5"
+              style="width:100%;padding:12px;margin:12px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px"></textarea>
+
+
+    <button class="btn" type="submit">
+      Publicar aula
+    </button>
+
+  </form>
+<!-- BIBLIOTECA DE MATERIAIS -->
+<div class="dash-card" id="adminMaterialsPanel" style="margin-top:20px">
+  <h2>📂 Materiais de estudo</h2>
+  <p style="color:var(--muted)">
+    Carrega documentos e ficheiros para uma aula específica.
+  </p>
+
+  <label for="materialLessonSelect">Seleccionar aula</label>
+  <select id="materialLessonSelect"
+    style="width:100%;padding:12px;margin:10px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+    <option value="">A carregar aulas...</option>
+  </select>
+
+  <label for="materialTitle">Nome do material</label>
+  <input id="materialTitle" type="text"
+    placeholder="Ex.: Manual da primeira aula"
+    style="width:100%;padding:12px;margin:10px 0;background:#120a1e;color:white;border:1px solid #50346c;border-radius:8px">
+
+  <label for="materialFile">Escolher ficheiro</label>
+  <input id="materialFile" type="file"
+    accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.jpeg,.png,.webp"
+    style="width:100%;padding:12px;margin:10px 0">
+
+  <p style="font-size:12px;color:var(--muted)">
+    Formatos: PDF, Word, PowerPoint, Excel e imagens. Máximo: 50 MB.
+  </p>
+
+  <button type="button" onclick="uploadLessonMaterial()">
+    📤 Carregar material
+  </button>
+
+  <button type="button" onclick="loadMaterialLessons()"
+    style="margin-left:8px">
+    🔄 Actualizar aulas
+  </button>
+
+  <div id="materialUploadMessage"
+    style="margin-top:12px"></div>
+  <div id="adminMaterialsList" style="margin-top:20px">Ainda não existem materiais carregados.</div>
+</div>
+
+  <div id="adminLessons" style="margin-top:20px">
+    Seleciona um módulo para consultar as aulas.
+  </div>
+
+</div>
+<!-- PAINEL DE APROVAÇÃO DE MATRÍCULAS -->
+<div class="dash-card" id="adminEnrollmentPanel" style="margin-top:20px">
+  <h2>📝 Inscrições dos alunos</h2>
+  <p style="color:var(--muted)">Consulta as inscrições e aprova os alunos.</p>
+  <div id="adminEnrollments">
+    Clica em "Ver matrículas" para carregar as inscrições.
+  </div>
+</div>
+  <div class="features hidden" id="adminQuickLinks" style="margin-top:25px">
+    <div class="feature">
+      <div class="emoji">📚</div>
+      <h3>Gerir cursos</h3>
+      <p>Criar, editar e publicar cursos.</p>
+     <button class="btn" onclick="goToAdminCourses()">
+  Gerir cursos
+</button>
+    </div>
+
+    <div class="feature">
+      <div class="emoji">👨‍🎓</div>
+      <h3>Alunos</h3>
+      <p>Consultar os alunos da plataforma.</p>
+    <button class="btn" onclick="goToAdminStudents()">
+  Ver alunos 👨‍🎓
+</button>
+    </div>
+
+    <div class="feature">
+      <div class="emoji">🎥</div>
+      <h3>Módulos e aulas</h3>
+      <p>Organizar e publicar conteúdos.</p>
+     <button class="btn" onclick="document.getElementById('adminContentPanel').scrollIntoView({behavior:'smooth'});">
+  Gerir aulas
+</button>
+    </div>
+
+    <div class="feature">
+      <div class="emoji">📝</div>
+      <h3>Matrículas</h3>
+      <p>Consultar e aprovar inscrições.</p>
+      <button class="btn" onclick="showAdminPanel('enrollments')">
+  Ver matrículas
+</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <strong>MUSSILIPO ACADEMY</strong>
+  <p>Aprende. Desenvolve. Conquista.</p>
+  <p style="margin-top:12px">© 2026 Mussilipo Investimento. Todos os direitos reservados.</p>
+</footer>
+
+<!-- MODAL DE AUTENTICAÇÃO -->
+<div class="modal" id="authModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal()">×</button>
+
+    <div id="authTitle">
+      <h2>Entrar na tua conta</h2>
+      <p>Acede à tua área de aprendizagem.</p>
+    </div>
+
+    <form id="authForm">
+      <input type="text" id="fullName" placeholder="O teu nome completo" class="hidden">
+      <input type="email" id="email" placeholder="O teu e-mail" required>
+      <input type="password" id="password" placeholder="Palavra-passe" minlength="8" required>
+      <button class="btn" type="submit" id="submitBtn">Entrar</button>
+    </form>
+
+    <div id="authMessage" class="message"></div>
+
+    <div class="switch" id="switchText">
+      Ainda não tens conta?
+      <a onclick="openModal('register')">Criar conta</a>
+    </div>
+    <div class="switch">
+      <a onclick="resetPassword()">Esqueci a palavra-passe</a>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from
+'https://esm.sh/@supabase/supabase-js@2';
+
+// CONFIGURAÇÃO DO TEU SUPABASE
+const SUPABASE_URL = 'https://hmfkqylquuzjoezixvbf.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_625CruX_1usvAZyThTlBrQ_akv3a4WM';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let authMode = 'login';
+let currentUser = null;
+let enrollments = [];
+let currentLearningCourseId = null;
+
+const $ = id => document.getElementById(id);
+
+window.openModal = function(mode) {
+  authMode = mode;
+  $('authModal').classList.add('show');
+  $('authMessage').textContent = '';
+  $('authMessage').className = 'message';
+  $('fullName').classList.toggle('hidden',mode !== 'register');
+
+  if(mode === 'register') {
+    $('authTitle').innerHTML = '<h2>Criar conta 🎓</h2><p>Junta-te à Mussilipo Academy.</p>';
+    $('submitBtn').textContent = 'Criar minha conta';
+    $('switchText').innerHTML = 'Já tens conta? <a onclick="openModal(\'login\')">Entrar</a>';
+  } else {
+    $('authTitle').innerHTML = '<h2>Entrar na tua conta</h2><p>Acede à tua área de aprendizagem.</p>';
+    $('submitBtn').textContent = 'Entrar';
+    $('switchText').innerHTML = 'Ainda não tens conta? <a onclick="openModal(\'register\')">Criar conta</a>';
+  }
+};
+
+window.closeModal = function() {
+  $('authModal').classList.remove('show');
+};
+
+function showMessage(message,error=false) {
+  $('authMessage').textContent = message;
+  $('authMessage').className = error ? 'message error' : 'message';
+}
+
+$('authForm').addEventListener('submit',async e => {
+  e.preventDefault();
+  const email = $('email').value.trim();
+  const password = $('password').value;
+  const name = $('fullName').value.trim();
+
+  $('submitBtn').disabled = true;
+  $('submitBtn').textContent = 'A processar...';
+
+  try {
+    if(authMode === 'register') {
+      if(!name) throw new Error('Introduz o teu nome.');
+
+      const {data,error} = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {full_name:name},
+          emailRedirectTo:window.location.origin + window.location.pathname
+        }
+      });
+
+      if(error) throw error;
+
+      if(data.session) {
+        showMessage('Conta criada com sucesso!');
+        await loadUser(data.session.user);
+      } else {
+        showMessage('Conta criada! Confirma o teu e-mail através do link enviado para a tua caixa de entrada.');
+      }
+
+    } else {
+      const {data,error} = await supabase.auth.signInWithPassword({
+        email,password
+      });
+      if(error) throw error;
+      await loadUser(data.user);
+      closeModal();
+    }
+  } catch(error) {
+    showMessage(error.message || 'Ocorreu um erro.',true);
+  } finally {
+    $('submitBtn').disabled = false;
+    $('submitBtn').textContent = authMode === 'register' ? 'Criar minha conta' : 'Entrar';
+  }
+});
+
+window.resetPassword = async function() {
+  const email = $('email').value.trim();
+  if(!email) {
+    showMessage('Escreve primeiro o teu e-mail.',true);
+    return;
+  }
+
+  try {
+    const {error} = await supabase.auth.resetPasswordForEmail(email,{
+      redirectTo:window.location.origin + window.location.pathname
+    });
+    if(error) throw error;
+    showMessage('Verifica o teu e-mail para recuperar a palavra-passe.');
+  } catch(error) {
+    showMessage(error.message,true);
+  }
+};
+
+
+async function loadUser(user) {
+  // Consultar o papel do utilizador na base de dados
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('role, full_name, is_blocked')
+    .eq('id', user.id)
+    .single();
+
+  if (error || !profile) {
+    console.error('Erro ao verificar perfil:', error);
+    alert('Não foi possível verificar o teu perfil. Tenta novamente.');
+    return;
+  }
+  // IMPEDIR ACESSO DE ALUNOS BLOQUEADOS
+if (profile.is_blocked && profile.role === 'student') {
+  await supabase.auth.signOut();
+  currentUser = null;
+
+  alert('A tua conta está temporariamente bloqueada. Contacta a administração.');
+
+  $('dashboard').classList.remove('show');
+  $('adminDashboard').classList.remove('show');
+  $('mainContent').classList.remove('hidden');
+
+  $('loginBtn').classList.remove('hidden');
+  $('registerBtn').classList.remove('hidden');
+  $('logoutBtn').classList.add('hidden');
+
+  return;
+}
+  currentUser = user;
+
+  // Esconder todos os painéis antes de abrir o correcto
+  $('mainContent').classList.add('hidden');
+  $('dashboard').classList.remove('show');
+  $('adminDashboard').classList.remove('show');
+  document.querySelectorAll('.student-page').forEach(page => page.classList.remove('active'));
+
+  // Actualizar os dados da conta
+  const name = profile.full_name || user.user_metadata?.full_name || user.email.split('@')[0];
+
+  $('studentName').textContent = name;
+  if ($('studentProfileName')) $('studentProfileName').textContent = name;
+  $('studentEmail').textContent = user.email;
+  ['publicHomeLink','publicCoursesLink','publicAdvantagesLink'].forEach(id => $(id)?.classList.add('hidden'));
+
+  // Mostrar o painel correspondente ao papel
+if (profile.role === 'admin') {
+
+  $('adminDashboard').classList.add('show');
+
+  window.organizeAdminPanels();
+
+  await loadAdminCourses();
+  await loadAdminContentCourses();
+  await loadAdminOverview();
+  await loadMaterialLessons();
+  await window.loadAdminMaterials?.();
+
+  window.showAdminPanel('overview');
+
+  $('adminDashboard').scrollIntoView({
+    behavior: 'smooth'
+  });
+
+} else {
+  $('dashboard').classList.add('show');
+  await loadEnrollments();
+  window.showStudentPanel('overview', false);
+  $('dashboard').scrollIntoView({behavior:'smooth', block:'start'});
+}
+  // Actualizar os botões do cabeçalho
+  $('loginBtn').classList.add('hidden');
+  $('registerBtn').classList.add('hidden');
+  $('logoutBtn').classList.remove('hidden');
+}
+
+
+// MOSTRAR INSCRIÇÕES DO ALUNO
+function renderEnrollments() {
+  const container = $('myCourses');
+  const recent = $('studentRecentCourses');
+  const total = enrollments.length;
+  const pending = enrollments.filter(c => c.status === 'pending').length;
+  const active = enrollments.filter(c => c.status === 'active').length;
+
+  if ($('studentCourseCount')) $('studentCourseCount').textContent = total;
+  if ($('studentPendingCount')) $('studentPendingCount').textContent = pending;
+  if ($('studentActiveCount')) $('studentActiveCount').textContent = active;
+
+  if (!total) {
+    const empty = '<div class="dash-card"><strong>Ainda não tens inscrições.</strong><p style="margin-top:8px">Explora o catálogo público depois de terminares a sessão para conhecer os cursos disponíveis.</p></div>';
+    container.innerHTML = empty;
+    if (recent) recent.innerHTML = empty;
+    return;
+  }
+
+  const cards = enrollments.map(c => {
+    const status = c.status === 'pending' ? 'Pendente' : c.status === 'active' ? 'Aprovada' : c.status === 'rejected' ? 'Rejeitada' : (c.status || 'Indefinido');
+    const statusClass = c.status === 'active' ? 'active' : c.status === 'pending' ? 'pending' : 'rejected';
+    const action = c.status === 'active'
+      ? `<button type="button" class="btn open-learning" data-course-id="${c.course_id}">Continuar a aprender →</button>`
+      : c.status === 'pending'
+      ? '<p>⏳ A tua inscrição está a aguardar aprovação da administração.</p>'
+      : '<p>Contacta a administração se precisares de ajuda com esta inscrição.</p>';
+    return `<article class="student-course-card">
+      <h3>📘 ${escapeHTML(c.course?.title || 'Curso')}</h3>
+      <span class="student-status ${statusClass}">${c.status === 'active' ? '✓' : c.status === 'pending' ? '◷' : '!' } ${escapeHTML(status)}</span>
+      ${c.status === 'active' ? '<p>Tens acesso às aulas e aos materiais deste curso.</p>' : ''}
+      ${action}
+    </article>`;
+  }).join('');
+
+  container.innerHTML = cards;
+  if (recent) recent.innerHTML = cards;
+
+  document.querySelectorAll('.open-learning').forEach(button => {
+    button.addEventListener('click', () => {
+      window.openLearningCourse(button.dataset.courseId);
+    });
+  });
+}
+
+async function loadEnrollments() {
+  if (!currentUser) return;
+
+  const container = $('myCourses');
+  container.textContent = 'A carregar inscrições...';
+
+  const { data: rows, error } = await supabase
+    .from('enrollments')
+    .select('id, course_id, status, created_at')
+    .eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Erro ao carregar inscrições:', error);
+    container.textContent = 'Não foi possível carregar as inscrições.';
+    return;
+  }
+
+  if (!rows || rows.length === 0) {
+    enrollments = [];
+    renderEnrollments();
+    return;
+  }
+
+  const courseIds = [...new Set(rows.map(row => row.course_id))];
+
+  const { data: courses, error: coursesError } = await supabase
+    .from('courses')
+    .select('id, title')
+    .in('id', courseIds);
+
+  if (coursesError) {
+    console.error('Erro ao carregar cursos inscritos:', coursesError);
+    container.textContent = 'Não foi possível carregar os cursos.';
+    return;
+  }
+
+  const courseMap = Object.fromEntries(
+    (courses || []).map(course => [course.id, course])
+  );
+
+  enrollments = rows.map(row => ({
+    ...row,
+    course: courseMap[row.course_id]
+  }));
+
+  renderEnrollments();
+}
+  // ABRIR CURSO NA ÁREA DE APRENDIZAGEM
+window.openLearningCourse = async function(courseId) {
+  if (!currentUser) {
+    alert('Entra na tua conta para continuar.');
+    return;
+  }
+
+  currentLearningCourseId = courseId;
+
+  const panel = $('learningPanel');
+  const modulesContainer = $('learningModules');
+
+  panel.classList.remove('hidden');
+  if (window.showStudentPanel) window.showStudentPanel('learning', false);
+  $('learningCourseTitle').textContent = 'A carregar curso...';
+  $('learningCourseDescription').textContent = '';
+  $('learningProgress').textContent = '';
+  modulesContainer.textContent = 'A carregar aulas...';
+
+  panel.scrollIntoView({ behavior: 'smooth' });
+
+  // CONFIRMAR SE A MATRÍCULA ESTÁ ATIVA
+  const { data: enrollment, error: enrollmentError } = await supabase
+    .from('enrollments')
+    .select('id')
+    .eq('user_id', currentUser.id)
+    .eq('course_id', courseId)
+    .eq('status', 'active')
+    .maybeSingle();
+
+  if (enrollmentError) {
+    modulesContainer.textContent =
+      'Erro ao verificar a matrícula: ' + enrollmentError.message;
+    return;
+  }
+
+  if (!enrollment) {
+    modulesContainer.textContent =
+      '🔒 Ainda não tens autorização para aceder a este curso.';
+    return;
+  }
+
+  // CARREGAR INFORMAÇÕES DO CURSO
+  const { data: course, error: courseError } = await supabase
+    .from('courses')
+    .select('id, title, description')
+    .eq('id', courseId)
+    .single();
+
+  if (courseError || !course) {
+    modulesContainer.textContent = 'Não foi possível carregar o curso.';
+    return;
+  }
+
+  $('learningCourseTitle').textContent = course.title;
+  $('learningCourseDescription').textContent =
+    course.description || 'Bem-vindo à tua aprendizagem!';
+
+  // CARREGAR MÓDULOS
+  const { data: modules, error: modulesError } = await supabase
+    .from('modules')
+    .select('id, title, position')
+    .eq('course_id', courseId)
+    .order('position', { ascending: true });
+
+  if (modulesError) {
+    modulesContainer.textContent =
+      'Erro ao carregar módulos: ' + modulesError.message;
+    return;
+  }
+
+  if (!modules || modules.length === 0) {
+    modulesContainer.textContent =
+      'Este curso ainda não tem módulos publicados.';
+    return;
+  }
+
+  const moduleIds = modules.map(module => module.id);
+
+  // CARREGAR AULAS PUBLICADAS
+  const { data: lessons, error: lessonsError } = await supabase
+    .from('lessons')
+    .select('id, module_id, title, description, video_url, content, position')
+    .in('module_id', moduleIds)
+    .eq('is_published', true)
+    .order('position', { ascending: true });
+
+  if (lessonsError) {
+    modulesContainer.textContent =
+      'Erro ao carregar aulas: ' + lessonsError.message;
+    return;
+  }
+
+  const lessonIds = (lessons || []).map(lesson => lesson.id);
+
+  // CARREGAR MATERIAIS DAS AULAS
+  const materialsByLesson = new Map();
+
+  if (lessonIds.length > 0) {
+    const { data: materials, error: materialsError } = await supabase
+      .from('lesson_materials')
+      .select('id, lesson_id, title, file_name, storage_path, file_size')
+      .in('lesson_id', lessonIds);
+
+    if (materialsError) {
+      console.error('Erro ao carregar materiais:', materialsError);
+    } else {
+      for (const material of (materials || [])) {
+        const { data: signedData, error: signedError } = await supabase
+          .storage
+          .from('course-materials')
+          .createSignedUrl(material.storage_path, 3600);
+
+        if (signedError) {
+          console.error('Erro ao gerar link do material:', signedError);
+          continue;
+        }
+
+        if (!materialsByLesson.has(material.lesson_id)) {
+          materialsByLesson.set(material.lesson_id, []);
+        }
+
+        materialsByLesson.get(material.lesson_id).push({
+          ...material,
+          signedUrl: signedData.signedUrl
+        });
+      }
+    }
+  }
+
+  // CARREGAR PROGRESSO DO ALUNO
+  let progress = [];
+
+  if (lessonIds.length > 0) {
+    const { data: progressRows, error: progressError } = await supabase
+      .from('lesson_progress')
+      .select('lesson_id, completed')
+      .eq('user_id', currentUser.id)
+      .in('lesson_id', lessonIds);
+
+    if (progressError) {
+      modulesContainer.textContent =
+        'Erro ao carregar progresso: ' + progressError.message;
+      return;
+    }
+
+    progress = progressRows || [];
+  }
+
+  const completedIds = new Set(
+    progress
+      .filter(item => item.completed)
+      .map(item => item.lesson_id)
+  );
+
+  const totalLessons = lessonIds.length;
+  const completedCount = completedIds.size;
+  const percentage = totalLessons
+    ? Math.round((completedCount / totalLessons) * 100)
+    : 0;
+
+  $('learningProgress').innerHTML = `
+    <div style="display:flex;justify-content:space-between;gap:10px">
+      <strong>📊 O teu progresso</strong>
+      <strong>${percentage}%</strong>
+    </div>
+
+    <div style="height:10px;background:#38234e;border-radius:20px;margin-top:10px;overflow:hidden">
+      <div style="height:100%;width:${percentage}%;background:var(--green);border-radius:20px"></div>
+    </div>
+
+    <p style="margin-top:8px">
+      ${completedCount} de ${totalLessons} aulas concluídas.
+    </p>
+  `;
+
+  // MOSTRAR MÓDULOS E AULAS
+  modulesContainer.innerHTML = modules.map((module, index) => {
+    const moduleLessons = (lessons || []).filter(
+      lesson => lesson.module_id === module.id
+    );
+
+    return `
+      <div class="dash-card">
+        <h3>📚 Módulo ${index + 1}: ${escapeHTML(module.title)}</h3>
+
+     ${moduleLessons.length
+         ? moduleLessons.map((lesson, lessonIndex) => {
+             const completed = completedIds.has(lesson.id);
+             const lessonMaterials = materialsByLesson.get(lesson.id) || [];
+
+             return `
+                <div style="border-top:1px solid #49305f;margin-top:15px;padding-top:15px">
+
+                  <h4>
+                    Aula ${lessonIndex + 1}: ${escapeHTML(lesson.title)}
+                  </h4>
+
+                  <p style="margin-top:8px">
+                    ${escapeHTML(lesson.description || '')}
+                  </p>
+
+                  ${lesson.video_url ? (() => {
+  const videoId = getYouTubeVideoId(lesson.video_url);
+
+  if (videoId) {
+    return `
+      <div style="
+        margin-top:18px;
+        width:100%;
+        aspect-ratio:16/9;
+        background:#000;
+        border-radius:12px;
+        overflow:hidden;
+      ">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/${videoId}"
+          title="${escapeHTML(lesson.title)}"
+          style="width:100%;height:100%;border:0"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+      </div>
+    `;
+  }
+
+  return `
+    <p style="margin-top:12px">
+      🎥 <a href="${escapeHTML(lesson.video_url)}"
+         target="_blank"
+         rel="noopener noreferrer"
+         style="color:#c5a3ff">
+         Abrir vídeo da aula
+      </a>
+    </p>
+  `;
+})() : ''}
+${lesson.content ? `
+  <div style="white-space:pre-wrap;margin-top:12px;color:#ddd">
+    ${escapeHTML(lesson.content)}
+  </div>
+` : ''}
+             
+  ${lessonMaterials.length ? `
+    <div style="
+      margin-top:18px;
+      padding:15px;
+      background:#120a1e;
+      border:1px solid #50346c;
+      border-radius:12px;
+    ">
+      <h4 style="margin-bottom:12px;color:#c5a3ff">
+        📂 Materiais de estudo
+      </h4>
+
+      ${lessonMaterials.map(material => `
+        <div style="
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          flex-wrap:wrap;
+          gap:10px;
+          padding:10px 0;
+          border-top:1px solid #38234e;
+        ">
+          <div>
+            <strong>${escapeHTML(material.title)}</strong>
+            <p style="font-size:12px;color:var(--muted)">
+              ${escapeHTML(material.file_name)}
+            </p>
+          </div>
+
+          <a
+            href="${escapeHTML(material.signedUrl)}"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="
+              display:inline-block;
+              background:var(--purple);
+              color:white;
+              padding:9px 13px;
+              border-radius:8px;
+              text-decoration:none;
+              font-size:13px;
+              font-weight:bold;
+            ">
+            📥 Abrir / Descarregar
+          </a>
+        </div>
+      `).join('')}
+    </div>
+  ` : ''}
+   
+
+                  <div style="margin-top:15px">
+                    ${completed
+                      ? '<span style="color:#41d6a1;font-weight:bold">✅ Aula concluída</span>'
+                      : `<button class="btn complete-lesson"
+                           data-lesson-id="${lesson.id}">
+                           Marcar como concluída
+                         </button>`
+                    }
+                  </div>
+
+                </div>
+              `;
+            }).join('')
+          : '<p style="margin-top:12px">Ainda não existem aulas publicadas neste módulo.</p>'
+        }
+
+      </div>
+    `;
+  }).join('');
+
+  // LIGAR OS BOTÕES DE CONCLUSÃO
+  modulesContainer.querySelectorAll('.complete-lesson').forEach(button => {
+    button.addEventListener('click', () => {
+      markLessonComplete(button.dataset.lessonId);
+    });
+  });
+};
+
+
+// MARCAR AULA COMO CONCLUÍDA
+window.markLessonComplete = async function(lessonId) {
+  if (!currentUser) return;
+
+  const { error } = await supabase
+    .from('lesson_progress')
+    .upsert({
+      user_id: currentUser.id,
+      lesson_id: lessonId,
+      completed: true,
+      completed_at: new Date().toISOString()
+    }, {
+      onConflict: 'user_id,lesson_id'
+    });
+
+  if (error) {
+    alert('Não foi possível guardar o progresso: ' + error.message);
+    return;
+  }
+
+  alert('🎉 Aula concluída! O teu progresso foi atualizado.');
+
+  await window.openLearningCourse(currentLearningCourseId);
+};
+
+
+// VOLTAR À LISTA DE INSCRIÇÕES
+window.closeLearningCourse = function() {
+  $('learningPanel').classList.add('hidden');
+  window.showStudentPanel('courses');
+  $('dashboard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+function escapeHTML(str) {
+  return String(str).replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[char]);
+}
+// IDENTIFICAR LINKS DE VÍDEOS DO YOUTUBE
+function getYouTubeVideoId(videoUrl) {
+  try {
+    const url = new URL(videoUrl);
+    const host = url.hostname.toLowerCase();
+
+    const allowedHosts = [
+      'youtube.com',
+      'www.youtube.com',
+      'm.youtube.com',
+      'music.youtube.com',
+      'youtu.be',
+      'www.youtu.be',
+      'youtube-nocookie.com',
+      'www.youtube-nocookie.com'
+    ];
+
+    if (!allowedHosts.includes(host)) return null;
+
+    let videoId = '';
+
+    if (host.includes('youtu.be')) {
+      videoId = url.pathname.split('/').filter(Boolean)[0] || '';
+    } else if (url.pathname === '/watch') {
+      videoId = url.searchParams.get('v') || '';
+    } else {
+      const match = url.pathname.match(
+        /^\/(embed|shorts|live)\/([a-zA-Z0-9_-]{11})/
+      );
+
+      if (match) videoId = match[2];
+    }
+
+    return /^[a-zA-Z0-9_-]{11}$/.test(videoId)
+      ? videoId
+      : null;
+
+  } catch {
+    return null;
+  }
+}
+window.enroll = async function(courseId, name, type) {
+  if (!currentUser) {
+    openModal('login');
+    showMessage('Entra na tua conta para continuar.');
+    return;
+  }
+
+  if (type === 'pago') {
+    alert('Este curso é pago. O sistema de pagamentos será configurado na próxima etapa.');
+    return;
+  }
+
+  try {
+    const { data: existing, error: checkError } = await supabase
+      .from('enrollments')
+      .select('id')
+      .eq('user_id', currentUser.id)
+      .eq('course_id', courseId)
+      .maybeSingle();
+
+    if (checkError) throw checkError;
+
+    if (existing) {
+      alert('Já tens uma inscrição neste curso.');
+      await loadEnrollments();
+      return;
+    }
+
+    const { error } = await supabase
+      .from('enrollments')
+      .insert({
+        user_id: currentUser.id,
+        course_id: courseId,
+        status: 'pending'
+      });
+
+    if (error) throw error;
+
+    await loadEnrollments();
+
+    $('dashboard').scrollIntoView({ behavior: 'smooth' });
+
+    alert('🎉 Inscrição enviada com sucesso! Aguarda a confirmação do administrador.');
+
+  } catch (error) {
+    console.error('Erro na inscrição:', error);
+    alert('Não foi possível realizar a inscrição: ' + error.message);
+  }
+};
+
+// ABRIR CATÁLOGO DE CURSOS
+window.showCatalog = function() {
+
+  $('dashboard').classList.remove('show');
+  $('adminDashboard').classList.remove('show');
+
+  $('mainContent').classList.remove('hidden');
+
+  const backButton = $('studentBackButton');
+
+  if (backButton) {
+    backButton.classList.toggle('hidden', !currentUser);
+  }
+
+  $('cursos').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+};
+
+
+// NAVEGAÇÃO DA ÁREA DO ALUNO
+window.showStudentPanel = function(panelName, scroll = true) {
+  const valid = ['overview', 'courses', 'learning', 'profile'];
+  if (!valid.includes(panelName)) return;
+  document.querySelectorAll('.student-page').forEach(page => page.classList.remove('active'));
+  document.querySelectorAll('.student-menu-button').forEach(button => {
+    button.classList.toggle('active', button.dataset.studentPanel === panelName);
+  });
+  const page = document.getElementById('studentPage' + panelName.charAt(0).toUpperCase() + panelName.slice(1));
+  if (page) page.classList.add('active');
+  if (panelName === 'learning' && !$('learningPanel')?.classList.contains('hidden')) {
+    $('studentLearningShortcut').classList.add('hidden');
+  } else if (panelName === 'learning') {
+    $('studentLearningShortcut').classList.remove('hidden');
+  }
+  if (scroll && $('dashboard')) $('dashboard').scrollIntoView({behavior:'smooth', block:'start'});
+};
+
+// VOLTAR À ÁREA DO ALUNO
+window.returnToStudentDashboard = async function() {
+
+  if (!currentUser) {
+    openModal('login');
+    return;
+  }
+
+  $('mainContent').classList.add('hidden');
+  $('adminDashboard').classList.remove('show');
+  $('dashboard').classList.add('show');
+
+  $('learningPanel').classList.add('hidden');
+
+  await loadEnrollments();
+  window.showStudentPanel('courses', false);
+
+  $('dashboard').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+};
+window.showPublicSection = function(sectionId) {
+  if (currentUser) return;
+  $('dashboard').classList.remove('show');
+  $('adminDashboard').classList.remove('show');
+
+  $('mainContent').classList.remove('hidden');
+  ['publicHomeLink','publicCoursesLink','publicAdvantagesLink'].forEach(id => $(id)?.classList.remove('hidden'));
+
+  const section = document.getElementById(sectionId);
+
+  if (section) {
+    section.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+};
+window.logout = async function() {
+  const {error} = await supabase.auth.signOut();
+
+  if(error) {
+    alert(error.message);
+    return;
+  }
+
+  currentUser = null;
+  enrollments = [];
+
+  $('dashboard').classList.remove('show');
+  $('adminDashboard').classList.remove('show');
+  $('mainContent').classList.remove('hidden');
+  ['publicHomeLink','publicCoursesLink','publicAdvantagesLink'].forEach(id => $(id)?.classList.remove('hidden'));
+  $('learningPanel').classList.add('hidden');
+
+  $('loginBtn').classList.remove('hidden');
+  $('registerBtn').classList.remove('hidden');
+  $('logoutBtn').classList.add('hidden');
+
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+
+window.filterCourses = function(type, button) {
+  document.querySelectorAll('.filter').forEach(b => {
+    b.classList.remove('active');
+  });
+
+  button.classList.add('active');
+
+  document.querySelectorAll('#courseList .course').forEach(course => {
+    const courseType = course.dataset.type;
+
+    course.style.display =
+      type === 'todos' || courseType === type ? '' : 'none';
+  });
+};
+
+window.createCourse = async function(event) {
+  event.preventDefault();
+
+  const title = $('courseTitle').value.trim();
+  const description = $('courseDescription').value.trim();
+  const price = Number($('coursePrice').value);
+  const accessType = $('courseType').value;
+  const imageFile = $('courseImage').files[0];
+  const published = $('coursePublished').checked;
+  const message = $('courseMessage');
+  const saveButton = $('saveCourseBtn');
+
+  if (!title) {
+    message.textContent = 'Escreve o nome do curso.';
+    return;
+  }
+
+  if (accessType === 'paid' && price <= 0) {
+    message.textContent = 'Indica um preço válido para o curso pago.';
+    return;
+  }
+
+  saveButton.disabled = true;
+  message.textContent = 'A guardar o curso...';
+
+  try {
+    let thumbnail = null;
+
+    if (imageFile) {
+      const extension = imageFile.name.split('.').pop();
+      const fileName = `${crypto.randomUUID()}.${extension}`;
+      const filePath = fileName;
+
+      const { error: uploadError } = await supabase.storage
+        .from('course-thumbnails')
+        .upload(filePath, imageFile);
+
+      if (uploadError) throw uploadError;
+
+      const { data: imageData } = supabase.storage
+        .from('course-thumbnails')
+        .getPublicUrl(filePath);
+
+      thumbnail = imageData.publicUrl;
+    }
+
+    const slug = title
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+
+    const { error } = await supabase
+      .from('courses')
+      .insert({
+        title,
+        slug,
+        description,
+        price_mzn: accessType === 'paid' ? price : 0,
+        access_type: accessType === 'paid' ? 'paid' : 'free',
+        thumbnail,
+        is_published: published
+      });
+
+    if (error) throw error;
+
+ message.textContent = '✅ Curso guardado com sucesso!';
+$('courseForm').reset();
+await loadAdminCourses();
+await loadPublicCourses();
+  } catch (error) {
+    console.error('Erro ao criar curso:', error);
+    message.textContent = 'Erro: ' + error.message;
+  } finally {
+    saveButton.disabled = false;
+  }
+};
+window.loadPublicCourses = async function() {
+  const container = $('courseList');
+
+  container.innerHTML = '<p>A carregar cursos...</p>';
+
+  const { data: courses, error } = await supabase
+    .from('courses')
+    .select('id, title, description, price_mzn, access_type, thumbnail')
+    .eq('is_published', true)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Erro ao carregar catálogo:', error);
+    container.innerHTML = '<p>Não foi possível carregar os cursos.</p>';
+    return;
+  }
+
+  if (!courses || courses.length === 0) {
+    container.innerHTML = '<p>Ainda não existem cursos publicados.</p>';
+    return;
+  }
+
+  container.innerHTML = courses.map(course => `
+    <article class="course" data-type="${course.access_type === 'free' ? 'gratuito' : 'pago'}">
+
+      ${course.thumbnail
+        ? `<img src="${escapeHTML(course.thumbnail)}" alt="${escapeHTML(course.title)}" class="course-cover">`
+        : '<div class="course-cover">📚</div>'}
+
+      <div class="course-content">
+        <h3>${escapeHTML(course.title)}</h3>
+
+        <p>${escapeHTML(course.description || 'Conhece este curso na Mussilipo Academy.')}</p>
+
+        <div class="price ${course.access_type === 'free' ? 'free' : ''}">
+          ${course.access_type === 'free'
+            ? 'GRATUITO'
+            : Number(course.price_mzn).toLocaleString('pt-MZ') + ' MT'}
+        </div>
+
+        <button class="btn enroll-button"
+  data-course-id="${course.id}"
+  data-course-name="${escapeHTML(course.title)}"
+  data-course-type="${course.access_type === 'free' ? 'gratuito' : 'pago'}">
+  ${course.access_type === 'free' ? 'Inscrever-me' : 'Ver curso'}
+</button>
+      </div>
+    </article>
+    `).join('');
+
+  container.querySelectorAll('.enroll-button').forEach(button => {
+    button.addEventListener('click', () => {
+      window.enroll(
+        button.dataset.courseId,
+        button.dataset.courseName,
+        button.dataset.courseType
+      );
+    });
+  });
+};
+window.loadAdminCourses = async function() {
+  const container = $('adminCourses');
+
+  container.textContent = 'A carregar cursos...';
+
+  const { data: courses, error } = await supabase
+    .from('courses')
+    .select('id, title, description, price_mzn, access_type, thumbnail, is_published')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    container.textContent = 'Erro ao carregar cursos: ' + error.message;
+    return;
+  }
+
+  if (!courses || courses.length === 0) {
+    container.textContent = 'Ainda não existem cursos cadastrados.';
+    return;
+  }
+
+  container.innerHTML = courses.map(course => `
+    <div class="dash-card" style="margin-top:15px">
+
+      ${course.thumbnail ? `
+        <img src="${escapeHTML(course.thumbnail)}"
+             alt="Capa do curso"
+             style="width:100%;max-width:220px;border-radius:12px">
+      ` : ''}
+
+      <h3>${escapeHTML(course.title)}</h3>
+
+      <p>${escapeHTML(course.description || 'Sem descrição')}</p>
+
+      <p>
+        ${course.access_type === 'free'
+          ? 'Gratuito'
+          : Number(course.price_mzn).toLocaleString('pt-MZ') + ' MT'}
+      </p>
+
+      <p>
+        ${course.is_published ? '🟢 Publicado' : '🟡 Rascunho'}
+      </p>
+
+      <button
+        type="button"
+        class="btn edit-course-btn"
+        data-course-id="${course.id}"
+        style="margin-top:12px">
+        ✏️ Editar curso
+      </button>
+
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.edit-course-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      window.editAdminCourse(button.dataset.courseId);
+    });
+  });
+};
+ // EDITAR CURSO EXISTENTE
+window.editAdminCourse = async function(courseId) {
+
+  const { data: course, error: readError } = await supabase
+    .from('courses')
+    .select('id, title, description, price_mzn, access_type, is_published')
+    .eq('id', courseId)
+    .single();
+
+  if (readError || !course) {
+    alert('Não foi possível carregar o curso: ' + (readError?.message || 'Curso não encontrado.'));
+    return;
+  }
+
+  const title = prompt('Nome do curso:', course.title);
+  if (title === null) return;
+
+  if (!title.trim()) {
+    alert('O nome do curso não pode ficar vazio.');
+    return;
+  }
+
+  const description = prompt(
+    'Descrição do curso:',
+    course.description || ''
+  );
+  if (description === null) return;
+
+  const accessType = prompt(
+    'Tipo de acesso: escreve "free" para gratuito ou "paid" para pago.',
+    course.access_type
+  );
+
+  if (accessType === null) return;
+
+  const normalizedType = accessType.trim().toLowerCase();
+
+  if (!['free', 'paid'].includes(normalizedType)) {
+    alert('Tipo inválido. Usa "free" ou "paid".');
+    return;
+  }
+
+  let price = 0;
+
+  if (normalizedType === 'paid') {
+    const priceInput = prompt(
+      'Preço do curso em MT:',
+      String(course.price_mzn || '')
+    );
+
+    if (priceInput === null) return;
+
+    price = Number(priceInput);
+
+    if (!Number.isFinite(price) || price <= 0) {
+      alert('Indica um preço válido, superior a zero.');
+      return;
+    }
+  }
+
+  const currentStatus = course.is_published ? 'sim' : 'nao';
+
+  const publishedInput = prompt(
+    'Publicar curso? Escreve "sim" ou "nao".',
+    currentStatus
+  );
+
+  if (publishedInput === null) return;
+
+  const published = publishedInput.trim().toLowerCase();
+
+  if (!['sim', 'nao'].includes(published)) {
+    alert('Resposta inválida. Escreve "sim" ou "nao".');
+    return;
+  }
+
+  const { error } = await supabase
+    .from('courses')
+    .update({
+      title: title.trim(),
+      description: description.trim(),
+      access_type: normalizedType,
+      price_mzn: normalizedType === 'paid' ? price : 0,
+      is_published: published === 'sim'
+    })
+    .eq('id', courseId);
+
+  if (error) {
+    alert('Erro ao actualizar curso: ' + error.message);
+    return;
+  }
+
+  alert('✅ Curso actualizado com sucesso!');
+
+  await window.loadAdminCourses();
+  await window.loadPublicCourses();
+}; 
+  // ABRIR A SECÇÃO DE GESTÃO DOS CURSOS
+window.goToAdminCourses = async function() {
+  const panel = document.getElementById('adminCoursesPanel');
+
+  if (!panel) {
+    alert('Não foi possível encontrar a lista de cursos.');
+    return;
+  }
+
+  await window.loadAdminCourses();
+
+  panel.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+};
+  // CARREGAR CURSOS NO PAINEL DE GESTÃO DE CONTEÚDOS
+window.loadAdminContentCourses = async function() {
+  const select = $('adminContentCourse');
+
+  const { data: courses, error } = await supabase
+    .from('courses')
+    .select('id, title')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    select.innerHTML = '<option value="">Erro ao carregar cursos</option>';
+    console.error(error);
+    return;
+  }
+
+  if (!courses || courses.length === 0) {
+    select.innerHTML = '<option value="">Não existem cursos</option>';
+    return;
+  }
+
+  select.innerHTML = `
+    <option value="">Seleciona um curso</option>
+    ${courses.map(course => `
+      <option value="${course.id}">${escapeHTML(course.title)}</option>
+    `).join('')}
+  `;
+};
+
+
+// CRIAR MÓDULO
+window.createModule = async function(event) {
+  event.preventDefault();
+
+  const courseId = $('adminContentCourse').value;
+  const title = $('moduleTitle').value.trim();
+
+  if (!courseId) {
+    alert('Seleciona primeiro um curso.');
+    return;
+  }
+
+  if (!title) {
+    alert('Introduz o nome do módulo.');
+    return;
+  }
+
+  const { data: existing, error: readError } = await supabase
+    .from('modules')
+    .select('position')
+    .eq('course_id', courseId)
+    .order('position', { ascending: false });
+
+  if (readError) {
+    alert('Erro ao consultar módulos: ' + readError.message);
+    return;
+  }
+
+  const position = existing && existing.length
+    ? Number(existing[0].position) + 1
+    : 1;
+
+  const { error } = await supabase
+    .from('modules')
+    .insert({
+      course_id: courseId,
+      title,
+      position
+    });
+
+  if (error) {
+    alert('Não foi possível criar o módulo: ' + error.message);
+    return;
+  }
+
+  $('moduleForm').reset();
+
+  alert('✅ Módulo criado com sucesso!');
+  await loadAdminModules();
+};
+
+
+// CARREGAR MÓDULOS DO CURSO SELECIONADO
+window.loadAdminModules = async function() {
+  const courseId = $('adminContentCourse').value;
+  const container = $('adminModules');
+  const moduleSelect = $('adminModuleSelect');
+
+  const previousModuleId = moduleSelect.value;
+
+  if (!courseId) {
+    container.textContent = 'Seleciona um curso.';
+    moduleSelect.innerHTML =
+      '<option value="">Primeiro seleciona um curso</option>';
+    $('adminLessons').textContent = 'Seleciona um módulo.';
+    return;
+  }
+
+  container.textContent = 'A carregar módulos...';
+
+  const { data: modules, error } = await supabase
+    .from('modules')
+    .select('id, title, position')
+    .eq('course_id', courseId)
+    .order('position', { ascending: true });
+
+  if (error) {
+    container.textContent = 'Erro ao carregar módulos: ' + error.message;
+    return;
+  }
+
+  if (!modules || modules.length === 0) {
+    container.textContent = 'Este curso ainda não tem módulos.';
+    moduleSelect.innerHTML =
+      '<option value="">Cria primeiro um módulo</option>';
+    $('adminLessons').textContent = 'Ainda não existem aulas.';
+    return;
+  }
+
+  moduleSelect.innerHTML = modules.map(module => `
+    <option value="${module.id}">
+      ${escapeHTML(module.title)}
+    </option>
+  `).join('');
+
+  if (modules.some(module => module.id === previousModuleId)) {
+    moduleSelect.value = previousModuleId;
+  }
+
+  container.innerHTML = modules.map((module, index) => `
+    <div class="dash-card" style="margin-top:12px">
+      <strong>
+        Módulo ${index + 1}: ${escapeHTML(module.title)}
+      </strong>
+
+      <p>Posição: ${module.position}</p>
+
+      <button
+        type="button"
+        class="btn edit-module-btn"
+        data-module-id="${module.id}"
+        style="margin-top:10px">
+        ✏️ Editar módulo
+      </button>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.edit-module-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      window.editAdminModule(button.dataset.moduleId);
+    });
+  });
+
+  await loadAdminLessons();
+};
+
+
+// EDITAR MÓDULO
+window.editAdminModule = async function(moduleId) {
+  const { data: module, error: readError } = await supabase
+    .from('modules')
+    .select('id, title, position')
+    .eq('id', moduleId)
+    .single();
+
+  if (readError || !module) {
+    alert('Não foi possível carregar o módulo.');
+    return;
+  }
+
+  const newTitle = prompt(
+    'Corrige o nome do módulo:',
+    module.title
+  );
+
+  if (newTitle === null) return;
+
+  if (!newTitle.trim()) {
+    alert('O nome do módulo não pode ficar vazio.');
+    return;
+  }
+
+  const newPosition = prompt(
+    'Indica a posição do módulo:',
+    String(module.position)
+  );
+
+  if (newPosition === null) return;
+
+  const position = Number(newPosition);
+
+  if (!Number.isInteger(position) || position < 1) {
+    alert('A posição deve ser um número inteiro maior que zero.');
+    return;
+  }
+
+  const { error } = await supabase
+    .from('modules')
+    .update({
+      title: newTitle.trim(),
+      position
+    })
+    .eq('id', moduleId);
+
+  if (error) {
+    alert('Erro ao actualizar módulo: ' + error.message);
+    return;
+  }
+
+  alert('✅ Módulo actualizado com sucesso!');
+
+  await loadAdminModules();
+};
+
+
+// CARREGAR AULAS DO MÓDULO SELECIONADO
+window.loadAdminLessons = async function() {
+  const moduleId = $('adminModuleSelect').value;
+  const container = $('adminLessons');
+
+  if (!moduleId) {
+    container.textContent = 'Seleciona um módulo.';
+    return;
+  }
+
+  container.textContent = 'A carregar aulas...';
+
+  const { data: lessons, error } = await supabase
+    .from('lessons')
+    .select(`
+      id,
+      title,
+      description,
+      video_url,
+      content,
+      is_published,
+      position
+    `)
+    .eq('module_id', moduleId)
+    .order('position', { ascending: true });
+
+  if (error) {
+    container.textContent = 'Erro ao carregar aulas: ' + error.message;
+    return;
+  }
+
+  if (!lessons || lessons.length === 0) {
+    container.textContent = 'Este módulo ainda não tem aulas.';
+    return;
+  }
+
+  container.innerHTML = `
+    <h3 style="margin-bottom:12px">📖 Aulas deste módulo</h3>
+
+    ${lessons.map((lesson, index) => `
+      <div class="dash-card" style="margin-top:12px">
+
+        <strong>
+          ${index + 1}. ${escapeHTML(lesson.title)}
+        </strong>
+
+        <p>
+          ${escapeHTML(lesson.description || 'Sem descrição')}
+        </p>
+
+        <p>
+          ${lesson.is_published
+            ? '🟢 Publicada'
+            : '🟡 Não publicada'}
+        </p>
+
+        <p>Posição: ${lesson.position}</p>
+
+        <button
+          type="button"
+          class="btn edit-lesson-btn"
+          data-lesson-id="${lesson.id}"
+          style="margin-top:10px">
+          ✏️ Editar aula
+        </button>
+
+      </div>
+    `).join('')}
+  `;
+
+  container.querySelectorAll('.edit-lesson-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      window.editAdminLesson(button.dataset.lessonId);
+    });
+  });
+};
+
+
+// EDITAR AULA
+window.editAdminLesson = async function(lessonId) {
+  const { data: lesson, error: readError } = await supabase
+    .from('lessons')
+    .select(`
+      id,
+      title,
+      description,
+      video_url,
+      content,
+      is_published,
+      position
+    `)
+    .eq('id', lessonId)
+    .single();
+
+  if (readError || !lesson) {
+    alert('Não foi possível carregar a aula.');
+    return;
+  }
+
+  const newTitle = prompt(
+    'Título da aula:',
+    lesson.title || ''
+  );
+
+  if (newTitle === null) return;
+
+  if (!newTitle.trim()) {
+    alert('O título da aula não pode ficar vazio.');
+    return;
+  }
+
+  const newDescription = prompt(
+    'Descrição da aula:',
+    lesson.description || ''
+  );
+
+  if (newDescription === null) return;
+
+  const newVideo = prompt(
+    'Link do vídeo:',
+    lesson.video_url || ''
+  );
+
+  if (newVideo === null) return;
+
+  if (newVideo.trim()) {
+    try {
+      const videoUrl = new URL(newVideo.trim());
+
+      if (!['http:', 'https:'].includes(videoUrl.protocol)) {
+        throw new Error();
+      }
+    } catch {
+      alert('Introduz um link de vídeo válido ou deixa o campo vazio.');
+      return;
+    }
+  }
+
+  const newContent = prompt(
+    'Conteúdo completo da aula:',
+    lesson.content || ''
+  );
+
+  if (newContent === null) return;
+
+  const newPosition = prompt(
+    'Posição da aula:',
+    String(lesson.position)
+  );
+
+  if (newPosition === null) return;
+
+  const position = Number(newPosition);
+
+  if (!Number.isInteger(position) || position < 1) {
+    alert('A posição deve ser um número inteiro maior que zero.');
+    return;
+  }
+
+  const currentStatus = lesson.is_published
+    ? 'publicada'
+    : 'rascunho';
+
+  const newStatus = prompt(
+    'Estado da aula: escreve "publicada" ou "rascunho".',
+    currentStatus
+  );
+
+  if (newStatus === null) return;
+
+  const normalizedStatus = newStatus.trim().toLowerCase();
+
+  if (!['publicada', 'rascunho'].includes(normalizedStatus)) {
+    alert('Estado inválido. Escreve "publicada" ou "rascunho".');
+    return;
+  }
+
+  const { error } = await supabase
+    .from('lessons')
+    .update({
+      title: newTitle.trim(),
+      description: newDescription.trim(),
+      video_url: newVideo.trim() || null,
+      content: newContent,
+      position,
+      is_published: normalizedStatus === 'publicada'
+    })
+    .eq('id', lessonId);
+
+  if (error) {
+    alert('Erro ao actualizar aula: ' + error.message);
+    return;
+  }
+
+  alert('✅ Aula actualizada com sucesso!');
+
+  await loadAdminLessons();
+};
+
+// CRIAR AULA
+window.createLesson = async function(event) {
+  event.preventDefault();
+
+  const moduleId = $('adminModuleSelect').value;
+  const title = $('lessonTitle').value.trim();
+  const description = $('lessonDescription').value.trim();
+  const videoUrl = $('lessonVideo').value.trim();
+  const content = $('lessonContent').value.trim();
+
+  if (!moduleId) {
+    alert('Seleciona primeiro um módulo.');
+    return;
+  }
+
+  if (!title) {
+    alert('Introduz o título da aula.');
+    return;
+  }
+
+  const { data: existing, error: readError } = await supabase
+    .from('lessons')
+    .select('position')
+    .eq('module_id', moduleId)
+    .order('position', { ascending: false });
+
+  if (readError) {
+    alert('Erro ao consultar aulas: ' + readError.message);
+    return;
+  }
+
+  const position = existing && existing.length
+    ? Number(existing[0].position) + 1
+    : 1;
+
+  const { error } = await supabase
+    .from('lessons')
+    .insert({
+      module_id: moduleId,
+      title,
+      description,
+      video_url: videoUrl || null,
+      content,
+      position,
+      is_published: true
+    });
+
+  if (error) {
+    alert('Não foi possível criar a aula: ' + error.message);
+    return;
+  }
+
+  $('lessonForm').reset();
+
+  alert('🎉 Aula publicada com sucesso!');
+  await loadAdminLessons();
+};
+ 
+/* ==========================================
+   NAVEGAÇÃO DO PAINEL ADMINISTRATIVO
+========================================== */
+
+window.organizeAdminPanels = function() {
+
+  const destinations = {
+    overview: 'adminPageOverview',
+    students: 'adminPageStudents',
+    courses: 'adminPageCourses',
+    content: 'adminPageContent',
+    materials: 'adminPageMaterials',
+    enrollments: 'adminPageEnrollments'
+  };
+
+  const elements = {
+    overview: ['adminOverviewCard'],
+    students: ['adminStudentPanel'],
+    courses: ['adminCreateCoursePanel', 'adminCoursesPanel'],
+    content: ['adminContentPanel'],
+    materials: ['adminMaterialsPanel'],
+    enrollments: ['adminEnrollmentPanel']
+  };
+
+  for (const [panel, ids] of Object.entries(elements)) {
+    const destination = document.getElementById(destinations[panel]);
+
+    if (!destination) continue;
+
+    ids.forEach(id => {
+      const element = document.getElementById(id);
+
+      if (element) {
+        destination.appendChild(element);
+      }
+    });
+  }
+};
+
+
+// ABRIR UM PAINEL DO MENU LATERAL
+window.showAdminPanel = function(panelName) {
+
+  const validPanels = [
+    'overview',
+    'students',
+    'courses',
+    'content',
+    'materials',
+    'enrollments'
+  ];
+
+  if (!validPanels.includes(panelName)) return;
+
+  document.querySelectorAll('.admin-page').forEach(panel => {
+    panel.classList.remove('active');
+  });
+
+  document.querySelectorAll('.admin-menu-button').forEach(button => {
+    button.classList.toggle(
+      'active',
+      button.dataset.adminPanel === panelName
+    );
+  });
+
+  const destination = document.getElementById(
+    'adminPage' +
+    panelName.charAt(0).toUpperCase() +
+    panelName.slice(1)
+  );
+
+  if (destination) {
+    destination.classList.add('active');
+  }
+
+  const sectionNames = {overview:'Visão geral',students:'Gestão dos alunos',courses:'Gestão dos cursos',content:'Módulos e aulas',materials:'Materiais de estudo',enrollments:'Matrículas'};
+  const currentSection = document.getElementById('adminCurrentSection');
+  if (currentSection) currentSection.textContent = sectionNames[panelName] || 'Painel administrativo';
+
+  if (panelName === 'courses') {
+    window.loadAdminCourses();
+  }
+
+  if (panelName === 'content') {
+    window.loadAdminContentCourses();
+  }
+
+  if (panelName === 'materials') {
+    window.loadMaterialLessons();
+    window.loadAdminMaterials?.();
+  }
+
+  if (panelName === 'enrollments') {
+    window.loadAdminEnrollments();
+  }
+
+  if (panelName === 'students' || panelName === 'overview') {
+    window.loadAdminOverview();
+  }
+
+  document.getElementById('adminDashboard').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+};
+
+
+// ATALHOS ANTIGOS PASSAM A USAR O MENU
+window.goToAdminCourses = function() {
+  window.showAdminPanel('courses');
+};
+
+window.goToAdminStudents = function() {
+  window.showAdminPanel('students');
+};
+ 
+// CARREGAR MATRÍCULAS PARA O ADMINISTRADOR
+window.loadAdminEnrollments = async function() {
+  const container = $('adminEnrollments');
+  container.textContent = 'A carregar inscrições...';
+
+  const { data: rows, error } = await supabase
+    .from('enrollments')
+    .select('id, user_id, course_id, status, created_at')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(error);
+    container.textContent = 'Erro ao carregar inscrições: ' + error.message;
+    return;
+  }
+
+  if (!rows || rows.length === 0) {
+    container.textContent = 'Ainda não existem inscrições.';
+    return;
+  }
+
+  const userIds = [...new Set(rows.map(row => row.user_id))];
+  const courseIds = [...new Set(rows.map(row => row.course_id))];
+
+  const [profilesResult, coursesResult] = await Promise.all([
+    supabase.from('profiles').select('id, full_name').in('id', userIds),
+    supabase.from('courses').select('id, title').in('id', courseIds)
+  ]);
+
+  if (profilesResult.error || coursesResult.error) {
+    const error = profilesResult.error || coursesResult.error;
+    console.error(error);
+    container.textContent = 'Erro ao consultar alunos ou cursos: ' + error.message;
+    return;
+  }
+
+  const profileMap = Object.fromEntries(
+    (profilesResult.data || []).map(p => [p.id, p])
+  );
+
+  const courseMap = Object.fromEntries(
+    (coursesResult.data || []).map(c => [c.id, c])
+  );
+
+  container.innerHTML = rows.map(row => `
+    <div class="dash-card" style="margin-top:15px">
+      <h3>${escapeHTML(profileMap[row.user_id]?.full_name || 'Aluno')}</h3>
+
+      <p>
+        <strong>Curso:</strong>
+        ${escapeHTML(courseMap[row.course_id]?.title || 'Curso indisponível')}
+      </p>
+
+      <p>
+        <strong>Estado:</strong>
+        ${row.status === 'pending' ? '⏳ Pendente' :
+          row.status === 'active' ? '✅ Aprovada' :
+          escapeHTML(row.status || 'Desconhecido')}
+      </p>
+
+      <p>
+        <strong>Data:</strong>
+        ${row.created_at ? new Date(row.created_at).toLocaleString('pt-MZ') : 'Não disponível'}
+      </p>
+
+      ${row.status === 'pending'
+        ? `<button class="btn approve-enrollment" data-enrollment-id="${row.id}">
+             Aprovar inscrição
+           </button>`
+        : ''}
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.approve-enrollment').forEach(button => {
+    button.addEventListener('click', () => {
+      approveEnrollment(button.dataset.enrollmentId);
+    });
+  });
+};
+
+// APROVAR INSCRIÇÃO
+window.approveEnrollment = async function(enrollmentId) {
+  if (!confirm('Confirmas a aprovação desta inscrição?')) return;
+
+  const { error } = await supabase
+    .from('enrollments')
+    .update({ status: 'active' })
+    .eq('id', enrollmentId);
+
+  if (error) {
+    alert('Não foi possível aprovar: ' + error.message);
+    return;
+  }
+
+  alert('🎉 Inscrição aprovada com sucesso!');
+  await window.loadAdminEnrollments();
+};
+// ==========================================
+// GESTÃO E ACOMPANHAMENTO DOS ALUNOS
+// ==========================================
+
+window.adminStudentsCache = [];
+
+window.loadAdminOverview = async function() {
+  const overview = document.getElementById('adminOverview');
+  const studentsBox = document.getElementById('adminStudents');
+
+  if (!overview || !studentsBox) return;
+
+  overview.innerHTML = 'A carregar estatísticas...';
+  studentsBox.innerHTML = 'A carregar alunos...';
+
+  try {
+    const [
+      profilesResult,
+      enrollmentsResult,
+      coursesResult,
+      modulesResult,
+      lessonsResult,
+      progressResult
+    ] = await Promise.all([
+     supabase.from('profiles')
+  .select('id, full_name, role, is_blocked')
+  .eq('role', 'student'),
+
+      supabase.from('enrollments')
+        .select('id, user_id, course_id, status'),
+
+      supabase.from('courses')
+        .select('id, title'),
+
+      supabase.from('modules')
+        .select('id, course_id'),
+
+      supabase.from('lessons')
+        .select('id, module_id, is_published')
+        .eq('is_published', true),
+
+      supabase.from('lesson_progress')
+        .select('user_id, lesson_id, completed')
+        .eq('completed', true)
+    ]);
+
+    const results = [
+      profilesResult,
+      enrollmentsResult,
+      coursesResult,
+      modulesResult,
+      lessonsResult,
+      progressResult
+    ];
+
+    const failed = results.find(result => result.error);
+
+    if (failed) {
+      throw new Error(failed.error.message);
+    }
+
+    const students = profilesResult.data || [];
+    const enrollments = enrollmentsResult.data || [];
+    const courses = coursesResult.data || [];
+    const modules = modulesResult.data || [];
+    const lessons = lessonsResult.data || [];
+    const progress = progressResult.data || [];
+
+    const pending = enrollments.filter(e => e.status === 'pending').length;
+    const active = enrollments.filter(e => e.status === 'active').length;
+
+    overview.innerHTML = `
+      <div class="dash-card">
+        <h3>👨‍🎓 Alunos</h3>
+        <p style="font-size:28px;font-weight:bold;color:#c5a3ff">
+          ${students.length}
+        </p>
+      </div>
+
+      <div class="dash-card">
+        <h3>📚 Cursos</h3>
+        <p style="font-size:28px;font-weight:bold;color:#c5a3ff">
+          ${courses.length}
+        </p>
+      </div>
+
+      <div class="dash-card">
+        <h3>⏳ Pendentes</h3>
+        <p style="font-size:28px;font-weight:bold;color:#fbbf24">
+          ${pending}
+        </p>
+      </div>
+
+      <div class="dash-card">
+        <h3>✅ Inscrições ativas</h3>
+        <p style="font-size:28px;font-weight:bold;color:#4ade80">
+          ${active}
+        </p>
+      </div>
+    `;
+
+    const courseMap = new Map(
+      courses.map(course => [course.id, course])
+    );
+
+    const moduleCourseMap = new Map(
+      modules.map(module => [module.id, module.course_id])
+    );
+
+    const lessonsByCourse = new Map();
+
+    lessons.forEach(lesson => {
+      const courseId = moduleCourseMap.get(lesson.module_id);
+
+      if (!courseId) return;
+
+      if (!lessonsByCourse.has(courseId)) {
+        lessonsByCourse.set(courseId, []);
+      }
+
+      lessonsByCourse.get(courseId).push(lesson.id);
+    });
+
+    window.adminStudentsCache = students.map(student => {
+      const studentEnrollments = enrollments.filter(
+        enrollment => enrollment.user_id === student.id
+      );
+
+      const studentCourses = studentEnrollments.map(enrollment => {
+        const course = courseMap.get(enrollment.course_id);
+        const courseLessons = lessonsByCourse.get(enrollment.course_id) || [];
+
+        const completedLessons = progress.filter(item =>
+          item.user_id === student.id &&
+          courseLessons.includes(item.lesson_id)
+        ).length;
+
+        const totalLessons = courseLessons.length;
+
+        const percentage = totalLessons > 0
+          ? Math.round((completedLessons / totalLessons) * 100)
+          : 0;
+
+        return {
+          title: course ? course.title : 'Curso não encontrado',
+          status: enrollment.status,
+          completed: completedLessons,
+          total: totalLessons,
+          percentage
+        };
+      });
+
+     return {
+       id: student.id,
+        name: student.full_name || 'Aluno sem nome',
+          is_blocked: student.is_blocked === true,
+           courses: studentCourses
+     };
+    });
+
+    window.filterAdminStudents();
+
+  } catch (error) {
+    console.error('Erro ao carregar painel dos alunos:', error);
+
+    overview.innerHTML = `
+      <p style="color:#f87171">
+        Não foi possível carregar as estatísticas.
+      </p>
+    `;
+
+    studentsBox.innerHTML = `
+      <p style="color:#f87171">
+        Erro ao consultar alunos: ${escapeHTML(error.message)}
+      </p>
+    `;
+  }
+};
+
+
+// ==========================================
+// PESQUISAR E MOSTRAR ALUNOS
+// ==========================================
+
+window.filterAdminStudents = function() {
+  const searchInput = document.getElementById('adminStudentSearch');
+  const container = document.getElementById('adminStudents');
+
+  if (!container) return;
+
+  const search = (searchInput?.value || '').trim().toLowerCase();
+  const students = window.adminStudentsCache || [];
+
+  const filtered = students.filter(student =>
+    student.name.toLowerCase().includes(search) ||
+    student.id.toLowerCase().includes(search)
+  );
+
+  if (!filtered.length) {
+    container.innerHTML = `
+      <p style="color:var(--muted);padding:15px 0">
+        Nenhum aluno encontrado.
+      </p>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(student => {
+    const coursesHTML = student.courses.length
+      ? student.courses.map(course => {
+          const statusLabel = {
+            active: 'Ativa',
+            pending: 'Pendente',
+            rejected: 'Rejeitada'
+          }[course.status] || course.status;
+
+          const statusColor = {
+            active: '#4ade80',
+            pending: '#fbbf24',
+            rejected: '#f87171'
+          }[course.status] || '#c5a3ff';
+
+          return `
+            <div style="
+              background:#120a1e;
+              border:1px solid #50346c;
+              border-radius:10px;
+              padding:13px;
+              margin-top:10px
+            ">
+              <strong>${escapeHTML(course.title)}</strong>
+
+              <p style="margin:8px 0;color:${statusColor}">
+                Inscrição: ${escapeHTML(statusLabel)}
+              </p>
+
+              ${
+                course.total > 0
+                ? `
+                  <p style="font-size:13px;color:var(--muted)">
+                    Aulas concluídas: ${course.completed}/${course.total}
+                  </p>
+
+                  <div style="
+                    width:100%;
+                    height:9px;
+                    background:#38264b;
+                    border-radius:20px;
+                    overflow:hidden;
+                    margin-top:8px
+                  ">
+                    <div style="
+                      width:${course.percentage}%;
+                      height:100%;
+                      background:#a855f7;
+                      border-radius:20px
+                    "></div>
+                  </div>
+
+                  <p style="margin-top:7px;color:#c5a3ff;font-weight:bold">
+                    ${course.percentage}% concluído
+                  </p>
+                `
+                : `
+                  <p style="color:var(--muted);font-size:13px">
+                    Ainda não existem aulas publicadas neste curso.
+                  </p>
+                `
+              }
+            </div>
+          `;
+        }).join('')
+      : `
+        <p style="color:var(--muted);margin-top:10px">
+          Este aluno ainda não tem inscrições.
+        </p>
+      `;
+
+    return `
+      <div class="dash-card" style="margin-top:15px">
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          align-items:flex-start;
+          gap:12px;
+          flex-wrap:wrap
+        ">
+          <div>
+            <h3>👤 ${escapeHTML(student.name)}</h3>
+
+            <p style="font-size:12px;color:var(--muted);word-break:break-all">
+              Código: ${escapeHTML(student.id)}
+            </p>
+
+            <p style="
+              margin-top:8px;
+              font-size:13px;
+              font-weight:bold;
+              color:${student.is_blocked ? '#f87171' : '#4ade80'}
+            ">
+              ${student.is_blocked ? '🔒 Conta bloqueada' : '🟢 Conta activa'}
+            </p>
+          </div>
+
+          <details style="position:relative">
+            <summary style="
+              cursor:pointer;
+              list-style:none;
+              background:#382254;
+              border:1px solid #64418a;
+              padding:8px 13px;
+              border-radius:8px;
+              font-size:13px;
+            ">
+              ⋮ Acções
+            </summary>
+
+            <div style="
+              position:absolute;
+              right:0;
+              top:42px;
+              z-index:10;
+              width:190px;
+              padding:8px;
+              background:#211334;
+              border:1px solid #64418a;
+              border-radius:10px;
+              box-shadow:0 8px 25px #0008;
+            ">
+
+              <button
+                type="button"
+                class="student-action-btn"
+                data-action="block"
+                data-student-id="${student.id}"
+                style="
+                  width:100%;
+                  padding:10px;
+                  margin-bottom:5px;
+                  border:0;
+                  border-radius:7px;
+                  background:#382254;
+                  color:white;
+                  text-align:left;
+                ">
+                ${student.is_blocked ? '🔓 Desbloquear' : '🔒 Bloquear'}
+              </button>
+
+              <button
+                type="button"
+                class="student-action-btn"
+                data-action="delete"
+                data-student-id="${student.id}"
+                style="
+                  width:100%;
+                  padding:10px;
+                  border:0;
+                  border-radius:7px;
+                  background:#5b202b;
+                  color:#fff;
+                  text-align:left;
+                ">
+                🗑️ Expulsar aluno
+              </button>
+
+            </div>
+          </details>
+        </div>
+
+        <h4 style="margin-top:18px">
+          📚 Cursos e progresso
+        </h4>
+
+        ${coursesHTML}
+
+      </div>
+    `;
+  }).join('');
+
+  container.querySelectorAll('.student-action-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+      const studentId = button.dataset.studentId;
+      const action = button.dataset.action;
+      button.closest('details')?.removeAttribute('open');
+      await window.adminStudentAction(studentId, action);
+    });
+  });
+};
+  // ==========================================
+// ACÇÕES ADMINISTRATIVAS SOBRE OS ALUNOS
+// ==========================================
+
+window.adminStudentAction = async function(studentId, action) {
+
+  const student = (window.adminStudentsCache || [])
+    .find(item => item.id === studentId);
+
+  if (!student) {
+    alert('Aluno não encontrado.');
+    return;
+  }
+
+  // BLOQUEAR OU DESBLOQUEAR
+  if (action === 'block') {
+
+    const newBlockedState = !student.is_blocked;
+
+    let reason = null;
+
+    if (newBlockedState) {
+      reason = prompt(
+        'Motivo do bloqueio (opcional):'
+      );
+
+      if (reason === null) return;
+
+      if (!confirm(
+        `Confirmas o bloqueio da conta de ${student.name}?`
+      )) return;
+
+    } else {
+      if (!confirm(
+        `Confirmas o desbloqueio da conta de ${student.name}?`
+      )) return;
+    }
+
+    try {
+      const { data, error } = await supabase.rpc(
+        'admin_set_student_block',
+        {
+          p_user_id: studentId,
+          p_blocked: newBlockedState,
+          p_reason: reason
+        }
+      );
+
+      if (error) throw error;
+
+      if (!data?.success) {
+        throw new Error('Não foi possível actualizar a conta.');
+      }
+
+      alert(
+        newBlockedState
+          ? '🔒 Conta do aluno bloqueada com sucesso.'
+          : '🔓 Conta do aluno desbloqueada com sucesso.'
+      );
+
+      await window.loadAdminOverview();
+
+    } catch (error) {
+      console.error('Erro na gestão do aluno:', error);
+      alert('Erro: ' + error.message);
+    }
+
+    return;
+  }
+
+  // EXPULSAR ALUNO
+  if (action === 'delete') {
+
+    const confirmation = prompt(
+      `ATENÇÃO: esta operação é permanente!\n\n` +
+      `O aluno ${student.name} será removido da plataforma, ` +
+      `incluindo a conta e os dados associados.\n\n` +
+      `Para confirmar, escreve EXPULSAR:`
+    );
+
+    if (confirmation !== 'EXPULSAR') {
+      alert('Operação cancelada.');
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase.functions.invoke(
+        'admin-delete-student',
+        {
+          body: {
+            user_id: studentId
+          }
+        }
+      );
+
+      if (error) throw error;
+
+      if (data?.error) {
+        throw new Error(data.error);
+      }
+
+      if (!data?.success) {
+        throw new Error('A expulsão não foi confirmada pelo servidor.');
+      }
+
+      alert('🗑️ Aluno expulso com sucesso.');
+
+      await window.loadAdminOverview();
+
+    } catch (error) {
+      console.error('Erro ao expulsar aluno:', error);
+      alert('Não foi possível expulsar o aluno: ' + error.message);
+    }
+  }
+};
+// ABRIR A SECÇÃO DE GESTÃO DOS ALUNOS
+window.goToAdminStudents = async function() {
+  const panel = document.getElementById('adminStudentPanel');
+
+  if (!panel) {
+    alert('Não foi possível encontrar o painel de gestão dos alunos.');
+    return;
+  }
+
+  await window.loadAdminOverview();
+
+  panel.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+};
+// ==========================================
+// BIBLIOTECA DE MATERIAIS DAS AULAS
+// ==========================================
+
+window.loadMaterialLessons = async function() {
+  const select = document.getElementById('materialLessonSelect');
+  if (!select) return;
+
+  select.innerHTML = '<option value="">A carregar...</option>';
+
+  try {
+    const { data, error } = await supabase
+      .from('lessons')
+      .select(`
+        id,
+        title,
+        modules (
+          title,
+          courses (title)
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (!data || !data.length) {
+      select.innerHTML = '<option value="">Nenhuma aula encontrada</option>';
+      return;
+    }
+
+    select.innerHTML =
+      '<option value="">Selecciona uma aula</option>' +
+      data.map(lesson => {
+        const course = lesson.modules?.courses?.title || 'Curso';
+        const module = lesson.modules?.title || 'Módulo';
+
+        return `
+          <option value="${escapeHTML(lesson.id)}">
+            ${escapeHTML(course)} — ${escapeHTML(module)} — ${escapeHTML(lesson.title)}
+          </option>
+        `;
+      }).join('');
+
+  } catch (error) {
+    console.error('Erro ao carregar aulas:', error);
+    select.innerHTML = '<option value="">Erro ao carregar aulas</option>';
+  }
+};
+
+
+// ==========================================
+// LISTAR E GERIR MATERIAIS
+// ==========================================
+window.loadAdminMaterials = async function() {
+  const container = document.getElementById('adminMaterialsList');
+  if (!container) return;
+  container.textContent = 'A carregar materiais...';
+
+  try {
+    const { data: materials, error } = await supabase
+      .from('lesson_materials')
+      .select('id, lesson_id, title, file_name, storage_path, created_at')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+
+    if (!materials || materials.length === 0) {
+      container.textContent = 'Ainda não existem materiais carregados.';
+      return;
+    }
+
+    const lessonIds = [...new Set(materials.map(item => item.lesson_id))];
+    const { data: lessons, error: lessonError } = await supabase
+      .from('lessons')
+      .select('id, title, modules (title, courses (title))')
+      .in('id', lessonIds);
+    if (lessonError) throw lessonError;
+
+    const lessonMap = new Map((lessons || []).map(lesson => [lesson.id, lesson]));
+    container.innerHTML = materials.map(material => {
+      const lesson = lessonMap.get(material.lesson_id);
+      const course = lesson?.modules?.courses?.title || 'Curso';
+      const module = lesson?.modules?.title || 'Módulo';
+      const lessonTitle = lesson?.title || 'Aula';
+      return `
+        <div class="dash-card" style="margin-top:12px">
+          <strong>📄 ${escapeHTML(material.title || material.file_name)}</strong>
+          <p>Ficheiro: ${escapeHTML(material.file_name || 'Sem nome')}</p>
+          <p>Curso: ${escapeHTML(course)}</p>
+          <p>Módulo: ${escapeHTML(module)}</p>
+          <p>Aula: ${escapeHTML(lessonTitle)}</p>
+          <button type="button" class="btn-outline delete-material-btn"
+            data-material-id="${material.id}"
+            data-material-name="${escapeHTML(material.title || material.file_name)}"
+            style="margin-top:12px;border-color:#ff6868;color:#ff8585">
+            🗑️ Eliminar material
+          </button>
+        </div>`;
+    }).join('');
+
+    container.querySelectorAll('.delete-material-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        window.deleteAdminContent('material', button.dataset.materialId, button.dataset.materialName);
+      });
+    });
+  } catch (error) {
+    console.error('Erro ao carregar materiais:', error);
+    container.textContent = 'Erro ao carregar materiais: ' + error.message;
+  }
+};
+
+// ==========================================
+// CARREGAR FICHEIRO PARA A SUPABASE
+// ==========================================
+
+window.uploadLessonMaterial = async function() {
+  const lessonId = document.getElementById('materialLessonSelect')?.value;
+  const titleInput = document.getElementById('materialTitle');
+  const fileInput = document.getElementById('materialFile');
+  const message = document.getElementById('materialUploadMessage');
+
+  const file = fileInput?.files?.[0];
+
+  if (!lessonId) {
+    message.textContent = 'Selecciona uma aula.';
+    return;
+  }
+
+  if (!file) {
+    message.textContent = 'Selecciona um ficheiro.';
+    return;
+  }
+
+  if (file.size > 50 * 1024 * 1024) {
+    message.textContent = 'O ficheiro ultrapassa o limite de 50 MB.';
+    return;
+  }
+
+  const allowedExtensions = /\.(pdf|doc|docx|ppt|pptx|xls|xlsx|jpg|jpeg|png|webp)$/i;
+
+  if (!allowedExtensions.test(file.name)) {
+    message.textContent = 'Formato de ficheiro não permitido.';
+    return;
+  }
+
+  const title = titleInput.value.trim() || file.name;
+
+  const safeName = file.name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9._-]/g, '_');
+
+  const storagePath = `${lessonId}/${Date.now()}-${safeName}`;
+
+  message.textContent = 'A carregar ficheiro...';
+
+  try {
+    const { data: userData, error: userError } =
+      await supabase.auth.getUser();
+
+    if (userError || !userData.user) {
+      throw new Error('Sessão não encontrada. Entra novamente.');
+    }
+
+    const { error: uploadError } = await supabase
+      .storage
+      .from('course-materials')
+      .upload(storagePath, file, {
+        upsert: false,
+        contentType: file.type || 'application/octet-stream'
+      });
+
+    if (uploadError) throw uploadError;
+
+    const { error: insertError } = await supabase
+      .from('lesson_materials')
+      .insert({
+        lesson_id: lessonId,
+        title: title,
+        file_name: file.name,
+        storage_path: storagePath,
+        mime_type: file.type || null,
+        file_size: file.size,
+        uploaded_by: userData.user.id
+      });
+
+    if (insertError) {
+      await supabase.storage
+        .from('course-materials')
+        .remove([storagePath]);
+
+      throw insertError;
+    }
+
+    message.textContent = '✅ Material carregado com sucesso!';
+
+    titleInput.value = '';
+    fileInput.value = '';
+    await window.loadAdminMaterials?.();
+
+  } catch (error) {
+    console.error('Erro ao carregar material:', error);
+    message.textContent = '❌ Erro: ' + error.message;
+  }
+};
+  
+await loadPublicCourses();
+
+const {data:{session}} = await supabase.auth.getSession();
+if(session?.user) await loadUser(session.user);
+
+</script>
+</body>
+</html>
