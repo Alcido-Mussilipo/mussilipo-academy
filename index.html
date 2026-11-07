@@ -653,6 +653,27 @@ footer strong {color:white}
   </form>
 <!-- BIBLIOTECA DE MATERIAIS -->
 <div class="dash-card" id="adminMaterialsPanel" style="margin-top:20px">
+  
+<hr style="border-color:#38234e;margin:25px 0">
+
+<h3>🗂️ Materiais já carregados</h3>
+
+<p style="color:var(--muted)">
+  Consulta e elimina os documentos associados às aulas.
+</p>
+
+<button
+  type="button"
+  class="btn-outline"
+  onclick="loadAdminMaterials()"
+  style="margin:12px 0">
+  🔄 Actualizar materiais
+</button>
+
+<div id="adminMaterialsList">
+  A carregar materiais...
+</div>
+
   <h2>📂 Materiais de estudo</h2>
   <p style="color:var(--muted)">
     Carrega documentos e ficheiros para uma aula específica.
@@ -942,7 +963,7 @@ if (profile.role === 'admin') {
   await loadAdminContentCourses();
   await loadAdminOverview();
   await loadMaterialLessons();
-
+  await window.loadAdminMaterials();
   window.showAdminPanel('overview');
 
   $('adminDashboard').scrollIntoView({
@@ -1732,6 +1753,92 @@ window.loadPublicCourses = async function() {
     });
   });
 };
+ 
+// ==========================================
+// ELIMINAR CONTEÚDOS PELO SUPABASE
+// ==========================================
+
+window.deleteAdminContent = async function(type, id, name) {
+  const labels = {
+    course: 'curso',
+    module: 'módulo',
+    lesson: 'aula',
+    material: 'material'
+  };
+
+  const label = labels[type];
+
+  if (!label || !id) {
+    alert('Não foi possível identificar o conteúdo.');
+    return;
+  }
+
+  const confirmed = confirm(
+    `ATENÇÃO!\n\n` +
+    `Tens a certeza de que pretendes eliminar este ${label}?\n\n` +
+    `${name || ''}\n\n` +
+    `Esta operação é permanente. Os conteúdos dependentes ` +
+    `e os ficheiros associados também poderão ser eliminados.\n\n` +
+    `Não será possível recuperar os dados.`
+  );
+
+  if (!confirmed) return;
+
+  try {
+    const { data, error } = await supabase.functions.invoke(
+      'admin-delete-content',
+      {
+        body: {
+          type: type,
+          id: id
+        }
+      }
+    );
+
+    if (error) {
+      throw new Error(
+        error.message || 'Falha na comunicação com o servidor.'
+      );
+    }
+
+    if (!data || data.success !== true) {
+      throw new Error(
+        data?.error || 'Não foi possível eliminar o conteúdo.'
+      );
+    }
+
+    if (data.cleanup_pending) {
+      alert(
+        '⚠️ O conteúdo foi eliminado da base de dados, ' +
+        'mas alguns ficheiros não foram removidos do Storage. ' +
+        'Será necessária uma limpeza manual.'
+      );
+    } else {
+      alert('✅ ' + (data.message || 'Conteúdo eliminado com sucesso!'));
+    }
+
+    // Actualizar todas as listas afectadas.
+    await window.loadAdminCourses();
+    await window.loadAdminContentCourses();
+    await window.loadAdminModules();
+    await window.loadMaterialLessons();
+    await window.loadAdminMaterials();
+
+    if (typeof window.loadPublicCourses === 'function') {
+      await window.loadPublicCourses();
+    }
+
+  } catch (error) {
+    console.error('Erro ao eliminar conteúdo:', error);
+
+    alert(
+      '❌ Erro ao eliminar conteúdo:\n' +
+      (error.message || 'Erro desconhecido.')
+    );
+  }
+};
+ 
+
 window.loadAdminCourses = async function() {
   const container = $('adminCourses');
 
@@ -1783,6 +1890,15 @@ window.loadAdminCourses = async function() {
         ✏️ Editar curso
       </button>
 
+      <button
+        type="button"
+        class="btn-outline delete-course-btn"
+        data-course-id="${course.id}"
+        data-course-name="${escapeHTML(course.title)}"
+        style="margin:12px 0 0 8px;border-color:#ff6868;color:#ff8585">
+        🗑️ Eliminar curso
+      </button>
+
     </div>
   `).join('');
 
@@ -1791,7 +1907,18 @@ window.loadAdminCourses = async function() {
       window.editAdminCourse(button.dataset.courseId);
     });
   });
+
+  container.querySelectorAll('.delete-course-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      window.deleteAdminContent(
+        'course',
+        button.dataset.courseId,
+        button.dataset.courseName
+      );
+    });
+  });
 };
+
  // EDITAR CURSO EXISTENTE
 window.editAdminCourse = async function(courseId) {
 
@@ -1987,6 +2114,7 @@ window.createModule = async function(event) {
 
 
 // CARREGAR MÓDULOS DO CURSO SELECIONADO
+
 window.loadAdminModules = async function() {
   const courseId = $('adminContentCourse').value;
   const container = $('adminModules');
@@ -2035,6 +2163,7 @@ window.loadAdminModules = async function() {
 
   container.innerHTML = modules.map((module, index) => `
     <div class="dash-card" style="margin-top:12px">
+
       <strong>
         Módulo ${index + 1}: ${escapeHTML(module.title)}
       </strong>
@@ -2048,12 +2177,32 @@ window.loadAdminModules = async function() {
         style="margin-top:10px">
         ✏️ Editar módulo
       </button>
+
+      <button
+        type="button"
+        class="btn-outline delete-module-btn"
+        data-module-id="${module.id}"
+        data-module-name="${escapeHTML(module.title)}"
+        style="margin:10px 0 0 8px;border-color:#ff6868;color:#ff8585">
+        🗑️ Eliminar módulo
+      </button>
+
     </div>
   `).join('');
 
   container.querySelectorAll('.edit-module-btn').forEach(button => {
     button.addEventListener('click', () => {
       window.editAdminModule(button.dataset.moduleId);
+    });
+  });
+
+  container.querySelectorAll('.delete-module-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      window.deleteAdminContent(
+        'module',
+        button.dataset.moduleId,
+        button.dataset.moduleName
+      );
     });
   });
 
@@ -2120,6 +2269,7 @@ window.editAdminModule = async function(moduleId) {
 
 
 // CARREGAR AULAS DO MÓDULO SELECIONADO
+
 window.loadAdminLessons = async function() {
   const moduleId = $('adminModuleSelect').value;
   const container = $('adminLessons');
@@ -2185,6 +2335,15 @@ window.loadAdminLessons = async function() {
           ✏️ Editar aula
         </button>
 
+        <button
+          type="button"
+          class="btn-outline delete-lesson-btn"
+          data-lesson-id="${lesson.id}"
+          data-lesson-name="${escapeHTML(lesson.title)}"
+          style="margin:10px 0 0 8px;border-color:#ff6868;color:#ff8585">
+          🗑️ Eliminar aula
+        </button>
+
       </div>
     `).join('')}
   `;
@@ -2192,6 +2351,16 @@ window.loadAdminLessons = async function() {
   container.querySelectorAll('.edit-lesson-btn').forEach(button => {
     button.addEventListener('click', () => {
       window.editAdminLesson(button.dataset.lessonId);
+    });
+  });
+
+  container.querySelectorAll('.delete-lesson-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      window.deleteAdminContent(
+        'lesson',
+        button.dataset.lessonId,
+        button.dataset.lessonName
+      );
     });
   });
 };
@@ -3153,6 +3322,98 @@ window.loadMaterialLessons = async function() {
   }
 };
 
+// ==========================================
+// LISTAR E GERIR MATERIAIS
+// ==========================================
+
+window.loadAdminMaterials = async function() {
+  const container = document.getElementById('adminMaterialsList');
+
+  if (!container) return;
+
+  container.textContent = 'A carregar materiais...';
+
+  try {
+    const { data: materials, error } = await supabase
+      .from('lesson_materials')
+      .select('id, lesson_id, title, file_name, storage_path, created_at')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (!materials || materials.length === 0) {
+      container.textContent = 'Ainda não existem materiais carregados.';
+      return;
+    }
+
+    const lessonIds = [...new Set(materials.map(item => item.lesson_id))];
+
+    const { data: lessons, error: lessonError } = await supabase
+      .from('lessons')
+      .select(`
+        id,
+        title,
+        modules (
+          title,
+          courses (title)
+        )
+      `)
+      .in('id', lessonIds);
+
+    if (lessonError) throw lessonError;
+
+    const lessonMap = new Map(
+      (lessons || []).map(lesson => [lesson.id, lesson])
+    );
+
+    container.innerHTML = materials.map(material => {
+      const lesson = lessonMap.get(material.lesson_id);
+      const course = lesson?.modules?.courses?.title || 'Curso';
+      const module = lesson?.modules?.title || 'Módulo';
+      const lessonTitle = lesson?.title || 'Aula';
+
+      return `
+        <div class="dash-card" style="margin-top:12px">
+
+          <strong>📄 ${escapeHTML(material.title || material.file_name)}</strong>
+
+          <p>Ficheiro: ${escapeHTML(material.file_name || 'Sem nome')}</p>
+
+          <p>Curso: ${escapeHTML(course)}</p>
+
+          <p>Módulo: ${escapeHTML(module)}</p>
+
+          <p>Aula: ${escapeHTML(lessonTitle)}</p>
+
+          <button
+            type="button"
+            class="btn-outline delete-material-btn"
+            data-material-id="${material.id}"
+            data-material-name="${escapeHTML(material.title || material.file_name)}"
+            style="margin-top:12px;border-color:#ff6868;color:#ff8585">
+            🗑️ Eliminar material
+          </button>
+
+        </div>
+      `;
+    }).join('');
+
+    container.querySelectorAll('.delete-material-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        window.deleteAdminContent(
+          'material',
+          button.dataset.materialId,
+          button.dataset.materialName
+        );
+      });
+    });
+
+  } catch (error) {
+    console.error('Erro ao carregar materiais:', error);
+    container.textContent = 'Erro ao carregar materiais: ' + error.message;
+  }
+};
+
 
 // ==========================================
 // CARREGAR FICHEIRO PARA A SUPABASE
@@ -3241,7 +3502,7 @@ window.uploadLessonMaterial = async function() {
 
     titleInput.value = '';
     fileInput.value = '';
-
+  await window.loadAdminMaterials();
   } catch (error) {
     console.error('Erro ao carregar material:', error);
     message.textContent = '❌ Erro: ' + error.message;
