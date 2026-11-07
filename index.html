@@ -221,6 +221,15 @@ footer strong {color:white}
 </section>
 
 <section id="cursos">
+  <button
+  type="button"
+  id="studentBackButton"
+  class="btn-outline hidden"
+  onclick="returnToStudentDashboard()"
+  style="margin-bottom:25px">
+  ← Voltar aos meus cursos
+</button>
+  
   <div class="section-title">
     <h2>Explora os nossos cursos 📚</h2>
     <p>Escolhe o teu próximo passo rumo ao conhecimento.</p>
@@ -1301,11 +1310,47 @@ window.enroll = async function(courseId, name, type) {
   }
 };
 
+// ABRIR CATÁLOGO DE CURSOS
 window.showCatalog = function() {
+
   $('dashboard').classList.remove('show');
   $('adminDashboard').classList.remove('show');
+
   $('mainContent').classList.remove('hidden');
-  $('cursos').scrollIntoView({behavior:'smooth'});
+
+  const backButton = $('studentBackButton');
+
+  if (backButton) {
+    backButton.classList.toggle('hidden', !currentUser);
+  }
+
+  $('cursos').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+};
+
+
+// VOLTAR À ÁREA DO ALUNO
+window.returnToStudentDashboard = async function() {
+
+  if (!currentUser) {
+    openModal('login');
+    return;
+  }
+
+  $('mainContent').classList.add('hidden');
+  $('adminDashboard').classList.remove('show');
+  $('dashboard').classList.add('show');
+
+  $('learningPanel').classList.add('hidden');
+
+  await loadEnrollments();
+
+  $('dashboard').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
 };
 window.showPublicSection = function(sectionId) {
   $('dashboard').classList.remove('show');
@@ -1513,13 +1558,14 @@ window.loadAdminCourses = async function() {
     return;
   }
 
-if (!courses || courses.length === 0) {
+  if (!courses || courses.length === 0) {
     container.textContent = 'Ainda não existem cursos cadastrados.';
     return;
   }
 
   container.innerHTML = courses.map(course => `
     <div class="dash-card" style="margin-top:15px">
+
       ${course.thumbnail ? `
         <img src="${escapeHTML(course.thumbnail)}"
              alt="Capa do curso"
@@ -1539,9 +1585,121 @@ if (!courses || courses.length === 0) {
       <p>
         ${course.is_published ? '🟢 Publicado' : '🟡 Rascunho'}
       </p>
+
+      <button
+        type="button"
+        class="btn edit-course-btn"
+        data-course-id="${course.id}"
+        style="margin-top:12px">
+        ✏️ Editar curso
+      </button>
+
     </div>
   `).join('');
+
+  container.querySelectorAll('.edit-course-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      window.editAdminCourse(button.dataset.courseId);
+    });
+  });
 };
+ // EDITAR CURSO EXISTENTE
+window.editAdminCourse = async function(courseId) {
+
+  const { data: course, error: readError } = await supabase
+    .from('courses')
+    .select('id, title, description, price_mzn, access_type, is_published')
+    .eq('id', courseId)
+    .single();
+
+  if (readError || !course) {
+    alert('Não foi possível carregar o curso: ' + (readError?.message || 'Curso não encontrado.'));
+    return;
+  }
+
+  const title = prompt('Nome do curso:', course.title);
+  if (title === null) return;
+
+  if (!title.trim()) {
+    alert('O nome do curso não pode ficar vazio.');
+    return;
+  }
+
+  const description = prompt(
+    'Descrição do curso:',
+    course.description || ''
+  );
+  if (description === null) return;
+
+  const accessType = prompt(
+    'Tipo de acesso: escreve "free" para gratuito ou "paid" para pago.',
+    course.access_type
+  );
+
+  if (accessType === null) return;
+
+  const normalizedType = accessType.trim().toLowerCase();
+
+  if (!['free', 'paid'].includes(normalizedType)) {
+    alert('Tipo inválido. Usa "free" ou "paid".');
+    return;
+  }
+
+  let price = 0;
+
+  if (normalizedType === 'paid') {
+    const priceInput = prompt(
+      'Preço do curso em MT:',
+      String(course.price_mzn || '')
+    );
+
+    if (priceInput === null) return;
+
+    price = Number(priceInput);
+
+    if (!Number.isFinite(price) || price <= 0) {
+      alert('Indica um preço válido, superior a zero.');
+      return;
+    }
+  }
+
+  const currentStatus = course.is_published ? 'sim' : 'nao';
+
+  const publishedInput = prompt(
+    'Publicar curso? Escreve "sim" ou "nao".',
+    currentStatus
+  );
+
+  if (publishedInput === null) return;
+
+  const published = publishedInput.trim().toLowerCase();
+
+  if (!['sim', 'nao'].includes(published)) {
+    alert('Resposta inválida. Escreve "sim" ou "nao".');
+    return;
+  }
+
+  const { error } = await supabase
+    .from('courses')
+    .update({
+      title: title.trim(),
+      description: description.trim(),
+      access_type: normalizedType,
+      price_mzn: normalizedType === 'paid' ? price : 0,
+      is_published: published === 'sim'
+    })
+    .eq('id', courseId);
+
+  if (error) {
+    alert('Erro ao actualizar curso: ' + error.message);
+    return;
+  }
+
+  alert('✅ Curso actualizado com sucesso!');
+
+  await window.loadAdminCourses();
+  await window.loadPublicCourses();
+}; 
   // ABRIR A SECÇÃO DE GESTÃO DOS CURSOS
 window.goToAdminCourses = async function() {
   const panel = document.getElementById('adminCoursesPanel');
