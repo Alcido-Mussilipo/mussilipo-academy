@@ -535,14 +535,24 @@ footer strong {color:white}
       <div class="emoji">📚</div>
       <h3>Gerir cursos</h3>
       <p>Criar, editar e publicar cursos.</p>
-      <button class="btn" onclick="alert('Vamos configurar esta função na próxima etapa.')">Gerir cursos</button>
+      <button class="btn" onclick="
+  document.getElementById('adminContentPanel').scrollIntoView({behavior:'smooth'});
+  loadAdminCourses();
+">
+  Gerir cursos
+</button>
     </div>
 
     <div class="feature">
       <div class="emoji">👨‍🎓</div>
       <h3>Alunos</h3>
       <p>Consultar os alunos da plataforma.</p>
-      <button class="btn" onclick="alert('Vamos configurar esta função na próxima etapa.')">Ver alunos</button>
+     <button class="btn" onclick="
+  document.getElementById('adminStudents').scrollIntoView({behavior:'smooth'});
+  loadAdminOverview();
+">
+  Ver alunos
+</button>
     </div>
 
     <div class="feature">
