@@ -315,6 +315,16 @@ footer strong {color:white}
 .student-profile-card {display:grid;grid-template-columns:70px 1fr;gap:18px;align-items:center}
 .student-profile-card > div:not(.student-avatar) {display:flex;flex-direction:column;gap:4px;min-width:0;overflow-wrap:anywhere}
 .student-profile-card small {color:var(--muted)}
+.profile-edit-form {display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.profile-edit-form label {display:flex;flex-direction:column;gap:7px;color:var(--muted);font-size:13px}
+.profile-edit-form input {width:100%;padding:12px;background:#120a1e;border:1px solid #50346c;border-radius:8px;color:white;outline:none}
+.profile-edit-form input:focus {border-color:var(--purple)}
+.profile-form-actions {grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap}
+.profile-form-message {grid-column:1/-1;font-size:13px;color:#61e0af;min-height:18px}
+.profile-form-message.error {color:#ff8585}
+.password-recovery-box {background:#211334;border:1px solid #64418a;border-radius:16px;padding:28px;width:100%;max-width:420px;position:relative}
+.password-recovery-box input {display:block;width:100%;padding:13px;margin:12px 0;background:#120a1e;border:1px solid #50346c;border-radius:8px;color:white;outline:none}
+.password-recovery-box .btn {width:100%;margin-top:8px}
 .student-avatar {width:58px;height:58px;display:grid;place-items:center;border-radius:50%;background:#382254;font-size:27px;grid-row:span 3}
 
 /* Navegação administrativa persistente */
@@ -341,6 +351,8 @@ footer strong {color:white}
   .student-profile-card {grid-template-columns:1fr}
   .student-avatar {grid-row:auto}
   .student-summary-card {padding:15px}
+  .profile-edit-form {grid-template-columns:1fr}
+  .profile-form-actions {grid-column:1}
 }
 
 </style>
@@ -511,6 +523,40 @@ footer strong {color:white}
       <div><small>Nome completo</small><strong id="studentProfileName">Aluno</strong></div>
       <div><small>E-mail da conta</small><strong id="studentEmail">—</strong></div>
       <div><small>Tipo de conta</small><strong>Aluno Mussilipo Academy</strong></div>
+    </div>
+
+    <div class="dash-card">
+      <h3>✏️ Actualizar os meus dados</h3>
+      <p style="margin-top:6px">Altera o nome que aparece na tua conta.</p>
+      <form id="profileEditForm" class="profile-edit-form">
+        <label>Nome completo
+          <input type="text" id="profileFullName" maxlength="100" required placeholder="O teu nome completo">
+        </label>
+        <label>E-mail da conta
+          <input type="email" id="profileEmailReadonly" readonly>
+        </label>
+        <div class="profile-form-actions">
+          <button type="submit" class="btn" id="saveProfileBtn">Guardar alterações</button>
+        </div>
+        <div id="profileEditMessage" class="profile-form-message" aria-live="polite"></div>
+      </form>
+    </div>
+
+    <div class="dash-card">
+      <h3>🔐 Alterar palavra-passe</h3>
+      <p style="margin-top:6px">Escolhe uma palavra-passe nova com pelo menos 8 caracteres.</p>
+      <form id="changePasswordForm" class="profile-edit-form">
+        <label>Nova palavra-passe
+          <input type="password" id="newPassword" minlength="8" autocomplete="new-password" required placeholder="Nova palavra-passe">
+        </label>
+        <label>Confirmar palavra-passe
+          <input type="password" id="confirmNewPassword" minlength="8" autocomplete="new-password" required placeholder="Repete a palavra-passe">
+        </label>
+        <div class="profile-form-actions">
+          <button type="submit" class="btn" id="changePasswordBtn">Actualizar palavra-passe</button>
+        </div>
+        <div id="changePasswordMessage" class="profile-form-message" aria-live="polite"></div>
+      </form>
     </div>
   </div>
 </section>
@@ -865,6 +911,20 @@ footer strong {color:white}
   </div>
 </div>
 
+<!-- FORMULÁRIO DE DEFINIÇÃO DE NOVA PALAVRA-PASSE -->
+<div class="modal" id="passwordRecoveryModal" role="dialog" aria-modal="true" aria-labelledby="passwordRecoveryTitle">
+  <div class="password-recovery-box">
+    <h2 id="passwordRecoveryTitle">Criar nova palavra-passe 🔐</h2>
+    <p style="color:var(--muted);font-size:13px;margin:8px 0 16px">Define uma nova palavra-passe para voltares a aceder à tua conta.</p>
+    <form id="passwordRecoveryForm">
+      <input type="password" id="recoveryNewPassword" minlength="8" autocomplete="new-password" required placeholder="Nova palavra-passe">
+      <input type="password" id="recoveryConfirmPassword" minlength="8" autocomplete="new-password" required placeholder="Confirmar palavra-passe">
+      <button type="submit" class="btn" id="saveRecoveryPasswordBtn">Guardar nova palavra-passe</button>
+    </form>
+    <div id="passwordRecoveryMessage" class="message" aria-live="polite"></div>
+  </div>
+</div>
+
 <script type="module">
 import { createClient } from
 'https://esm.sh/@supabase/supabase-js@2';
@@ -975,6 +1035,146 @@ window.resetPassword = async function() {
 };
 
 
+// GUARDAR ALTERAÇÕES DO PERFIL DO ALUNO
+$('profileEditForm')?.addEventListener('submit', async event => {
+  event.preventDefault();
+  if (!currentUser) return;
+
+  const name = $('profileFullName').value.trim();
+  const message = $('profileEditMessage');
+  const button = $('saveProfileBtn');
+
+  if (name.length < 2) {
+    message.textContent = 'Introduz um nome válido.';
+    message.className = 'profile-form-message error';
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = 'A guardar...';
+  message.textContent = '';
+  message.className = 'profile-form-message';
+
+  try {
+    const { data: savedProfile, error: profileError } = await supabase
+      .from('profiles')
+      .update({ full_name: name })
+      .eq('id', currentUser.id)
+      .select('id')
+      .maybeSingle();
+
+    if (profileError) throw profileError;
+    if (!savedProfile) throw new Error('A base de dados não confirmou a actualização. Verifica as permissões de edição da tabela profiles.');
+
+    const { data, error: authError } = await supabase.auth.updateUser({
+      data: { full_name: name }
+    });
+    if (authError) throw authError;
+
+    currentUser = data.user || currentUser;
+    $('studentName').textContent = name;
+    $('studentProfileName').textContent = name;
+    message.textContent = '✅ Os teus dados foram actualizados.';
+  } catch (error) {
+    console.error('Erro ao actualizar perfil:', error);
+    message.textContent = 'Não foi possível actualizar o perfil: ' + (error.message || 'Erro desconhecido.');
+    message.className = 'profile-form-message error';
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Guardar alterações';
+  }
+});
+
+// ALTERAR PALAVRA-PASSE COM A SESSÃO ACTUAL
+$('changePasswordForm')?.addEventListener('submit', async event => {
+  event.preventDefault();
+  const password = $('newPassword').value;
+  const confirmation = $('confirmNewPassword').value;
+  const message = $('changePasswordMessage');
+  const button = $('changePasswordBtn');
+
+  if (password.length < 8) {
+    message.textContent = 'A palavra-passe deve ter pelo menos 8 caracteres.';
+    message.className = 'profile-form-message error';
+    return;
+  }
+  if (password !== confirmation) {
+    message.textContent = 'As palavras-passe não coincidem.';
+    message.className = 'profile-form-message error';
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = 'A actualizar...';
+  message.textContent = '';
+  message.className = 'profile-form-message';
+
+  try {
+    const { error } = await supabase.auth.updateUser({ password });
+    if (error) throw error;
+    $('changePasswordForm').reset();
+    message.textContent = '✅ Palavra-passe alterada com sucesso.';
+  } catch (error) {
+    console.error('Erro ao alterar palavra-passe:', error);
+    message.textContent = 'Não foi possível alterar a palavra-passe: ' + (error.message || 'Erro desconhecido.');
+    message.className = 'profile-form-message error';
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Actualizar palavra-passe';
+  }
+});
+
+// GUARDAR A NOVA PALAVRA-PASSE DEPOIS DO LINK DE RECUPERAÇÃO
+$('passwordRecoveryForm')?.addEventListener('submit', async event => {
+  event.preventDefault();
+  const password = $('recoveryNewPassword').value;
+  const confirmation = $('recoveryConfirmPassword').value;
+  const message = $('passwordRecoveryMessage');
+  const button = $('saveRecoveryPasswordBtn');
+
+  if (password.length < 8) {
+    message.textContent = 'A palavra-passe deve ter pelo menos 8 caracteres.';
+    message.className = 'message error';
+    return;
+  }
+  if (password !== confirmation) {
+    message.textContent = 'As palavras-passe não coincidem.';
+    message.className = 'message error';
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = 'A guardar...';
+  message.textContent = '';
+  message.className = 'message';
+
+  try {
+    const { error } = await supabase.auth.updateUser({ password });
+    if (error) throw error;
+    $('passwordRecoveryForm').reset();
+    message.textContent = '✅ Palavra-passe actualizada. Já podes entrar na tua conta.';
+    setTimeout(() => {
+      $('passwordRecoveryModal').classList.remove('show');
+      $('authModal').classList.add('show');
+      openModal('login');
+    }, 1200);
+  } catch (error) {
+    console.error('Erro na recuperação da palavra-passe:', error);
+    message.textContent = 'Não foi possível actualizar a palavra-passe: ' + (error.message || 'Link inválido ou expirado. Pede um novo link.');
+    message.className = 'message error';
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Guardar nova palavra-passe';
+  }
+});
+
+// O SUPABASE AVISA QUANDO O ALUNO ABRE O LINK DE RECUPERAÇÃO
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'PASSWORD_RECOVERY' && session) {
+    $('passwordRecoveryModal').classList.add('show');
+  }
+});
+
 async function loadUser(user) {
   // Consultar o papel do utilizador na base de dados
   const { data: profile, error } = await supabase
@@ -1019,6 +1219,8 @@ if (profile.is_blocked && profile.role === 'student') {
   $('studentName').textContent = name;
   if ($('studentProfileName')) $('studentProfileName').textContent = name;
   $('studentEmail').textContent = user.email;
+  if ($('profileFullName')) $('profileFullName').value = name;
+  if ($('profileEmailReadonly')) $('profileEmailReadonly').value = user.email || '';
   ['publicHomeLink','publicCoursesLink','publicAdvantagesLink'].forEach(id => $(id)?.classList.add('hidden'));
 
   // Mostrar o painel correspondente ao papel
