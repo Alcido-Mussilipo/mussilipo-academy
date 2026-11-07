@@ -1635,6 +1635,135 @@ window.loadAdminModules = async function() {
   const container = $('adminModules');
   const moduleSelect = $('adminModuleSelect');
 
+  const previousModuleId = moduleSelect.value;
+
+  if (!courseId) {
+    container.textContent = 'Seleciona um curso.';
+    moduleSelect.innerHTML =
+      '<option value="">Primeiro seleciona um curso</option>';
+    $('adminLessons').textContent = 'Seleciona um módulo.';
+    return;
+  }
+
+  container.textContent = 'A carregar módulos...';
+
+  const { data: modules, error } = await supabase
+    .from('modules')
+    .select('id, title, position')
+    .eq('course_id', courseId)
+    .order('position', { ascending: true });
+
+  if (error) {
+    container.textContent = 'Erro ao carregar módulos: ' + error.message;
+    return;
+  }
+
+  if (!modules || modules.length === 0) {
+    container.textContent = 'Este curso ainda não tem módulos.';
+    moduleSelect.innerHTML =
+      '<option value="">Cria primeiro um módulo</option>';
+    $('adminLessons').textContent = 'Ainda não existem aulas.';
+    return;
+  }
+
+  moduleSelect.innerHTML = modules.map(module => `
+    <option value="${module.id}">
+      ${escapeHTML(module.title)}
+    </option>
+  `).join('');
+
+  if (modules.some(module => module.id === previousModuleId)) {
+    moduleSelect.value = previousModuleId;
+  }
+
+  container.innerHTML = modules.map((module, index) => `
+    <div class="dash-card" style="margin-top:12px">
+      <strong>
+        Módulo ${index + 1}: ${escapeHTML(module.title)}
+      </strong>
+
+      <p>Posição: ${module.position}</p>
+
+      <button
+        type="button"
+        class="btn edit-module-btn"
+        data-module-id="${module.id}"
+        style="margin-top:10px">
+        ✏️ Editar módulo
+      </button>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.edit-module-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      window.editAdminModule(button.dataset.moduleId);
+    });
+  });
+
+  await loadAdminLessons();
+};
+
+
+// EDITAR MÓDULO
+window.editAdminModule = async function(moduleId) {
+  const { data: module, error: readError } = await supabase
+    .from('modules')
+    .select('id, title, position')
+    .eq('id', moduleId)
+    .single();
+
+  if (readError || !module) {
+    alert('Não foi possível carregar o módulo.');
+    return;
+  }
+
+  const newTitle = prompt(
+    'Corrige o nome do módulo:',
+    module.title
+  );
+
+  if (newTitle === null) return;
+
+  if (!newTitle.trim()) {
+    alert('O nome do módulo não pode ficar vazio.');
+    return;
+  }
+
+  const newPosition = prompt(
+    'Indica a posição do módulo:',
+    String(module.position)
+  );
+
+  if (newPosition === null) return;
+
+  const position = Number(newPosition);
+
+  if (!Number.isInteger(position) || position < 1) {
+    alert('A posição deve ser um número inteiro maior que zero.');
+    return;
+  }
+
+  const { error } = await supabase
+    .from('modules')
+    .update({
+      title: newTitle.trim(),
+      position
+    })
+    .eq('id', moduleId);
+
+  if (error) {
+    alert('Erro ao actualizar módulo: ' + error.message);
+    return;
+  }
+
+  alert('✅ Módulo actualizado com sucesso!');
+
+  await loadAdminModules();
+};
+  const courseId = $('adminContentCourse').value;
+  const container = $('adminModules');
+  const moduleSelect = $('adminModuleSelect');
+
   if (!courseId) {
     container.textContent = 'Seleciona um curso.';
     moduleSelect.innerHTML = '<option value="">Primeiro seleciona um curso</option>';
@@ -1680,6 +1809,202 @@ window.loadAdminModules = async function() {
 
 // CARREGAR AULAS DO MÓDULO SELECIONADO
 window.loadAdminLessons = async function() {
+  const moduleId = $('adminModuleSelect').value;
+  const container = $('adminLessons');
+
+  if (!moduleId) {
+    container.textContent = 'Seleciona um módulo.';
+    return;
+  }
+
+  container.textContent = 'A carregar aulas...';
+
+  const { data: lessons, error } = await supabase
+    .from('lessons')
+    .select(`
+      id,
+      title,
+      description,
+      video_url,
+      content,
+      is_published,
+      position
+    `)
+    .eq('module_id', moduleId)
+    .order('position', { ascending: true });
+
+  if (error) {
+    container.textContent = 'Erro ao carregar aulas: ' + error.message;
+    return;
+  }
+
+  if (!lessons || lessons.length === 0) {
+    container.textContent = 'Este módulo ainda não tem aulas.';
+    return;
+  }
+
+  container.innerHTML = `
+    <h3 style="margin-bottom:12px">📖 Aulas deste módulo</h3>
+
+    ${lessons.map((lesson, index) => `
+      <div class="dash-card" style="margin-top:12px">
+
+        <strong>
+          ${index + 1}. ${escapeHTML(lesson.title)}
+        </strong>
+
+        <p>
+          ${escapeHTML(lesson.description || 'Sem descrição')}
+        </p>
+
+        <p>
+          ${lesson.is_published
+            ? '🟢 Publicada'
+            : '🟡 Não publicada'}
+        </p>
+
+        <p>Posição: ${lesson.position}</p>
+
+        <button
+          type="button"
+          class="btn edit-lesson-btn"
+          data-lesson-id="${lesson.id}"
+          style="margin-top:10px">
+          ✏️ Editar aula
+        </button>
+
+      </div>
+    `).join('')}
+  `;
+
+  container.querySelectorAll('.edit-lesson-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      window.editAdminLesson(button.dataset.lessonId);
+    });
+  });
+};
+
+
+// EDITAR AULA
+window.editAdminLesson = async function(lessonId) {
+  const { data: lesson, error: readError } = await supabase
+    .from('lessons')
+    .select(`
+      id,
+      title,
+      description,
+      video_url,
+      content,
+      is_published,
+      position
+    `)
+    .eq('id', lessonId)
+    .single();
+
+  if (readError || !lesson) {
+    alert('Não foi possível carregar a aula.');
+    return;
+  }
+
+  const newTitle = prompt(
+    'Título da aula:',
+    lesson.title || ''
+  );
+
+  if (newTitle === null) return;
+
+  if (!newTitle.trim()) {
+    alert('O título da aula não pode ficar vazio.');
+    return;
+  }
+
+  const newDescription = prompt(
+    'Descrição da aula:',
+    lesson.description || ''
+  );
+
+  if (newDescription === null) return;
+
+  const newVideo = prompt(
+    'Link do vídeo:',
+    lesson.video_url || ''
+  );
+
+  if (newVideo === null) return;
+
+  if (newVideo.trim()) {
+    try {
+      const videoUrl = new URL(newVideo.trim());
+
+      if (!['http:', 'https:'].includes(videoUrl.protocol)) {
+        throw new Error();
+      }
+    } catch {
+      alert('Introduz um link de vídeo válido ou deixa o campo vazio.');
+      return;
+    }
+  }
+
+  const newContent = prompt(
+    'Conteúdo completo da aula:',
+    lesson.content || ''
+  );
+
+  if (newContent === null) return;
+
+  const newPosition = prompt(
+    'Posição da aula:',
+    String(lesson.position)
+  );
+
+  if (newPosition === null) return;
+
+  const position = Number(newPosition);
+
+  if (!Number.isInteger(position) || position < 1) {
+    alert('A posição deve ser um número inteiro maior que zero.');
+    return;
+  }
+
+  const currentStatus = lesson.is_published
+    ? 'publicada'
+    : 'rascunho';
+
+  const newStatus = prompt(
+    'Estado da aula: escreve "publicada" ou "rascunho".',
+    currentStatus
+  );
+
+  if (newStatus === null) return;
+
+  const normalizedStatus = newStatus.trim().toLowerCase();
+
+  if (!['publicada', 'rascunho'].includes(normalizedStatus)) {
+    alert('Estado inválido. Escreve "publicada" ou "rascunho".');
+    return;
+  }
+
+  const { error } = await supabase
+    .from('lessons')
+    .update({
+      title: newTitle.trim(),
+      description: newDescription.trim(),
+      video_url: newVideo.trim() || null,
+      content: newContent,
+      position,
+      is_published: normalizedStatus === 'publicada'
+    })
+    .eq('id', lessonId);
+
+  if (error) {
+    alert('Erro ao actualizar aula: ' + error.message);
+    return;
+  }
+
+  alert('✅ Aula actualizada com sucesso!');
+
+  await loadAdminLessons();
+};
   const moduleId = $('adminModuleSelect').value;
   const container = $('adminLessons');
 
