@@ -365,6 +365,19 @@ footer strong {color:white}
 .notification-item small {display:block;color:var(--muted);margin-top:9px}
 .notification-actions {display:flex;justify-content:flex-end;margin-top:12px}
 
+
+/* Comunidade e suporte em tempo real */
+.chat-layout{display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px}
+.chat-box{background:#160b25;border:1px solid #49305f;border-radius:13px;padding:15px;min-width:0}
+.chat-messages{height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:8px 2px;margin:12px 0}
+.chat-message{max-width:88%;padding:10px 13px;border-radius:12px;background:#2a1940;overflow-wrap:anywhere}
+.chat-message.mine{align-self:flex-end;background:#43216c}
+.chat-message small{display:block;color:#c5b4d9;font-size:11px;margin-top:5px}
+.chat-compose{display:flex;gap:8px;align-items:flex-end}
+.chat-compose textarea{flex:1;min-width:0;resize:vertical;min-height:48px;max-height:120px;padding:12px;background:#120a1e;color:white;border:1px solid #50346c;border-radius:9px}
+.support-user-list{display:grid;gap:8px;margin:12px 0}
+.support-user-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;background:#211334;border:1px solid #49305f;border-radius:10px}
+@media(max-width:520px){.chat-compose{flex-direction:column}.chat-compose .btn{width:100%}.chat-message{max-width:96%}}
 </style>
 </head>
 
@@ -493,6 +506,8 @@ footer strong {color:white}
     <button type="button" class="student-menu-button" data-student-panel="learning" onclick="showStudentPanel('learning')">🎥 Aulas e materiais</button>
     <button type="button" class="student-menu-button" data-student-panel="profile" onclick="showStudentPanel('profile')">👤 Minha conta</button>
     <button type="button" class="student-menu-button" data-student-panel="notifications" onclick="showStudentPanel('notifications')">🔔 Notificações <span id="notificationCount" class="notification-count hidden">0</span></button>
+    <button type="button" class="student-menu-button" data-student-panel="community" onclick="showStudentPanel('community')">💬 Comunidade</button>
+    <button type="button" class="student-menu-button" data-student-panel="support" onclick="showStudentPanel('support')">🛟 Suporte</button>
   </nav>
 
   <div id="studentPageOverview" class="student-page active">
@@ -534,6 +549,28 @@ footer strong {color:white}
     </div>
     <div id="studentNotificationsList" style="margin-top:18px">
       <div class="dash-card">A carregar notificações...</div>
+    </div>
+  </div>
+
+  <div id="studentPageCommunity" class="student-page">
+    <div class="student-section-heading"><div><h2>💬 Comunidade de alunos</h2><p>Partilha dúvidas e troca experiências sobre os cursos com outros alunos.</p></div></div>
+    <div class="chat-box">
+      <div id="communityMessages" class="chat-messages" aria-live="polite"><p>A carregar conversa...</p></div>
+      <form id="communityMessageForm" class="chat-compose">
+        <textarea id="communityMessageInput" maxlength="3000" required placeholder="Escreve uma mensagem para a comunidade..."></textarea>
+        <button class="btn" type="submit" id="sendCommunityMessageBtn">Enviar</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="studentPageSupport" class="student-page">
+    <div class="student-section-heading"><div><h2>🛟 Suporte da Mussilipo Academy</h2><p>Envia uma mensagem privada à administração e acompanha a resposta nesta conversa.</p></div></div>
+    <div class="chat-box">
+      <div id="studentSupportMessages" class="chat-messages" aria-live="polite"><p>A carregar conversa...</p></div>
+      <form id="studentSupportForm" class="chat-compose">
+        <textarea id="studentSupportInput" maxlength="3000" required placeholder="Escreve a tua dúvida ou pedido de ajuda..."></textarea>
+        <button class="btn" type="submit" id="sendStudentSupportBtn">Enviar ao suporte</button>
+      </form>
     </div>
   </div>
 
@@ -630,6 +667,11 @@ footer strong {color:white}
         onclick="showAdminPanel('enrollments')">
         📝 Matrículas
       </button>
+      <button class="admin-menu-button"
+        data-admin-panel="support"
+        onclick="showAdminPanel('support')">
+        🛟 Suporte aos alunos
+      </button>
     </nav>
   </aside>
 
@@ -650,6 +692,19 @@ footer strong {color:white}
     <div id="adminPageMaterials" class="admin-page"></div>
 
     <div id="adminPageEnrollments" class="admin-page"></div>
+    <div id="adminPageSupport" class="admin-page">
+      <h2>🛟 Suporte aos alunos</h2>
+      <p style="color:var(--muted);margin:6px 0 14px">Selecciona um aluno para consultar e responder à conversa privada.</p>
+      <div id="adminSupportUsers" class="support-user-list">A carregar conversas...</div>
+      <div class="chat-box">
+        <h3 id="adminSupportChatTitle">Selecciona uma conversa</h3>
+        <div id="adminSupportMessages" class="chat-messages"><p>As mensagens aparecerão aqui.</p></div>
+        <form id="adminSupportForm" class="chat-compose">
+          <textarea id="adminSupportInput" maxlength="3000" required placeholder="Escreve uma resposta ao aluno..."></textarea>
+          <button class="btn" type="submit" id="sendAdminSupportBtn">Responder</button>
+        </form>
+      </div>
+    </div>
 
   </main>
 </div>
@@ -960,6 +1015,10 @@ let authMode = 'login';
 let currentUser = null;
 let enrollments = [];
 let currentLearningCourseId = null;
+let currentProfileName = '';
+let currentUserRole = '';
+let realtimeChannel = null;
+let selectedSupportUserId = null;
 
 const $ = id => document.getElementById(id);
 
@@ -1227,6 +1286,8 @@ if (profile.is_blocked && profile.role === 'student') {
   return;
 }
   currentUser = user;
+  currentProfileName = profile.full_name || user.user_metadata?.full_name || user.email.split('@')[0];
+  currentUserRole = profile.role;
 
   // Esconder todos os painéis antes de abrir o correcto
   $('mainContent').classList.add('hidden');
@@ -1235,7 +1296,7 @@ if (profile.is_blocked && profile.role === 'student') {
   document.querySelectorAll('.student-page').forEach(page => page.classList.remove('active'));
 
   // Actualizar os dados da conta
-  const name = profile.full_name || user.user_metadata?.full_name || user.email.split('@')[0];
+  const name = currentProfileName;
 
   $('studentName').textContent = name;
   if ($('studentProfileName')) $('studentProfileName').textContent = name;
@@ -1269,6 +1330,14 @@ if (profile.role === 'admin') {
   window.showStudentPanel('overview', false);
   $('dashboard').scrollIntoView({behavior:'smooth', block:'start'});
 }
+  await startAcademyRealtime();
+  if (profile.role === 'student') {
+    await window.loadStudentNotifications();
+    await loadCommunityMessages();
+    await loadStudentSupportMessages();
+  } else if (profile.role === 'admin') {
+    await loadAdminSupportUsers();
+  }
   // Actualizar os botões do cabeçalho
   $('loginBtn').classList.add('hidden');
   $('registerBtn').classList.add('hidden');
@@ -1356,6 +1425,165 @@ window.markAllNotificationsRead = async function() {
   }
   await window.loadStudentNotifications();
 };
+
+// =========================================
+// COMUNIDADE, SUPORTE E REALTIME
+// =========================================
+function chatDate(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? '' : date.toLocaleString('pt-MZ', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+function renderChatMessages(containerId, rows) {
+  const container = $(containerId);
+  if (!container) return;
+  if (!rows || !rows.length) {
+    container.innerHTML = '<p style="color:var(--muted)">Ainda não existem mensagens. Sê o primeiro a conversar! 👋</p>';
+    return;
+  }
+  container.innerHTML = rows.map(row => `
+    <article class="chat-message ${row.sender_id === currentUser?.id ? 'mine' : ''}">
+      <strong>${escapeHTML(row.sender_name || 'Utilizador')} ${row.sender_role === 'admin' ? '👑' : ''}</strong>
+      <div>${escapeHTML(row.message || '')}</div>
+      <small>${chatDate(row.created_at)}</small>
+    </article>
+  `).join('');
+  container.scrollTop = container.scrollHeight;
+}
+
+async function loadCommunityMessages() {
+  if (!currentUser) return;
+  const { data, error } = await supabase.from('community_messages')
+    .select('id, sender_id, sender_name, sender_role, message, created_at')
+    .order('created_at', { ascending: true }).limit(150);
+  if (error) {
+    console.error('Erro ao carregar comunidade:', error);
+    $('communityMessages').innerHTML = '<p>Não foi possível carregar a comunidade. Tenta novamente.</p>';
+    return;
+  }
+  renderChatMessages('communityMessages', data || []);
+}
+
+async function loadStudentSupportMessages() {
+  if (!currentUser || currentUserRole !== 'student') return;
+  const { data, error } = await supabase.from('support_messages')
+    .select('id, user_id, sender_id, sender_name, sender_role, message, created_at')
+    .eq('user_id', currentUser.id).order('created_at', { ascending: true }).limit(200);
+  if (error) {
+    console.error('Erro ao carregar suporte:', error);
+    $('studentSupportMessages').innerHTML = '<p>Não foi possível carregar a conversa de suporte.</p>';
+    return;
+  }
+  renderChatMessages('studentSupportMessages', data || []);
+}
+
+async function loadAdminSupportUsers() {
+  if (!currentUser || currentUserRole !== 'admin') return;
+  const list = $('adminSupportUsers');
+  if (!list) return;
+  const { data, error } = await supabase.from('support_messages')
+    .select('user_id, sender_name, message, created_at')
+    .order('created_at', { ascending: false }).limit(500);
+  if (error) {
+    console.error('Erro ao carregar pedidos de suporte:', error);
+    list.textContent = 'Não foi possível carregar as conversas. Verifica as permissões da tabela.';
+    return;
+  }
+  const latest = new Map();
+  (data || []).forEach(row => { if (!latest.has(row.user_id)) latest.set(row.user_id, row); });
+  if (!latest.size) {
+    list.innerHTML = '<p style="color:var(--muted)">Ainda não existem pedidos de suporte.</p>';
+    return;
+  }
+  list.innerHTML = Array.from(latest.entries()).map(([userId, row]) => `
+    <div class="support-user-item">
+      <div><strong>${escapeHTML(row.sender_name || 'Aluno')}</strong><br><small>${escapeHTML(String(row.message || '').slice(0,90))}</small><br><small>${chatDate(row.created_at)}</small></div>
+      <button type="button" class="btn-outline" onclick="openAdminSupportChat('${userId}')">Abrir conversa</button>
+    </div>
+  `).join('');
+}
+
+window.openAdminSupportChat = async function(userId) {
+  if (!currentUser || currentUserRole !== 'admin' || !userId) return;
+  selectedSupportUserId = userId;
+  $('adminSupportChatTitle').textContent = 'Conversa privada · ' + userId;
+  const { data, error } = await supabase.from('support_messages')
+    .select('id, user_id, sender_id, sender_name, sender_role, message, created_at')
+    .eq('user_id', userId).order('created_at', { ascending: true }).limit(200);
+  if (error) {
+    console.error('Erro ao abrir conversa:', error);
+    $('adminSupportMessages').textContent = 'Não foi possível abrir esta conversa.';
+    return;
+  }
+  renderChatMessages('adminSupportMessages', data || []);
+};
+
+async function sendChatMessage(table, values, buttonId, inputId, reloadFn) {
+  const input = $(inputId);
+  const button = $(buttonId);
+  const message = input?.value.trim();
+  if (!currentUser || !message) return;
+  button.disabled = true;
+  try {
+    const { error } = await supabase.from(table).insert(values(message));
+    if (error) throw error;
+    input.value = '';
+    await reloadFn();
+  } catch (error) {
+    console.error('Erro ao enviar mensagem:', error);
+    alert('Não foi possível enviar a mensagem: ' + error.message);
+  } finally {
+    button.disabled = false;
+  }
+}
+
+$('communityMessageForm')?.addEventListener('submit', event => {
+  event.preventDefault();
+  sendChatMessage('community_messages', message => ({
+    sender_id: currentUser.id, sender_name: currentProfileName,
+    sender_role: currentUserRole, message
+  }), 'sendCommunityMessageBtn', 'communityMessageInput', loadCommunityMessages);
+});
+
+$('studentSupportForm')?.addEventListener('submit', event => {
+  event.preventDefault();
+  sendChatMessage('support_messages', message => ({
+    user_id: currentUser.id, sender_id: currentUser.id,
+    sender_name: currentProfileName, sender_role: 'student', message
+  }), 'sendStudentSupportBtn', 'studentSupportInput', loadStudentSupportMessages);
+});
+
+$('adminSupportForm')?.addEventListener('submit', event => {
+  event.preventDefault();
+  if (!selectedSupportUserId) { alert('Selecciona primeiro uma conversa de aluno.'); return; }
+  sendChatMessage('support_messages', message => ({
+    user_id: selectedSupportUserId, sender_id: currentUser.id,
+    sender_name: currentProfileName, sender_role: 'admin', message
+  }), 'sendAdminSupportBtn', 'adminSupportInput', async () => {
+    await window.openAdminSupportChat(selectedSupportUserId);
+    await loadAdminSupportUsers();
+  });
+});
+
+async function startAcademyRealtime() {
+  if (!currentUser) return;
+  if (realtimeChannel) await supabase.removeChannel(realtimeChannel);
+  const userId = currentUser.id;
+  realtimeChannel = supabase.channel('academy-live-' + userId)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'community_messages' }, () => {
+      loadCommunityMessages();
+    })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'notifications', filter: 'user_id=eq.' + userId }, () => {
+      window.loadStudentNotifications?.();
+    })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'support_messages', ...(currentUserRole === 'student' ? { filter: 'user_id=eq.' + userId } : {}) }, () => {
+      if (currentUserRole === 'student') loadStudentSupportMessages();
+      else { loadAdminSupportUsers(); if (selectedSupportUserId) window.openAdminSupportChat(selectedSupportUserId); }
+    })
+    .subscribe(status => {
+      if (status === 'CHANNEL_ERROR') console.error('Erro na ligação em tempo real do Supabase.');
+    });
+}
 
 // MOSTRAR INSCRIÇÕES DO ALUNO
 function renderEnrollments() {
@@ -1930,7 +2158,7 @@ window.showCatalog = function() {
 
 // NAVEGAÇÃO DA ÁREA DO ALUNO
 window.showStudentPanel = function(panelName, scroll = true) {
-  const valid = ['overview', 'courses', 'learning', 'profile', 'notifications'];
+  const valid = ['overview', 'courses', 'learning', 'profile', 'notifications', 'community', 'support'];
   if (!valid.includes(panelName)) return;
   document.querySelectorAll('.student-page').forEach(page => page.classList.remove('active'));
   document.querySelectorAll('.student-menu-button').forEach(button => {
@@ -1938,6 +2166,9 @@ window.showStudentPanel = function(panelName, scroll = true) {
   });
   const page = document.getElementById('studentPage' + panelName.charAt(0).toUpperCase() + panelName.slice(1));
   if (page) page.classList.add('active');
+  if (panelName === 'notifications') window.loadStudentNotifications?.();
+  if (panelName === 'community') loadCommunityMessages();
+  if (panelName === 'support') loadStudentSupportMessages();
   if (panelName === 'learning' && !$('learningPanel')?.classList.contains('hidden')) {
     $('studentLearningShortcut').classList.add('hidden');
   } else if (panelName === 'learning') {
@@ -1993,7 +2224,14 @@ window.logout = async function() {
     return;
   }
 
+  if (realtimeChannel) {
+    await supabase.removeChannel(realtimeChannel);
+    realtimeChannel = null;
+  }
   currentUser = null;
+  currentProfileName = '';
+  currentUserRole = '';
+  selectedSupportUserId = null;
   enrollments = [];
 
   $('dashboard').classList.remove('show');
@@ -2856,7 +3094,8 @@ window.showAdminPanel = function(panelName) {
     'courses',
     'content',
     'materials',
-    'enrollments'
+    'enrollments',
+    'support'
   ];
 
   if (!validPanels.includes(panelName)) return;
@@ -2882,7 +3121,7 @@ window.showAdminPanel = function(panelName) {
     destination.classList.add('active');
   }
 
-  const sectionNames = {overview:'Visão geral',students:'Gestão dos alunos',courses:'Gestão dos cursos',content:'Módulos e aulas',materials:'Materiais de estudo',enrollments:'Matrículas'};
+  const sectionNames = {overview:'Visão geral',students:'Gestão dos alunos',courses:'Gestão dos cursos',content:'Módulos e aulas',materials:'Materiais de estudo',enrollments:'Matrículas',support:'Suporte aos alunos'};
   const currentSection = document.getElementById('adminCurrentSection');
   if (currentSection) currentSection.textContent = sectionNames[panelName] || 'Painel administrativo';
 
@@ -2901,6 +3140,9 @@ window.showAdminPanel = function(panelName) {
 
   if (panelName === 'enrollments') {
     window.loadAdminEnrollments();
+  }
+  if (panelName === 'support') {
+    window.loadAdminSupportUsers();
   }
 
   if (panelName === 'students' || panelName === 'overview') {
