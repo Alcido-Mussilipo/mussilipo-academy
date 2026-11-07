@@ -355,6 +355,16 @@ footer strong {color:white}
   .profile-form-actions {grid-column:1}
 }
 
+
+/* NOTIFICACOES DO ALUNO */
+.notification-count {display:inline-grid;place-items:center;min-width:19px;height:19px;padding:0 5px;margin-left:5px;border-radius:20px;background:#e34d72;color:#fff;font-size:11px;font-weight:800}
+.notification-item {padding:15px;margin:12px 0;border:1px solid #49305f;border-radius:12px;background:#211334}
+.notification-item.unread {border-color:#9b65dc;background:#29183e}
+.notification-item h3 {font-size:15px;margin:0 0 7px}
+.notification-item p {margin:0;color:#ded2eb;line-height:1.5}
+.notification-item small {display:block;color:var(--muted);margin-top:9px}
+.notification-actions {display:flex;justify-content:flex-end;margin-top:12px}
+
 </style>
 </head>
 
@@ -482,6 +492,7 @@ footer strong {color:white}
     <button type="button" class="student-menu-button" data-student-panel="courses" onclick="showStudentPanel('courses')">📚 Meus cursos</button>
     <button type="button" class="student-menu-button" data-student-panel="learning" onclick="showStudentPanel('learning')">🎥 Aulas e materiais</button>
     <button type="button" class="student-menu-button" data-student-panel="profile" onclick="showStudentPanel('profile')">👤 Minha conta</button>
+    <button type="button" class="student-menu-button" data-student-panel="notifications" onclick="showStudentPanel('notifications')">🔔 Notificações <span id="notificationCount" class="notification-count hidden">0</span></button>
   </nav>
 
   <div id="studentPageOverview" class="student-page active">
@@ -513,6 +524,16 @@ footer strong {color:white}
       <p id="learningCourseDescription" style="color:var(--muted);margin-top:8px"></p>
       <div id="learningProgress" style="margin-top:15px"></div>
       <div id="learningModules" style="margin-top:20px">A carregar aulas...</div>
+    </div>
+  </div>
+
+  <div id="studentPageNotifications" class="student-page">
+    <div class="student-section-heading">
+      <div><h2>🔔 As minhas notificações</h2><p>Recebe aqui avisos importantes sobre os teus cursos e inscrições.</p></div>
+      <button type="button" class="btn-outline" onclick="markAllNotificationsRead()">Marcar todas como lidas</button>
+    </div>
+    <div id="studentNotificationsList" style="margin-top:18px">
+      <div class="dash-card">A carregar notificações...</div>
     </div>
   </div>
 
@@ -1255,6 +1276,87 @@ if (profile.role === 'admin') {
 }
 
 
+// NOTIFICACOES PERSISTENTES DO ALUNO
+let studentNotifications = [];
+
+function formatNotificationDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  return date.toLocaleString('pt-MZ', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+window.loadStudentNotifications = async function() {
+  if (!currentUser) return;
+  const list = $('studentNotificationsList');
+  if (list) list.innerHTML = '<div class="dash-card">A carregar notificações...</div>';
+
+  const { data, error } = await supabase
+    .from('notifications')
+    .select('id, title, message, type, read_at, created_at')
+    .eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false })
+    .limit(50);
+
+  if (error) {
+    console.error('Erro ao carregar notificações:', error);
+    if (list) list.innerHTML = '<div class="dash-card">Não foi possível carregar as notificações. Tenta novamente.</div>';
+    return;
+  }
+
+  studentNotifications = data || [];
+  const unread = studentNotifications.filter(item => !item.read_at).length;
+  const count = $('notificationCount');
+  if (count) {
+    count.textContent = unread > 99 ? '99+' : String(unread);
+    count.classList.toggle('hidden', unread === 0);
+  }
+
+  if (!list) return;
+  if (!studentNotifications.length) {
+    list.innerHTML = '<div class="dash-card">Ainda não tens notificações. Quando houver novidades, aparecerão aqui. 🔔</div>';
+    return;
+  }
+
+  list.innerHTML = studentNotifications.map(item => `
+    <article class="notification-item ${item.read_at ? '' : 'unread'}">
+      <h3>${escapeHTML(item.title || 'Notificação')}</h3>
+      <p>${escapeHTML(item.message || '')}</p>
+      <small>${formatNotificationDate(item.created_at)} · ${item.read_at ? 'Lida' : 'Não lida'}</small>
+      ${item.read_at ? '' : `<div class="notification-actions"><button type="button" class="btn-outline" onclick="markNotificationRead('${item.id}')">Marcar como lida</button></div>`}
+    </article>
+  `).join('');
+};
+
+window.markNotificationRead = async function(notificationId) {
+  if (!currentUser || !notificationId) return;
+  const { error } = await supabase
+    .from('notifications')
+    .update({ read_at: new Date().toISOString() })
+    .eq('id', notificationId)
+    .eq('user_id', currentUser.id);
+  if (error) {
+    console.error('Erro ao marcar notificação:', error);
+    alert('Não foi possível actualizar a notificação. Tenta novamente.');
+    return;
+  }
+  await window.loadStudentNotifications();
+};
+
+window.markAllNotificationsRead = async function() {
+  if (!currentUser) return;
+  const { error } = await supabase
+    .from('notifications')
+    .update({ read_at: new Date().toISOString() })
+    .eq('user_id', currentUser.id)
+    .is('read_at', null);
+  if (error) {
+    console.error('Erro ao actualizar notificações:', error);
+    alert('Não foi possível actualizar as notificações. Tenta novamente.');
+    return;
+  }
+  await window.loadStudentNotifications();
+};
+
 // MOSTRAR INSCRIÇÕES DO ALUNO
 function renderEnrollments() {
   const container = $('myCourses');
@@ -1828,7 +1930,7 @@ window.showCatalog = function() {
 
 // NAVEGAÇÃO DA ÁREA DO ALUNO
 window.showStudentPanel = function(panelName, scroll = true) {
-  const valid = ['overview', 'courses', 'learning', 'profile'];
+  const valid = ['overview', 'courses', 'learning', 'profile', 'notifications'];
   if (!valid.includes(panelName)) return;
   document.querySelectorAll('.student-page').forEach(page => page.classList.remove('active'));
   document.querySelectorAll('.student-menu-button').forEach(button => {
