@@ -639,510 +639,6 @@ footer strong {color:white}
   #adminDashboard .admin-stats-section {overflow-x:auto}
 }
 
-
-
-/* =========================================================
-   MUSSILIPO ACADEMY — REDESIGN PREMIUM SEGURO
-   Apenas apresentação visual. Não altera HTML funcional,
-   identificadores, formulários, eventos, JavaScript ou Supabase.
-========================================================= */
-:root {
-  --ma-deep: #064b2b;
-  --ma-green: #087b42;
-  --ma-emerald: #10a653;
-  --ma-soft: #eaf7ee;
-  --ma-line: #dcebe1;
-  --ma-ink: #172b20;
-  --ma-muted: #687c70;
-}
-
-/* Fundo e tipografia geral das áreas autenticadas */
-#adminDashboard.dashboard,
-#dashboard.student-dashboard {
-  background:
-    radial-gradient(circle at 95% 0%, rgba(16,166,83,.07), transparent 28%),
-    #f3f7f4 !important;
-  color: var(--ma-ink) !important;
-}
-#adminDashboard h1, #dashboard h1,
-#adminDashboard h2, #dashboard h2,
-#adminDashboard h3, #dashboard h3,
-#adminDashboard h4, #dashboard h4 {
-  letter-spacing: -.025em;
-}
-
-/* Cabeçalho administrativo: destaque sem criar novos controlos */
-#adminDashboard > h1 {
-  position: relative;
-  overflow: hidden;
-  padding: 24px 30px 4px;
-  margin: 0 !important;
-  color: #fff !important;
-  background: linear-gradient(115deg, #064b2b 0%, #087b42 62%, #10a653 100%);
-  border-radius: 18px 18px 0 0;
-}
-#adminDashboard > p {
-  position: relative;
-  padding: 0 30px 23px;
-  margin: 0 !important;
-  color: rgba(255,255,255,.88) !important;
-  background: linear-gradient(115deg, #064b2b 0%, #087b42 62%, #10a653 100%);
-  border-radius: 0 0 18px 18px;
-}
-#adminDashboard > h1::after {
-  content: "🎓";
-  position: absolute;
-  right: clamp(18px, 4vw, 52px);
-  top: 10px;
-  font-size: clamp(34px, 5vw, 54px);
-  opacity: .92;
-  filter: drop-shadow(0 5px 8px rgba(0,0,0,.18));
-}
-
-/* Estrutura administrativa */
-#adminDashboard .admin-layout {
-  grid-template-columns: 252px minmax(0,1fr) !important;
-  gap: 20px !important;
-  margin-top: 20px !important;
-}
-#adminDashboard .admin-sidebar {
-  background: linear-gradient(180deg, #07532f 0%, #043d25 100%) !important;
-  border: 1px solid #0a6a3c !important;
-  border-radius: 18px !important;
-  padding: 14px !important;
-  box-shadow: 0 12px 28px rgba(4,61,37,.16) !important;
-}
-#adminDashboard .admin-sidebar h3 {
-  color: #bce9cc !important;
-  letter-spacing: .12em !important;
-}
-#adminDashboard .admin-menu-button {
-  color: #effaf2 !important;
-  border-radius: 11px !important;
-  padding: 12px 13px !important;
-  margin: 4px 0 !important;
-  font-weight: 650 !important;
-  transition: background .18s ease, transform .18s ease !important;
-}
-#adminDashboard .admin-menu-button:hover {
-  background: rgba(255,255,255,.12) !important;
-  color: #fff !important;
-  transform: translateX(2px);
-}
-#adminDashboard .admin-menu-button.active {
-  color: #fff !important;
-  background: linear-gradient(100deg, #10a653, #078344) !important;
-  border-left: 3px solid #b9f5ce !important;
-  box-shadow: 0 5px 14px rgba(0,0,0,.13);
-}
-#adminDashboard .admin-sidebar-toggle {
-  background: rgba(255,255,255,.12) !important;
-  color: #fff !important;
-  border: 1px solid rgba(255,255,255,.12) !important;
-}
-#adminDashboard .admin-sidebar-toggle:hover {
-  background: rgba(255,255,255,.19) !important;
-}
-#adminDashboard .admin-workspace-toolbar {
-  padding: 15px 18px !important;
-  border-radius: 16px !important;
-  margin-bottom: 16px;
-  position: sticky;
-  top: 78px;
-  z-index: 10;
-}
-#adminDashboard .admin-workspace-toolbar strong {
-  color: #153c27;
-  font-size: 15px;
-}
-#adminDashboard .admin-page {
-  min-width: 0;
-  animation: maFadeIn .22s ease both;
-}
-#adminDashboard .dash-card,
-#adminDashboard .admin-stat-card,
-#adminDashboard .assessment-card,
-#adminDashboard .feature,
-#adminDashboard .notification-item,
-#adminDashboard .announcement-card,
-#adminDashboard .admin-help-note {
-  box-shadow: 0 7px 22px rgba(18,75,42,.055) !important;
-}
-#adminDashboard .admin-stat-card {
-  position: relative;
-  overflow: hidden;
-}
-#adminDashboard .admin-stat-card::after {
-  content: "";
-  position: absolute;
-  width: 74px;
-  height: 74px;
-  right: -27px;
-  top: -27px;
-  border-radius: 50%;
-  background: rgba(16,166,83,.08);
-  pointer-events: none;
-}
-#adminDashboard .btn,
-#adminDashboard .btn-outline {
-  transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
-}
-#adminDashboard .btn:hover,
-#adminDashboard .btn-outline:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 12px rgba(8,123,66,.12);
-}
-
-/* Área do estudante: cabeçalho de boas-vindas em destaque */
-#dashboard.student-dashboard {
-  padding-top: 28px !important;
-}
-#dashboard .student-welcome {
-  position: relative;
-  overflow: hidden;
-  min-height: 150px;
-  padding: 25px clamp(18px,3vw,34px) !important;
-  border: 1px solid #cfe8d6;
-  border-radius: 20px;
-  background:
-    radial-gradient(circle at 88% 35%, rgba(255,255,255,.55), transparent 18%),
-    linear-gradient(112deg, #ffffff 0%, #effaf2 54%, #c9f0d5 100%);
-  box-shadow: 0 9px 26px rgba(18,75,42,.07);
-}
-#dashboard .student-welcome > div:first-child {
-  position: relative;
-  z-index: 1;
-}
-#dashboard .student-welcome::after {
-  content: "🎓";
-  position: absolute;
-  right: clamp(20px,5vw,65px);
-  bottom: -20px;
-  font-size: clamp(78px, 11vw, 132px);
-  line-height: 1;
-  opacity: .14;
-  transform: rotate(-12deg);
-  pointer-events: none;
-}
-#dashboard .student-eyebrow {
-  letter-spacing: .13em !important;
-  font-size: 10px !important;
-}
-#dashboard .student-welcome h1 {
-  font-size: clamp(27px,4vw,39px) !important;
-  margin: 8px 0 5px !important;
-}
-#dashboard .student-account-chip {
-  position: relative;
-  z-index: 1;
-  box-shadow: 0 4px 12px rgba(8,123,66,.07);
-}
-
-/* Navegação do aluno: verde profundo e estado activo evidente */
-#dashboard .student-menu {
-  background: linear-gradient(100deg, #064b2b, #087b42) !important;
-  border: 1px solid #075b34 !important;
-  border-radius: 15px !important;
-  padding: 9px !important;
-  gap: 6px !important;
-  box-shadow: 0 8px 20px rgba(4,61,37,.13) !important;
-}
-#dashboard .student-menu-button {
-  color: #effaf2 !important;
-  border-radius: 10px !important;
-  padding: 10px 13px !important;
-  font-weight: 650 !important;
-  transition: background .18s ease, transform .18s ease !important;
-}
-#dashboard .student-menu-button:hover {
-  color: #fff !important;
-  background: rgba(255,255,255,.13) !important;
-}
-#dashboard .student-menu-button.active {
-  color: #fff !important;
-  background: #10a653 !important;
-  box-shadow: inset 0 -2px 0 rgba(255,255,255,.35), 0 4px 10px rgba(0,0,0,.12) !important;
-}
-#dashboard .student-summary-card,
-#dashboard .student-course-card,
-#dashboard .student-profile-card,
-#dashboard .notification-item,
-#dashboard .assessment-card,
-#dashboard .dash-card {
-  box-shadow: 0 7px 22px rgba(18,75,42,.055) !important;
-  transition: transform .18s ease, box-shadow .18s ease;
-}
-#dashboard .student-summary-card:hover,
-#dashboard .student-course-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 11px 26px rgba(18,75,42,.09) !important;
-}
-#dashboard .student-summary-card {
-  border-top: 3px solid #16a45a !important;
-}
-#dashboard .student-summary-card span {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  background: #e8f7ed;
-}
-#dashboard .student-summary-card strong {
-  font-size: 29px !important;
-}
-#dashboard .student-course-card {
-  overflow: hidden;
-}
-#dashboard .student-page {
-  animation: maFadeIn .22s ease both;
-}
-
-/* Comunidade e suporte: remove os fundos roxos antigos */
-#adminDashboard .chat-box,
-#dashboard .chat-box {
-  background: #f8fbf8 !important;
-  border: 1px solid #d8e9dd !important;
-  border-radius: 16px !important;
-  padding: 15px !important;
-  box-shadow: inset 0 1px 3px rgba(18,75,42,.025);
-}
-#adminDashboard .chat-messages,
-#dashboard .chat-messages {
-  background: #f2f8f4 !important;
-  border: 1px solid #e1eee5 !important;
-  border-radius: 13px !important;
-  padding: 13px !important;
-  scrollbar-color: #9bc9a9 #edf5ef;
-}
-#adminDashboard .chat-message,
-#dashboard .chat-message {
-  background: #fff !important;
-  color: #24372a !important;
-  border: 1px solid #dce9df !important;
-  border-radius: 14px 14px 14px 5px !important;
-  box-shadow: 0 3px 10px rgba(18,75,42,.045);
-}
-#adminDashboard .chat-message.mine,
-#dashboard .chat-message.mine {
-  background: #e3f5e9 !important;
-  color: #173c28 !important;
-  border-color: #c6e7d0 !important;
-  border-radius: 14px 14px 5px 14px !important;
-}
-#adminDashboard .chat-message strong,
-#dashboard .chat-message strong {
-  color: #087b42 !important;
-}
-#adminDashboard .chat-message small,
-#dashboard .chat-message small {
-  color: #718477 !important;
-}
-#adminDashboard .chat-compose textarea,
-#dashboard .chat-compose textarea {
-  background: #fff !important;
-  color: #24372a !important;
-  border: 1px solid #cfe1d4 !important;
-  border-radius: 12px !important;
-}
-#adminDashboard .chat-compose textarea:focus,
-#dashboard .chat-compose textarea:focus {
-  outline: 3px solid rgba(16,166,83,.12);
-  border-color: #10a653 !important;
-}
-#adminDashboard .chat-attachment,
-#dashboard .chat-attachment {
-  background: #edf8f0 !important;
-  border-color: #c8e5d0 !important;
-  color: #087b42 !important;
-}
-#adminDashboard .chat-reply-context,
-#dashboard .chat-reply-context {
-  background: #edf8f0 !important;
-  border-color: #c8e5d0 !important;
-  color: #245638 !important;
-}
-#adminDashboard .chat-tools,
-#dashboard .chat-tools {
-  color: #687c70;
-}
-#adminDashboard .announcement-card,
-#dashboard .announcement-card {
-  background: #fff !important;
-  border-color: #dce9df !important;
-  border-left-color: #10a653 !important;
-  color: #24372a !important;
-}
-#adminDashboard .announcement-card p,
-#dashboard .announcement-card p {
-  color: #52665a !important;
-}
-#adminDashboard .community-admin-actions .btn-outline,
-#dashboard .community-admin-actions .btn-outline {
-  font-size: 12px;
-}
-
-/* Formulários, definições e tabelas: legibilidade consistente */
-#adminDashboard label,
-#dashboard label {
-  color: #405b49;
-}
-#adminDashboard input:focus,
-#adminDashboard select:focus,
-#adminDashboard textarea:focus,
-#dashboard input:focus,
-#dashboard select:focus,
-#dashboard textarea:focus {
-  outline: 3px solid rgba(16,166,83,.11);
-  border-color: #10a653 !important;
-}
-#adminDashboard .admin-page table,
-#dashboard table {
-  border-collapse: separate;
-  border-spacing: 0;
-}
-#adminDashboard .admin-page th,
-#dashboard th {
-  background: #f0f7f2;
-}
-#adminDashboard .admin-page tr:hover td,
-#dashboard tr:hover td {
-  background: #f8fcf9;
-}
-
-/* Animação discreta e acessibilidade */
-@keyframes maFadeIn {
-  from {opacity:0; transform:translateY(5px)}
-  to {opacity:1; transform:translateY(0)}
-}
-@media (prefers-reduced-motion: reduce) {
-  #adminDashboard *, #dashboard * {
-    animation-duration: .01ms !important;
-    transition-duration: .01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* Responsividade sem criar deslocamento horizontal */
-@media(max-width:900px) {
-  #adminDashboard .admin-layout {
-    grid-template-columns: minmax(0,1fr) !important;
-  }
-  #adminDashboard .admin-sidebar {
-    position: relative !important;
-    top: auto !important;
-  }
-  #adminDashboard .admin-workspace-toolbar {
-    position: relative;
-    top: auto;
-  }
-}
-@media(max-width:600px) {
-  #adminDashboard > h1 {
-    padding: 20px 18px 4px !important;
-    padding-right: 75px !important;
-    font-size: 25px !important;
-  }
-  #adminDashboard > p {
-    padding: 0 18px 18px !important;
-  }
-  #adminDashboard > h1::after {
-    right: 17px;
-    top: 14px;
-    font-size: 34px;
-  }
-  #adminDashboard .admin-sidebar nav {
-    max-height: 48vh;
-    overflow-y: auto !important;
-  }
-  #dashboard .student-welcome {
-    min-height: 130px;
-    padding: 20px 17px !important;
-  }
-  #dashboard .student-welcome::after {
-    right: 12px;
-    bottom: -8px;
-    font-size: 76px;
-  }
-  #dashboard .student-menu {
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    overscroll-behavior-x: contain;
-    scrollbar-width: thin;
-  }
-  #dashboard .student-menu-button {
-    flex: 0 0 auto;
-    white-space: nowrap;
-  }
-  #adminDashboard .chat-messages,
-  #dashboard .chat-messages {
-    height: min(54vh, 380px);
-    min-height: 240px;
-  }
-  #adminDashboard .chat-message,
-  #dashboard .chat-message {
-    max-width: 96%;
-  }
-  #adminDashboard .chat-tools input[type=file],
-  #dashboard .chat-tools input[type=file] {
-    max-width: 100%;
-  }
-}
-
-
-/* Imagens JPG externas — pasta assets/ ao lado deste HTML */
-#adminDashboard > h1::after {
-  content: "";
-  width: 104px;
-  height: 104px;
-  right: 22px;
-  top: 8px;
-  background: url("assets/admin-banner.jpg") center 25% / cover no-repeat;
-  border: 3px solid rgba(255,255,255,.9);
-  border-radius: 50%;
-  opacity: 1;
-  filter: drop-shadow(0 5px 9px rgba(0,0,0,.2));
-}
-#dashboard .student-welcome::after {
-  content: "";
-  width: clamp(145px, 24%, 245px);
-  height: 100%;
-  right: 0;
-  bottom: 0;
-  background: url("assets/aluno-banner.jpg") 72% center / cover no-repeat;
-  border-radius: 0 20px 20px 0;
-  opacity: 1;
-  transform: none;
-  filter: none;
-}
-#adminDashboard .chat-box::before,
-#dashboard .chat-box::before {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 112px;
-  margin: 0 0 13px;
-  border-radius: 12px;
-  background: url("assets/comunidade-banner.jpg") center 48% / cover no-repeat;
-  border: 1px solid #d7eadc;
-}
-@media(max-width:600px) {
-  #adminDashboard > h1::after {
-    width: 58px;
-    height: 58px;
-    right: 12px;
-    top: 10px;
-  }
-  #dashboard .student-welcome::after {
-    width: 105px;
-    opacity: .92;
-  }
-  #adminDashboard .chat-box::before,
-  #dashboard .chat-box::before {
-    height: 82px;
-  }
-}
-
 </style>
 </head>
 
@@ -3926,12 +3422,24 @@ window.loadPublicCourses = async function() {
     return;
   }
 
+  // Escolhe uma imagem local conforme o tema do curso, sem substituir
+  // miniaturas personalizadas já guardadas na base de dados.
+  const localCourseImage = (title) => {
+    const name = String(title || '').toLowerCase();
+    if (name.includes('inform') || name.includes('comput') || name.includes('tecnolog') || name.includes('program')) return 'assets/informatica.jpg';
+    if (name.includes('matem') || name.includes('cálculo') || name.includes('calculo')) return 'assets/matematica.jpg';
+    if (name.includes('gest') || name.includes('lider') || name.includes('empreend') || name.includes('administra')) return 'assets/gestao.jpg';
+    if (name.includes('ingl') || name.includes('english') || name.includes('língua inglesa') || name.includes('lingua inglesa')) return 'assets/ingles.jpg';
+    return 'assets/motivacao.jpg';
+  };
+
   container.innerHTML = courses.map(course => `
     <article class="course" data-type="${course.access_type === 'free' ? 'gratuito' : 'pago'}">
 
-      ${course.thumbnail
-        ? `<img src="${escapeHTML(course.thumbnail)}" alt="${escapeHTML(course.title)}" class="course-cover">`
-        : '<div class="course-cover">📚</div>'}
+      <img src="${escapeHTML(course.thumbnail || localCourseImage(course.title))}"
+           alt="Imagem do curso ${escapeHTML(course.title)}"
+           class="course-cover" loading="lazy"
+           onerror="this.onerror=null;this.src='assets/motivacao.jpg'">
 
       <div class="course-content">
         <h3>${escapeHTML(course.title)}</h3>
@@ -5956,7 +5464,18 @@ window.printAdminReport = function() {
   if (!box || !(window.adminReportRows || []).length) return alert('Gera primeiro um relatório com registos.');
   const w = window.open('', '_blank');
   if (!w) return alert('Permite janelas pop-up para imprimir o relatório.');
-  w.document.write(`<!doctype html><html lang="pt"><head><meta charset="utf-8"><title>${escapeHTML(window.adminReportTitle)}</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}h2{margin-bottom:6px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #bbb;padding:7px;text-align:left}th{background:#eee}p{color:#555}@media print{body{padding:0}}</style></head><body><h2>${escapeHTML(window.adminReportTitle)}</h2><p>Gerado em ${new Date().toLocaleString('pt-MZ')} · ${window.adminReportRows.length} registo(s)</p>${box.querySelector('table')?.outerHTML || ''}</body></html>`);
+  w.document.write(`<!doctype html><html lang="pt"><head><meta charset="utf-8"><title>${escapeHTML(window.adminReportTitle)}</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}h2{margin-bottom:6px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #bbb;padding:7px;text-align:left}th{background:#eee}p{color:#555}@media print{body{padding:0}}</style></head><body><h2>${escapeHTML(window.adminReportTitle)}</h2><p>Gerado em ${new Date().toLocaleString('pt-MZ')} · ${window.adminReportRows.length} registo(s)</p>${box.querySelector('table')?.outerHTML || ''}
+<style id="mussilipo-image-assets">
+/* Imagens decorativas: manter a pasta assets ao lado deste index.html */
+#adminDashboard > h1{position:relative;padding-top:128px!important;}
+#adminDashboard > h1::before{content:"";display:block;position:absolute;left:0;top:0;width:min(100%,920px);height:112px;background:url('assets/admin-banner.jpg') center/cover no-repeat;border-radius:16px;}
+.student-welcome{position:relative;overflow:hidden;border-radius:18px;padding:24px!important;background:#fff url('assets/aluno-banner.jpg') right center/auto 100% no-repeat!important;border:1px solid #dce9df;}
+.chat-box{position:relative;}
+.chat-box::before{content:"";display:block;height:95px;margin-bottom:12px;border-radius:10px;background:url('assets/comunidade-banner.jpg') center/cover no-repeat;}
+@media(max-width:650px){#adminDashboard > h1{padding-top:100px!important}#adminDashboard > h1::before{height:86px}.student-welcome{background-image:linear-gradient(90deg,rgba(255,255,255,.96),rgba(255,255,255,.78)),url('assets/aluno-banner.jpg')!important;background-size:cover!important}}
+</style>
+
+</body></html>`);
   w.document.close(); w.focus(); w.print();
 };
 
@@ -6064,6 +5583,63 @@ await window.verifyCertificateFromUrl();
   else initAdminSidebar();
 })();
 </script>
+
+
+<style id="mussilipo-image-assets">
+/* Imagens decorativas: manter a pasta assets ao lado deste index.html */
+#adminDashboard > h1{position:relative;padding-top:128px!important;}
+#adminDashboard > h1::before{content:"";display:block;position:absolute;left:0;top:0;width:min(100%,920px);height:112px;background:url('assets/admin-banner.jpg') center/cover no-repeat;border-radius:16px;}
+.student-welcome{position:relative;overflow:hidden;border-radius:18px;padding:24px!important;background:#fff url('assets/aluno-banner.jpg') right center/auto 100% no-repeat!important;border:1px solid #dce9df;}
+.chat-box{position:relative;}
+.chat-box::before{content:"";display:block;height:95px;margin-bottom:12px;border-radius:10px;background:url('assets/comunidade-banner.jpg') center/cover no-repeat;}
+@media(max-width:650px){#adminDashboard > h1{padding-top:100px!important}#adminDashboard > h1::before{height:86px}.student-welcome{background-image:linear-gradient(90deg,rgba(255,255,255,.96),rgba(255,255,255,.78)),url('assets/aluno-banner.jpg')!important;background-size:cover!important}}
+</style>
+
+
+<style id="mussilipo-all-nine-images">
+/* Imagens locais da academia: a pasta assets deve ficar junto do index.html. */
+.course-cover {
+  display:block;
+  width:100%;
+  height:165px;
+  object-fit:cover;
+  object-position:center;
+  background:#24113e;
+}
+#studentPageCertificates .student-section-heading,
+#adminPageCertificates > h2 {
+  position:relative;
+  min-height:86px;
+  padding-right:150px;
+}
+#studentPageCertificates .student-section-heading::after,
+#adminPageCertificates > h2::after {
+  content:"";
+  position:absolute;
+  right:0;
+  top:0;
+  width:132px;
+  height:78px;
+  border-radius:12px;
+  background:url('assets/certificado-trofeu.jpg') center/cover no-repeat;
+}
+#vantagens .section-title::after {
+  content:"";
+  display:block;
+  width:min(100%,420px);
+  height:105px;
+  margin:18px auto 0;
+  border-radius:14px;
+  background:url('assets/motivacao.jpg') center/cover no-repeat;
+}
+@media(max-width:600px){
+  .course-cover{height:145px}
+  #studentPageCertificates .student-section-heading,
+  #adminPageCertificates > h2{padding-right:0;padding-bottom:88px}
+  #studentPageCertificates .student-section-heading::after,
+  #adminPageCertificates > h2::after{left:0;right:auto;top:auto;bottom:0;width:120px;height:72px}
+}
+</style>
 
 </body>
 </html>
