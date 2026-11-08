@@ -3422,24 +3422,12 @@ window.loadPublicCourses = async function() {
     return;
   }
 
-  // Escolhe uma imagem local conforme o tema do curso, sem substituir
-  // miniaturas personalizadas já guardadas na base de dados.
-  const localCourseImage = (title) => {
-    const name = String(title || '').toLowerCase();
-    if (name.includes('inform') || name.includes('comput') || name.includes('tecnolog') || name.includes('program')) return 'assets/informatica.jpg';
-    if (name.includes('matem') || name.includes('cálculo') || name.includes('calculo')) return 'assets/matematica.jpg';
-    if (name.includes('gest') || name.includes('lider') || name.includes('empreend') || name.includes('administra')) return 'assets/gestao.jpg';
-    if (name.includes('ingl') || name.includes('english') || name.includes('língua inglesa') || name.includes('lingua inglesa')) return 'assets/ingles.jpg';
-    return 'assets/motivacao.jpg';
-  };
-
   container.innerHTML = courses.map(course => `
     <article class="course" data-type="${course.access_type === 'free' ? 'gratuito' : 'pago'}">
 
-      <img src="${escapeHTML(course.thumbnail || localCourseImage(course.title))}"
-           alt="Imagem do curso ${escapeHTML(course.title)}"
-           class="course-cover" loading="lazy"
-           onerror="this.onerror=null;this.src='assets/motivacao.jpg'">
+      ${course.thumbnail
+        ? `<img src="${escapeHTML(course.thumbnail)}" alt="${escapeHTML(course.title)}" class="course-cover">`
+        : '<div class="course-cover">📚</div>'}
 
       <div class="course-content">
         <h3>${escapeHTML(course.title)}</h3>
@@ -5466,13 +5454,113 @@ window.printAdminReport = function() {
   if (!w) return alert('Permite janelas pop-up para imprimir o relatório.');
   w.document.write(`<!doctype html><html lang="pt"><head><meta charset="utf-8"><title>${escapeHTML(window.adminReportTitle)}</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}h2{margin-bottom:6px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #bbb;padding:7px;text-align:left}th{background:#eee}p{color:#555}@media print{body{padding:0}}</style></head><body><h2>${escapeHTML(window.adminReportTitle)}</h2><p>Gerado em ${new Date().toLocaleString('pt-MZ')} · ${window.adminReportRows.length} registo(s)</p>${box.querySelector('table')?.outerHTML || ''}
 <style id="mussilipo-image-assets">
-/* Imagens decorativas: manter a pasta assets ao lado deste index.html */
-#adminDashboard > h1{position:relative;padding-top:128px!important;}
-#adminDashboard > h1::before{content:"";display:block;position:absolute;left:0;top:0;width:min(100%,920px);height:112px;background:url('assets/admin-banner.jpg') center/cover no-repeat;border-radius:16px;}
-.student-welcome{position:relative;overflow:hidden;border-radius:18px;padding:24px!important;background:#fff url('assets/aluno-banner.jpg') right center/auto 100% no-repeat!important;border:1px solid #dce9df;}
-.chat-box{position:relative;}
-.chat-box::before{content:"";display:block;height:95px;margin-bottom:12px;border-radius:10px;background:url('assets/comunidade-banner.jpg') center/cover no-repeat;}
-@media(max-width:650px){#adminDashboard > h1{padding-top:100px!important}#adminDashboard > h1::before{height:86px}.student-welcome{background-image:linear-gradient(90deg,rgba(255,255,255,.96),rgba(255,255,255,.78)),url('assets/aluno-banner.jpg')!important;background-size:cover!important}}
+/* BANNER ADMIN: proporção horizontal 1200 x 400 (3:1) */
+#adminDashboard > h1 {
+  position: relative;
+  padding-top: clamp(100px, 12vw, 140px) !important;
+}
+#adminDashboard > h1::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 920px;
+  aspect-ratio: 3 / 1;
+  height: auto;
+  background: url('assets/admin-banner.jpg') center / cover no-repeat;
+  border-radius: 16px;
+}
+
+/* BANNER DE BOAS-VINDAS DO ALUNO */
+.student-welcome {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  padding: 25px !important;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.96), rgba(255,255,255,.78)),
+    url('assets/aluno-banner.jpg') center / cover no-repeat;
+  border: 1px solid #dce9df;
+}
+
+/* BANNER DA COMUNIDADE: formato 1200 x 400 */
+.chat-box {
+  position: relative;
+}
+.chat-box::before {
+  content: "";
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 1;
+  height: auto;
+  margin-bottom: 15px;
+  background: url('assets/comunidade-banner.jpg') center / cover no-repeat;
+  border-radius: 12px;
+}
+
+/* CAPAS DOS CURSOS: proporção 16:9, separada dos banners */
+.course-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+/* IMAGENS DE CATEGORIAS E CERTIFICADO */
+img[src*="informatica.jpg"],
+img[src*="matematica.jpg"],
+img[src*="gestao.jpg"],
+img[src*="ingles.jpg"],
+img[src*="motivacao.jpg"],
+img[src*="certificado-trofeu.jpg"] {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* IMAGENS DE AVISOS/MENSAGENS HORIZONTAIS 1200 x 400 */
+img[src*="mensagem"],
+img[src*="aviso"],
+img[src*="banner"] {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 1;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 12px;
+}
+
+/* RESPONSIVO: computador, tablet e telemóvel */
+@media (max-width: 650px) {
+  #adminDashboard > h1 {
+    padding-top: 28vw !important;
+  }
+  #adminDashboard > h1::before {
+    width: 100%;
+    max-width: none;
+    aspect-ratio: 3 / 1;
+  }
+  .student-welcome {
+    background-position: center;
+    background-size: cover;
+  }
+  .chat-box::before {
+    aspect-ratio: 3 / 1;
+  }
+  .course-cover {
+    aspect-ratio: 16 / 9;
+  }
+}
 </style>
 
 </body></html>`);
@@ -5593,52 +5681,6 @@ await window.verifyCertificateFromUrl();
 .chat-box{position:relative;}
 .chat-box::before{content:"";display:block;height:95px;margin-bottom:12px;border-radius:10px;background:url('assets/comunidade-banner.jpg') center/cover no-repeat;}
 @media(max-width:650px){#adminDashboard > h1{padding-top:100px!important}#adminDashboard > h1::before{height:86px}.student-welcome{background-image:linear-gradient(90deg,rgba(255,255,255,.96),rgba(255,255,255,.78)),url('assets/aluno-banner.jpg')!important;background-size:cover!important}}
-</style>
-
-
-<style id="mussilipo-all-nine-images">
-/* Imagens locais da academia: a pasta assets deve ficar junto do index.html. */
-.course-cover {
-  display:block;
-  width:100%;
-  height:165px;
-  object-fit:cover;
-  object-position:center;
-  background:#24113e;
-}
-#studentPageCertificates .student-section-heading,
-#adminPageCertificates > h2 {
-  position:relative;
-  min-height:86px;
-  padding-right:150px;
-}
-#studentPageCertificates .student-section-heading::after,
-#adminPageCertificates > h2::after {
-  content:"";
-  position:absolute;
-  right:0;
-  top:0;
-  width:132px;
-  height:78px;
-  border-radius:12px;
-  background:url('assets/certificado-trofeu.jpg') center/cover no-repeat;
-}
-#vantagens .section-title::after {
-  content:"";
-  display:block;
-  width:min(100%,420px);
-  height:105px;
-  margin:18px auto 0;
-  border-radius:14px;
-  background:url('assets/motivacao.jpg') center/cover no-repeat;
-}
-@media(max-width:600px){
-  .course-cover{height:145px}
-  #studentPageCertificates .student-section-heading,
-  #adminPageCertificates > h2{padding-right:0;padding-bottom:88px}
-  #studentPageCertificates .student-section-heading::after,
-  #adminPageCertificates > h2::after{left:0;right:auto;top:auto;bottom:0;width:120px;height:72px}
-}
 </style>
 
 </body>
