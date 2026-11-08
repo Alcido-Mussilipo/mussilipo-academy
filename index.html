@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#087a43">
+<meta name="theme-color" content="#10051f">
 <title>Mussilipo Academy | Aprende e Conquista</title>
 <meta name="description" content="Mussilipo Academy - Aprende online, desenvolve competências e constrói o teu futuro.">
 
@@ -642,366 +642,505 @@ footer strong {color:white}
 
 
 /* =========================================================
-   MUSSILIPO ACADEMY — CAMADA PREMIUM 2026
-   Apenas apresentação visual: não altera dados, permissões,
-   autenticação, pagamentos, matrículas ou integrações.
+   MUSSILIPO ACADEMY — REDESIGN PREMIUM SEGURO
+   Apenas apresentação visual. Não altera HTML funcional,
+   identificadores, formulários, eventos, JavaScript ou Supabase.
 ========================================================= */
-:root{
-  --bg:#f4f8f5;
-  --panel:#ffffff;
-  --panel2:#edf5ef;
-  --purple:#087a43;
-  --light:#21a366;
-  --white:#17251d;
-  --muted:#68796f;
-  --green:#159653;
-  --am-ink:#173326;
-  --am-line:#dce9df;
-  --am-shadow:0 12px 32px rgba(20,65,39,.075);
+:root {
+  --ma-deep: #064b2b;
+  --ma-green: #087b42;
+  --ma-emerald: #10a653;
+  --ma-soft: #eaf7ee;
+  --ma-line: #dcebe1;
+  --ma-ink: #172b20;
+  --ma-muted: #687c70;
 }
-html{scroll-behavior:smooth;scroll-padding-top:92px}
-body{
-  background:#f4f8f5;
-  color:#1b2b21;
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
-}
-body,button,input,textarea,select{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
-button{transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease}
-button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{
-  outline:3px solid rgba(31,163,96,.28);outline-offset:2px
-}
-header{
-  background:linear-gradient(110deg,#064b2c 0%,#087a43 55%,#0a8a4d 100%);
-  color:#fff;border:0;box-shadow:0 5px 22px rgba(8,75,42,.16);
-  min-height:76px;padding:13px clamp(16px,4vw,58px)
-}
-header .logo{font-size:22px;letter-spacing:-.5px;color:#fff}
-header .logo span{color:#b9f1ce}
-header nav{gap:10px}
-header nav a{color:#e5f5eb;font-weight:600}
-header nav a:hover{color:#fff}
-header .btn{background:#fff!important;color:#087a43!important;border:1px solid #fff!important}
-header .btn-outline{color:#fff!important;border:1px solid rgba(255,255,255,.55)!important;background:rgba(255,255,255,.08)!important}
-header .btn:hover,header .btn-outline:hover{transform:translateY(-1px);box-shadow:0 6px 16px #003c2633}
-.btn{
-  background:linear-gradient(135deg,#159653,#087a43)!important;
-  color:#fff!important;border:1px solid #0d8749!important;
-  border-radius:11px!important;padding:11px 18px!important;
-  font-weight:750;box-shadow:0 5px 13px rgba(11,130,67,.16)
-}
-.btn:hover{background:#076b3b!important;transform:translateY(-1px);box-shadow:0 8px 18px rgba(11,130,67,.2)}
-.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
-.btn-outline{
-  background:#fff!important;color:#147a45!important;border:1px solid #c7ddce!important;
-  border-radius:11px!important;padding:10px 16px!important;font-weight:700
-}
-.btn-outline:hover{background:#eff8f1!important;border-color:#8bc7a0!important}
-.hero{
-  background:
-    radial-gradient(ellipse at 82% 25%,rgba(52,177,104,.25),transparent 34%),
-    linear-gradient(130deg,#063d27 0%,#087a43 55%,#0e9a58 100%);
-  color:#fff;padding:clamp(60px,8vw,100px) 7% 78px;
-}
-.hero small{color:#b8f1cd}
-.hero h1{color:#fff;letter-spacing:-1.8px}
-.hero h1 span{color:#b8f1cd}
-.hero p{color:#e0f2e6}
-.hero .btn{background:#fff!important;color:#087a43!important}
-.hero .btn-outline{color:#fff!important;background:transparent!important;border-color:#b8e5c7!important}
-.stats strong{color:#d4f7df}
-.stats small{color:#d2e9d9}
-section{scroll-margin-top:90px}
-.section-title h2{color:#173326;letter-spacing:-.5px}
-.section-title p{color:#718176}
-#cursos,#vantagens{background:#f7faf7}
-.course,.feature{
-  background:#fff!important;border:1px solid var(--am-line)!important;
-  border-radius:18px!important;box-shadow:0 8px 24px rgba(24,68,42,.055);
-  color:#20372a
-}
-.course:hover{transform:translateY(-4px);border-color:#9acbab!important;box-shadow:var(--am-shadow)}
-.course-cover{background:linear-gradient(135deg,#e5f4e9,#ccebd6);color:#087a43}
-.course-content h3,.feature h3{color:#1d3828}
-.course-content p,.feature p{color:#6b7b70}
-.tag{background:#e8f5ec;color:#147943}
-.filter{background:#fff;border:1px solid #d8e6dc;color:#466052}
-.filter.active{background:#087a43;color:#fff;border-color:#087a43}
-.price{color:#087a43}
-.cta{
-  background:linear-gradient(120deg,#064b2c,#087a43 65%,#159653);
-  box-shadow:var(--am-shadow);color:#fff
-}
-.cta h2{color:#fff}
-.cta p{color:#e2f5e8!important}
-footer{background:#063d27;color:#d2e8d9;border:0}
-footer strong{color:#fff}
-.modal{backdrop-filter:blur(7px)}
-.modal-box,.password-recovery-box{
-  background:#fff!important;color:#1c3325!important;border:1px solid #dce9df!important;
-  border-radius:20px!important;box-shadow:0 25px 80px rgba(0,0,0,.22)
-}
-.modal-box h2,.password-recovery-box h2{color:#173c28}
-.modal-box p,.password-recovery-box p{color:#6c7b70!important}
-.modal-box input,.password-recovery-box input{
-  background:#f7faf7!important;color:#20372a!important;border:1px solid #d4e2d8!important
-}
-.modal-box input:focus,.password-recovery-box input:focus{border-color:#159653!important}
-.modal-box .close{color:#50675a}
-.switch{color:#718176}
-.switch a{color:#087a43}
 
-/* ADMIN: painel próprio, menu lateral e área de trabalho */
-#adminDashboard.dashboard{
-  background:#f3f7f4!important;color:#1b2b21!important;
-  padding:34px clamp(14px,3vw,46px) 60px!important;
+/* Fundo e tipografia geral das áreas autenticadas */
+#adminDashboard.dashboard,
+#dashboard.student-dashboard {
+  background:
+    radial-gradient(circle at 95% 0%, rgba(16,166,83,.07), transparent 28%),
+    #f3f7f4 !important;
+  color: var(--ma-ink) !important;
 }
-#adminDashboard>h1{
-  color:#173c28;font-size:clamp(27px,3vw,36px);font-weight:850;
-  letter-spacing:-.8px;margin:2px 0 4px
+#adminDashboard h1, #dashboard h1,
+#adminDashboard h2, #dashboard h2,
+#adminDashboard h3, #dashboard h3,
+#adminDashboard h4, #dashboard h4 {
+  letter-spacing: -.025em;
 }
-#adminDashboard>p{color:#6b7d71!important;font-size:14px}
-#adminDashboard .admin-layout{
-  grid-template-columns:250px minmax(0,1fr);gap:22px;margin-top:25px
+
+/* Cabeçalho administrativo: destaque sem criar novos controlos */
+#adminDashboard > h1 {
+  position: relative;
+  overflow: hidden;
+  padding: 24px 30px 4px;
+  margin: 0 !important;
+  color: #fff !important;
+  background: linear-gradient(115deg, #064b2b 0%, #087b42 62%, #10a653 100%);
+  border-radius: 18px 18px 0 0;
 }
-#adminDashboard .admin-sidebar{
-  background:linear-gradient(180deg,#07502f 0%,#063d27 100%)!important;
-  border:1px solid #06472b!important;border-radius:18px!important;
-  padding:14px!important;box-shadow:0 12px 28px rgba(5,67,36,.16);
-  top:94px
+#adminDashboard > p {
+  position: relative;
+  padding: 0 30px 23px;
+  margin: 0 !important;
+  color: rgba(255,255,255,.88) !important;
+  background: linear-gradient(115deg, #064b2b 0%, #087b42 62%, #10a653 100%);
+  border-radius: 0 0 18px 18px;
 }
-#adminDashboard .admin-sidebar h3{color:#a9dcbc!important;margin:16px 10px 12px}
-#adminDashboard .admin-sidebar-toggle{
-  color:#fff!important;background:rgba(255,255,255,.11)!important;
-  border:1px solid rgba(255,255,255,.12);border-radius:11px
+#adminDashboard > h1::after {
+  content: "🎓";
+  position: absolute;
+  right: clamp(18px, 4vw, 52px);
+  top: 10px;
+  font-size: clamp(34px, 5vw, 54px);
+  opacity: .92;
+  filter: drop-shadow(0 5px 8px rgba(0,0,0,.18));
 }
-#adminDashboard .admin-sidebar-toggle:hover{background:rgba(255,255,255,.18)!important}
-#adminDashboard .admin-menu-button{
-  color:#e2f2e7!important;border-radius:11px!important;
-  padding:12px 13px;margin:3px 0;font-weight:650
+
+/* Estrutura administrativa */
+#adminDashboard .admin-layout {
+  grid-template-columns: 252px minmax(0,1fr) !important;
+  gap: 20px !important;
+  margin-top: 20px !important;
 }
-#adminDashboard .admin-menu-button:hover,
-#adminDashboard .admin-menu-button.active{
-  color:#fff!important;background:#0d8b4b!important
+#adminDashboard .admin-sidebar {
+  background: linear-gradient(180deg, #07532f 0%, #043d25 100%) !important;
+  border: 1px solid #0a6a3c !important;
+  border-radius: 18px !important;
+  padding: 14px !important;
+  box-shadow: 0 12px 28px rgba(4,61,37,.16) !important;
 }
-#adminDashboard .admin-menu-button.active{
-  border-left:3px solid #b8f1cd!important;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.09)
+#adminDashboard .admin-sidebar h3 {
+  color: #bce9cc !important;
+  letter-spacing: .12em !important;
 }
-#adminDashboard .admin-workspace{min-width:0}
-#adminDashboard .admin-workspace-toolbar{
-  top:88px;background:rgba(255,255,255,.94)!important;
-  border:1px solid #dce9df!important;border-radius:15px;
-  box-shadow:0 7px 22px rgba(20,65,39,.06);backdrop-filter:blur(12px);
-  padding:14px 17px
+#adminDashboard .admin-menu-button {
+  color: #effaf2 !important;
+  border-radius: 11px !important;
+  padding: 12px 13px !important;
+  margin: 4px 0 !important;
+  font-weight: 650 !important;
+  transition: background .18s ease, transform .18s ease !important;
 }
-#adminDashboard .admin-workspace-toolbar strong{color:#173c28;font-size:15px}
-#adminDashboard .admin-workspace-toolbar span{color:#718477!important}
-#adminDashboard .admin-page{min-width:0;scroll-margin-top:110px}
-#adminDashboard .admin-page>h2{font-size:23px;letter-spacing:-.4px;color:#173c28}
-#adminDashboard .admin-page>p{color:#718477!important}
+#adminDashboard .admin-menu-button:hover {
+  background: rgba(255,255,255,.12) !important;
+  color: #fff !important;
+  transform: translateX(2px);
+}
+#adminDashboard .admin-menu-button.active {
+  color: #fff !important;
+  background: linear-gradient(100deg, #10a653, #078344) !important;
+  border-left: 3px solid #b9f5ce !important;
+  box-shadow: 0 5px 14px rgba(0,0,0,.13);
+}
+#adminDashboard .admin-sidebar-toggle {
+  background: rgba(255,255,255,.12) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+}
+#adminDashboard .admin-sidebar-toggle:hover {
+  background: rgba(255,255,255,.19) !important;
+}
+#adminDashboard .admin-workspace-toolbar {
+  padding: 15px 18px !important;
+  border-radius: 16px !important;
+  margin-bottom: 16px;
+  position: sticky;
+  top: 78px;
+  z-index: 10;
+}
+#adminDashboard .admin-workspace-toolbar strong {
+  color: #153c27;
+  font-size: 15px;
+}
+#adminDashboard .admin-page {
+  min-width: 0;
+  animation: maFadeIn .22s ease both;
+}
 #adminDashboard .dash-card,
 #adminDashboard .admin-stat-card,
 #adminDashboard .assessment-card,
 #adminDashboard .feature,
 #adminDashboard .notification-item,
 #adminDashboard .announcement-card,
-#adminDashboard .admin-help-note{
-  background:#fff!important;color:#24372a!important;
-  border:1px solid #dce9df!important;border-radius:16px!important;
-  box-shadow:0 7px 22px rgba(26,74,43,.045)
+#adminDashboard .admin-help-note {
+  box-shadow: 0 7px 22px rgba(18,75,42,.055) !important;
 }
-#adminDashboard .dash-card{padding:20px}
-#adminDashboard .dash-card p{color:#718477}
-#adminDashboard h2,#adminDashboard h3,#adminDashboard h4{color:#203d2a}
-#adminDashboard .admin-stat-card{padding:18px}
-#adminDashboard .admin-stat-card .stat-value{color:#128248}
-#adminDashboard .admin-stat-card .stat-label,
-#adminDashboard .admin-stat-card .stat-note,
-#adminDashboard .admin-stats-message,
-#adminDashboard .admin-stats-footnote{color:#718477!important}
-#adminDashboard input,#adminDashboard select,#adminDashboard textarea{
-  background:#f8fbf8!important;color:#24372a!important;
-  border:1px solid #d3e2d7!important;border-radius:10px
+#adminDashboard .admin-stat-card {
+  position: relative;
+  overflow: hidden;
 }
-#adminDashboard input::placeholder,#adminDashboard textarea::placeholder{color:#93a397}
-#adminDashboard .btn{background:linear-gradient(135deg,#159653,#087a43)!important}
-#adminDashboard .btn-outline{color:#147a45!important;background:#fff!important;border-color:#c7ddce!important}
-#adminDashboard table{color:#2a3b30}
-#adminDashboard th{color:#52705b!important}
-#adminDashboard td{border-color:#e6eee8!important}
-#adminDashboard .admin-month-bars{background:#e7efe9}
-#adminDashboard .admin-month-enroll{background:#16834a}
-#adminDashboard .admin-month-attempt{background:#70bf8c}
-#adminDashboard .admin-month-cert{background:#e8b94c}
-#adminDashboard .admin-month-legend{color:#718477}
+#adminDashboard .admin-stat-card::after {
+  content: "";
+  position: absolute;
+  width: 74px;
+  height: 74px;
+  right: -27px;
+  top: -27px;
+  border-radius: 50%;
+  background: rgba(16,166,83,.08);
+  pointer-events: none;
+}
+#adminDashboard .btn,
+#adminDashboard .btn-outline {
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+}
+#adminDashboard .btn:hover,
+#adminDashboard .btn-outline:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(8,123,66,.12);
+}
 
-/* Cartões de gestão de alunos e conteúdo gerado dinamicamente */
-#adminDashboard .student-course-card,
-#adminDashboard [id*="admin"] .dash-card{background:#fff}
-#adminDashboard details{border-radius:12px}
-#adminDashboard summary{cursor:pointer}
-#adminDashboard .admin-page .assessment-form-grid label,
-#adminDashboard .admin-page form label{color:#5f7466}
-
-/* ESTUDANTE: navegação lateral própria, sem qualquer item administrativo */
-#dashboard.student-dashboard{
-  background:#f3f7f4!important;color:#1b2b21!important;
-  padding:30px clamp(14px,3vw,46px) 58px!important;
-  min-height:100vh;
+/* Área do estudante: cabeçalho de boas-vindas em destaque */
+#dashboard.student-dashboard {
+  padding-top: 28px !important;
 }
-#dashboard.student-dashboard.show{
-  display:grid!important;
-  grid-template-columns:238px minmax(0,1fr);
-  grid-template-areas:"welcome welcome" "menu content";
-  align-items:start;column-gap:22px;row-gap:20px
-}
-#dashboard .student-welcome{
-  grid-area:welcome;margin:0;padding:25px 28px;
-  border-radius:19px;border:1px solid #d6eadc;
+#dashboard .student-welcome {
+  position: relative;
+  overflow: hidden;
+  min-height: 150px;
+  padding: 25px clamp(18px,3vw,34px) !important;
+  border: 1px solid #cfe8d6;
+  border-radius: 20px;
   background:
-    radial-gradient(circle at 88% 20%,rgba(255,255,255,.22),transparent 25%),
-    linear-gradient(115deg,#07502f,#0b8649 70%,#20a45f);
-  box-shadow:0 12px 28px rgba(9,91,48,.13);color:#fff
+    radial-gradient(circle at 88% 35%, rgba(255,255,255,.55), transparent 18%),
+    linear-gradient(112deg, #ffffff 0%, #effaf2 54%, #c9f0d5 100%);
+  box-shadow: 0 9px 26px rgba(18,75,42,.07);
 }
-#dashboard .student-eyebrow{color:#c6f2d3!important;font-size:11px;letter-spacing:1.6px}
-#dashboard .student-welcome h1{color:#fff!important;font-size:clamp(25px,3vw,34px);letter-spacing:-.6px}
-#dashboard .student-welcome p{color:#e1f5e7!important}
-#dashboard .student-account-chip{
-  background:rgba(255,255,255,.13)!important;color:#fff!important;
-  border:1px solid rgba(255,255,255,.25)!important;border-radius:30px
+#dashboard .student-welcome > div:first-child {
+  position: relative;
+  z-index: 1;
 }
-#dashboard .student-menu{
-  grid-area:menu;position:sticky;top:96px;z-index:10;
-  display:flex;flex-direction:column;align-items:stretch;gap:4px;
-  padding:12px;background:linear-gradient(180deg,#07502f,#063d27)!important;
-  border:1px solid #06472b!important;border-radius:17px;
-  box-shadow:0 12px 26px rgba(5,67,36,.14);margin:0
+#dashboard .student-welcome::after {
+  content: "🎓";
+  position: absolute;
+  right: clamp(20px,5vw,65px);
+  bottom: -20px;
+  font-size: clamp(78px, 11vw, 132px);
+  line-height: 1;
+  opacity: .14;
+  transform: rotate(-12deg);
+  pointer-events: none;
 }
-#dashboard .student-menu-button{
-  width:100%;text-align:left;color:#e2f2e7!important;
-  padding:12px 13px;border-radius:10px;font-weight:650
+#dashboard .student-eyebrow {
+  letter-spacing: .13em !important;
+  font-size: 10px !important;
 }
-#dashboard .student-menu-button:hover,
-#dashboard .student-menu-button.active{
-  color:#fff!important;background:#0d8b4b!important
+#dashboard .student-welcome h1 {
+  font-size: clamp(27px,4vw,39px) !important;
+  margin: 8px 0 5px !important;
 }
-#dashboard .student-menu-button.active{box-shadow:inset 3px 0 0 #b8f1cd!important}
-#dashboard .student-page{
-  grid-area:content;min-width:0;scroll-margin-top:105px
+#dashboard .student-account-chip {
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 12px rgba(8,123,66,.07);
 }
-#dashboard .student-page.active{display:block}
-#dashboard .student-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+
+/* Navegação do aluno: verde profundo e estado activo evidente */
+#dashboard .student-menu {
+  background: linear-gradient(100deg, #064b2b, #087b42) !important;
+  border: 1px solid #075b34 !important;
+  border-radius: 15px !important;
+  padding: 9px !important;
+  gap: 6px !important;
+  box-shadow: 0 8px 20px rgba(4,61,37,.13) !important;
+}
+#dashboard .student-menu-button {
+  color: #effaf2 !important;
+  border-radius: 10px !important;
+  padding: 10px 13px !important;
+  font-weight: 650 !important;
+  transition: background .18s ease, transform .18s ease !important;
+}
+#dashboard .student-menu-button:hover {
+  color: #fff !important;
+  background: rgba(255,255,255,.13) !important;
+}
+#dashboard .student-menu-button.active {
+  color: #fff !important;
+  background: #10a653 !important;
+  box-shadow: inset 0 -2px 0 rgba(255,255,255,.35), 0 4px 10px rgba(0,0,0,.12) !important;
+}
 #dashboard .student-summary-card,
 #dashboard .student-course-card,
 #dashboard .student-profile-card,
 #dashboard .notification-item,
 #dashboard .assessment-card,
-#dashboard .dash-card{
-  background:#fff!important;color:#24372a!important;
-  border:1px solid #dce9df!important;border-radius:16px!important;
-  box-shadow:0 7px 22px rgba(26,74,43,.045)
+#dashboard .dash-card {
+  box-shadow: 0 7px 22px rgba(18,75,42,.055) !important;
+  transition: transform .18s ease, box-shadow .18s ease;
 }
-#dashboard .student-summary-card{padding:19px}
-#dashboard .student-summary-card strong{color:#16834a!important}
-#dashboard .student-summary-card small,
-#dashboard .student-course-card p,
-#dashboard .student-profile-card small{color:#718477!important}
-#dashboard .student-section-heading h2{color:#173c28;font-size:23px;letter-spacing:-.4px}
-#dashboard .student-section-heading p{color:#718477!important}
-#dashboard .student-course-card{padding:20px;transition:transform .2s,box-shadow .2s}
-#dashboard .student-course-card:hover{transform:translateY(-3px);box-shadow:var(--am-shadow)}
-#dashboard .student-course-card h3{color:#1d3828}
-#dashboard .student-avatar{background:#e4f3e8!important;color:#16834a}
-#dashboard .student-status.active{background:#e1f5e8!important;color:#167341!important}
-#dashboard .student-status.pending{background:#fff4d9!important;color:#946600!important}
-#dashboard .student-status.rejected{background:#fde8e8!important;color:#a83232!important}
-#dashboard input,#dashboard select,#dashboard textarea{
-  background:#f8fbf8!important;color:#24372a!important;
-  border:1px solid #d3e2d7!important;border-radius:10px
+#dashboard .student-summary-card:hover,
+#dashboard .student-course-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 11px 26px rgba(18,75,42,.09) !important;
 }
-#dashboard .btn{background:linear-gradient(135deg,#159653,#087a43)!important;color:#fff!important;border-color:#16834a!important}
-#dashboard .btn-outline{background:#fff!important;color:#16834a!important;border-color:#c7ddce!important}
-#dashboard .chat-box{background:#fff;border:1px solid #dce9df;border-radius:16px;padding:16px}
-#dashboard .chat-messages{background:#f7faf7;border-radius:12px;padding:12px}
-#dashboard .chat-message{background:#e8f4eb;color:#20372a;border:1px solid #d6e9dc}
-#dashboard .chat-message.mine{background:#d7f0df;color:#145d35}
-#dashboard .chat-message small{color:#6b7d71}
-#dashboard .chat-reply-context{background:#f0f8f2;border-color:#d3e6d8;color:#315641}
-#dashboard .chat-attachment{border-color:#b9d9c3;color:#147a43}
-#dashboard .notification-item.unread{background:#eff8f1!important;border-color:#b8dcc3!important}
-#dashboard .certificate-card{border-color:#16834a;background:linear-gradient(135deg,#fff,#eff8f1);box-shadow:var(--am-shadow)}
-#dashboard .certificate-card h2{color:#087a43}
-#dashboard .assessment-question{background:#f7faf7;border-color:#dce9df;color:#20372a}
-#dashboard .assessment-option{color:#344c3b}
-#dashboard .assessment-table th{color:#52705b}
-#dashboard .assessment-table td{border-color:#e6eee8}
-#dashboard .student-page .dash-card p{color:#718477}
+#dashboard .student-summary-card {
+  border-top: 3px solid #16a45a !important;
+}
+#dashboard .student-summary-card span {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #e8f7ed;
+}
+#dashboard .student-summary-card strong {
+  font-size: 29px !important;
+}
+#dashboard .student-course-card {
+  overflow: hidden;
+}
+#dashboard .student-page {
+  animation: maFadeIn .22s ease both;
+}
 
-/* Elementos de formulário, tabelas e mensagens */
-#adminDashboard .admin-page,#dashboard .student-page{overflow-wrap:anywhere}
-#adminDashboard .admin-page table,#dashboard .student-page table{max-width:100%}
-#adminDashboard .admin-page [style*="overflow-x:auto"],
-#dashboard .student-page [style*="overflow-x:auto"]{max-width:100%}
-#adminDashboard .admin-page button,#dashboard .student-page button{min-height:38px}
-#adminDashboard .admin-page input[type="checkbox"],
-#dashboard .student-page input[type="checkbox"],
-#dashboard .student-page input[type="radio"]{accent-color:#16834a}
-::selection{background:#bde8ca;color:#123b24}
+/* Comunidade e suporte: remove os fundos roxos antigos */
+#adminDashboard .chat-box,
+#dashboard .chat-box {
+  background: #f8fbf8 !important;
+  border: 1px solid #d8e9dd !important;
+  border-radius: 16px !important;
+  padding: 15px !important;
+  box-shadow: inset 0 1px 3px rgba(18,75,42,.025);
+}
+#adminDashboard .chat-messages,
+#dashboard .chat-messages {
+  background: #f2f8f4 !important;
+  border: 1px solid #e1eee5 !important;
+  border-radius: 13px !important;
+  padding: 13px !important;
+  scrollbar-color: #9bc9a9 #edf5ef;
+}
+#adminDashboard .chat-message,
+#dashboard .chat-message {
+  background: #fff !important;
+  color: #24372a !important;
+  border: 1px solid #dce9df !important;
+  border-radius: 14px 14px 14px 5px !important;
+  box-shadow: 0 3px 10px rgba(18,75,42,.045);
+}
+#adminDashboard .chat-message.mine,
+#dashboard .chat-message.mine {
+  background: #e3f5e9 !important;
+  color: #173c28 !important;
+  border-color: #c6e7d0 !important;
+  border-radius: 14px 14px 5px 14px !important;
+}
+#adminDashboard .chat-message strong,
+#dashboard .chat-message strong {
+  color: #087b42 !important;
+}
+#adminDashboard .chat-message small,
+#dashboard .chat-message small {
+  color: #718477 !important;
+}
+#adminDashboard .chat-compose textarea,
+#dashboard .chat-compose textarea {
+  background: #fff !important;
+  color: #24372a !important;
+  border: 1px solid #cfe1d4 !important;
+  border-radius: 12px !important;
+}
+#adminDashboard .chat-compose textarea:focus,
+#dashboard .chat-compose textarea:focus {
+  outline: 3px solid rgba(16,166,83,.12);
+  border-color: #10a653 !important;
+}
+#adminDashboard .chat-attachment,
+#dashboard .chat-attachment {
+  background: #edf8f0 !important;
+  border-color: #c8e5d0 !important;
+  color: #087b42 !important;
+}
+#adminDashboard .chat-reply-context,
+#dashboard .chat-reply-context {
+  background: #edf8f0 !important;
+  border-color: #c8e5d0 !important;
+  color: #245638 !important;
+}
+#adminDashboard .chat-tools,
+#dashboard .chat-tools {
+  color: #687c70;
+}
+#adminDashboard .announcement-card,
+#dashboard .announcement-card {
+  background: #fff !important;
+  border-color: #dce9df !important;
+  border-left-color: #10a653 !important;
+  color: #24372a !important;
+}
+#adminDashboard .announcement-card p,
+#dashboard .announcement-card p {
+  color: #52665a !important;
+}
+#adminDashboard .community-admin-actions .btn-outline,
+#dashboard .community-admin-actions .btn-outline {
+  font-size: 12px;
+}
 
-/* Responsividade: navegação confortável sem scroll horizontal da página */
-@media(max-width:1050px){
-  #adminDashboard .admin-layout{grid-template-columns:220px minmax(0,1fr);gap:16px}
-  #dashboard.student-dashboard.show{grid-template-columns:210px minmax(0,1fr);column-gap:16px}
+/* Formulários, definições e tabelas: legibilidade consistente */
+#adminDashboard label,
+#dashboard label {
+  color: #405b49;
 }
-@media(max-width:900px){
-  #adminDashboard .admin-layout{grid-template-columns:1fr}
-  #adminDashboard .admin-sidebar{position:relative;top:auto;max-height:none}
-  #adminDashboard .admin-sidebar.collapsed nav{display:none}
-  #adminDashboard .admin-sidebar:not(.collapsed) nav{
-    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px
+#adminDashboard input:focus,
+#adminDashboard select:focus,
+#adminDashboard textarea:focus,
+#dashboard input:focus,
+#dashboard select:focus,
+#dashboard textarea:focus {
+  outline: 3px solid rgba(16,166,83,.11);
+  border-color: #10a653 !important;
+}
+#adminDashboard .admin-page table,
+#dashboard table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+#adminDashboard .admin-page th,
+#dashboard th {
+  background: #f0f7f2;
+}
+#adminDashboard .admin-page tr:hover td,
+#dashboard tr:hover td {
+  background: #f8fcf9;
+}
+
+/* Animação discreta e acessibilidade */
+@keyframes maFadeIn {
+  from {opacity:0; transform:translateY(5px)}
+  to {opacity:1; transform:translateY(0)}
+}
+@media (prefers-reduced-motion: reduce) {
+  #adminDashboard *, #dashboard * {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
   }
-  #dashboard.student-dashboard.show{
-    grid-template-columns:1fr;grid-template-areas:"welcome" "menu" "content";row-gap:14px
+}
+
+/* Responsividade sem criar deslocamento horizontal */
+@media(max-width:900px) {
+  #adminDashboard .admin-layout {
+    grid-template-columns: minmax(0,1fr) !important;
   }
-  #dashboard .student-menu{position:relative;top:auto;display:flex;flex-direction:row;overflow-x:auto;flex-wrap:nowrap}
-  #dashboard .student-menu-button{width:auto;min-width:max-content;text-align:center}
-  #dashboard .student-menu-button.active{box-shadow:inset 0 -3px 0 #b8f1cd!important}
-  #dashboard .student-page{grid-area:content}
-  #adminDashboard .admin-workspace-toolbar{position:relative;top:auto}
+  #adminDashboard .admin-sidebar {
+    position: relative !important;
+    top: auto !important;
+  }
+  #adminDashboard .admin-workspace-toolbar {
+    position: relative;
+    top: auto;
+  }
 }
-@media(max-width:650px){
-  header{padding:12px 4%;gap:10px}
-  header .logo{font-size:19px}
-  header nav{width:100%;justify-content:flex-start;gap:8px}
-  header nav a{font-size:12px}
-  .hero{padding:58px 5%}
-  .hero h1{letter-spacing:-1px}
-  section{padding:48px 5%}
-  #adminDashboard.dashboard,#dashboard.student-dashboard{padding:20px 12px 38px!important}
-  #adminDashboard .admin-sidebar:not(.collapsed) nav{grid-template-columns:1fr 1fr}
-  #adminDashboard .admin-menu-button{width:100%;min-width:0;font-size:12px;padding:10px}
-  #adminDashboard .admin-workspace-toolbar{padding:11px}
-  #adminDashboard .dash-card{padding:15px}
-  #dashboard .student-welcome{padding:20px 18px}
-  #dashboard .student-summary-grid{grid-template-columns:1fr}
-  #dashboard .student-summary-card{padding:15px}
-  #dashboard .student-course-grid{grid-template-columns:1fr}
-  #dashboard .student-section-heading{align-items:flex-start}
-  #dashboard .student-section-heading .btn,
-  #dashboard .student-section-heading .btn-outline{width:100%}
-  #dashboard .profile-edit-form{grid-template-columns:1fr}
-  #dashboard .profile-form-actions{grid-column:1}
-  #dashboard .chat-compose{flex-direction:column;align-items:stretch}
-  #dashboard .chat-compose .btn{width:100%}
-  #dashboard .chat-tools input[type=file]{max-width:100%}
-  .modal-box,.password-recovery-box{padding:22px!important}
+@media(max-width:600px) {
+  #adminDashboard > h1 {
+    padding: 20px 18px 4px !important;
+    padding-right: 75px !important;
+    font-size: 25px !important;
+  }
+  #adminDashboard > p {
+    padding: 0 18px 18px !important;
+  }
+  #adminDashboard > h1::after {
+    right: 17px;
+    top: 14px;
+    font-size: 34px;
+  }
+  #adminDashboard .admin-sidebar nav {
+    max-height: 48vh;
+    overflow-y: auto !important;
+  }
+  #dashboard .student-welcome {
+    min-height: 130px;
+    padding: 20px 17px !important;
+  }
+  #dashboard .student-welcome::after {
+    right: 12px;
+    bottom: -8px;
+    font-size: 76px;
+  }
+  #dashboard .student-menu {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+  #dashboard .student-menu-button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+  #adminDashboard .chat-messages,
+  #dashboard .chat-messages {
+    height: min(54vh, 380px);
+    min-height: 240px;
+  }
+  #adminDashboard .chat-message,
+  #dashboard .chat-message {
+    max-width: 96%;
+  }
+  #adminDashboard .chat-tools input[type=file],
+  #dashboard .chat-tools input[type=file] {
+    max-width: 100%;
+  }
 }
-@media(max-width:380px){
-  #adminDashboard .admin-sidebar:not(.collapsed) nav{grid-template-columns:1fr}
-  #dashboard .student-menu-button{padding:10px 12px;font-size:12px}
+
+
+/* Imagens JPG externas — pasta assets/ ao lado deste HTML */
+#adminDashboard > h1::after {
+  content: "";
+  width: 104px;
+  height: 104px;
+  right: 22px;
+  top: 8px;
+  background: url("assets/admin-banner.jpg") center 25% / cover no-repeat;
+  border: 3px solid rgba(255,255,255,.9);
+  border-radius: 50%;
+  opacity: 1;
+  filter: drop-shadow(0 5px 9px rgba(0,0,0,.2));
 }
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+#dashboard .student-welcome::after {
+  content: "";
+  width: clamp(145px, 24%, 245px);
+  height: 100%;
+  right: 0;
+  bottom: 0;
+  background: url("assets/aluno-banner.jpg") 72% center / cover no-repeat;
+  border-radius: 0 20px 20px 0;
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+#adminDashboard .chat-box::before,
+#dashboard .chat-box::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 112px;
+  margin: 0 0 13px;
+  border-radius: 12px;
+  background: url("assets/comunidade-banner.jpg") center 48% / cover no-repeat;
+  border: 1px solid #d7eadc;
+}
+@media(max-width:600px) {
+  #adminDashboard > h1::after {
+    width: 58px;
+    height: 58px;
+    right: 12px;
+    top: 10px;
+  }
+  #dashboard .student-welcome::after {
+    width: 105px;
+    opacity: .92;
+  }
+  #adminDashboard .chat-box::before,
+  #dashboard .chat-box::before {
+    height: 82px;
+  }
 }
 
 </style>
