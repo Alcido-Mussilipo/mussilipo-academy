@@ -442,29 +442,203 @@ footer strong {color:white}
 @media(max-width:600px){.admin-month-row{grid-template-columns:55px minmax(0,1fr);gap:7px}.admin-month-row .admin-month-values{grid-column:2;font-size:11px}.admin-stat-card .stat-value{font-size:22px}}
 
 
-/* Navegação administrativa recolhível e adaptada a telemóveis */
-.admin-workspace-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:15px 18px;margin-bottom:18px;background:var(--panel);border:1px solid #38234e;border-radius:14px}
-.admin-toolbar-heading{display:flex;flex-direction:column;gap:4px;min-width:0}
-.admin-toolbar-heading strong{color:var(--light);font-size:16px}
-.admin-toolbar-heading span{color:var(--muted);font-size:13px}
-.admin-toolbar-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.admin-layout.menu-closed{grid-template-columns:minmax(0,1fr)}
-.admin-layout.menu-closed .admin-sidebar{display:none}
-.admin-menu-toggle{white-space:nowrap}
-@media(max-width:800px){
-  .admin-layout{display:flex;flex-direction:column;gap:12px;margin-top:14px}
-  .admin-sidebar{display:none;width:100%;position:static;padding:12px;order:0}
-  .admin-layout.menu-open .admin-sidebar{display:block}
-  .admin-sidebar nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;overflow:visible}
-  .admin-menu-button{width:100%;min-width:0;min-height:46px;margin:0;padding:10px;text-align:left;white-space:normal;font-size:13px}
-  .admin-workspace{width:100%;order:1}
-  .admin-workspace-toolbar{width:100%;padding:12px;align-items:flex-start}
-  .admin-toolbar-actions{width:100%}
-  .admin-toolbar-actions button{flex:1}
-  .admin-page-title{font-size:21px}
-  .admin-page .dash-card{padding:16px;margin:12px 0;border-radius:12px}
+/* =====================================================
+   MUSSILIPO ACADEMY — NOVA IDENTIDADE VISUAL VERDE/BRANCO
+   Camada visual: mantém os fluxos e dados existentes.
+===================================================== */
+:root {
+  --bg:#f3f7f4;
+  --panel:#ffffff;
+  --panel2:#edf5ef;
+  --purple:#16834a;
+  --light:#2a9d62;
+  --white:#17251c;
+  --muted:#66776c;
+  --green:#19a45b;
 }
-@media(max-width:420px){.admin-sidebar nav{grid-template-columns:1fr}.admin-toolbar-heading{width:100%}}
+
+/* Área administrativa */
+#adminDashboard.dashboard {
+  background:#f3f7f4 !important;
+  color:#1b2b21 !important;
+  padding:30px clamp(14px,3vw,42px) 55px !important;
+  min-height:100vh;
+}
+#adminDashboard > h1 {font-size:clamp(25px,3vw,34px);color:#173c28;margin:0 0 5px}
+#adminDashboard > p {color:#6b7d71 !important}
+#adminDashboard .admin-layout {
+  grid-template-columns:260px minmax(0,1fr);
+  gap:24px;
+  margin-top:24px;
+  align-items:start;
+}
+#adminDashboard .admin-sidebar {
+  background:#fff !important;
+  border:1px solid #dce9df !important;
+  border-radius:18px !important;
+  padding:16px !important;
+  box-shadow:0 8px 26px rgba(26,74,43,.07);
+  top:88px;
+}
+#adminDashboard .admin-sidebar h3 {
+  color:#718477 !important;
+  font-size:11px;
+  letter-spacing:1.4px;
+  margin:13px 10px 12px;
+}
+#adminDashboard .admin-menu-button {
+  color:#52665a !important;
+  background:transparent !important;
+  border-radius:10px;
+  padding:12px 13px;
+  margin:4px 0;
+  font-weight:600;
+  transition:background .18s ease,color .18s ease;
+}
+#adminDashboard .admin-menu-button:hover,
+#adminDashboard .admin-menu-button.active {
+  background:#e7f5eb !important;
+  color:#147a40 !important;
+}
+#adminDashboard .admin-menu-button.active {
+  border-left:3px solid #1c9a52 !important;
+}
+#adminDashboard .admin-workspace {min-width:0}
+#adminDashboard .admin-workspace-toolbar {
+  background:#fff !important;
+  border:1px solid #dce9df !important;
+  border-radius:15px;
+  box-shadow:0 5px 18px rgba(26,74,43,.05);
+  color:#1c3324;
+}
+#adminDashboard .admin-workspace-toolbar span {color:#718477 !important}
+#adminDashboard .admin-page-title {color:#173c28;font-size:26px}
+#adminDashboard .admin-page-description {color:#718477 !important}
+#adminDashboard .dash-card,
+#adminDashboard .admin-stat-card,
+#adminDashboard .assessment-card,
+#adminDashboard .feature,
+#adminDashboard .notification-item,
+#adminDashboard .announcement-card,
+#adminDashboard .admin-help-note {
+  background:#fff !important;
+  color:#24372a !important;
+  border:1px solid #dce9df !important;
+  border-radius:15px;
+  box-shadow:0 5px 20px rgba(26,74,43,.045);
+}
+#adminDashboard .dash-card p,
+#adminDashboard .admin-stat-card .stat-label,
+#adminDashboard .admin-stat-card .stat-note,
+#adminDashboard .admin-stats-message,
+#adminDashboard .admin-stats-footnote {color:#718477 !important}
+#adminDashboard .admin-stat-card .stat-value {color:#16834a}
+#adminDashboard h2,#adminDashboard h3,#adminDashboard h4 {color:#203d2a}
+#adminDashboard input,#adminDashboard select,#adminDashboard textarea {
+  background:#f8fbf8 !important;
+  color:#24372a !important;
+  border:1px solid #d3e2d7 !important;
+  border-radius:9px;
+}
+#adminDashboard input::placeholder,#adminDashboard textarea::placeholder {color:#93a397}
+#adminDashboard .btn {
+  background:#16834a !important;
+  color:#fff !important;
+  border:1px solid #16834a !important;
+  border-radius:9px;
+}
+#adminDashboard .btn:hover {background:#116b3c !important}
+#adminDashboard .btn-outline {
+  color:#16834a !important;
+  background:#fff !important;
+  border:1px solid #16834a !important;
+}
+#adminDashboard table {color:#2a3b30}
+#adminDashboard th {color:#52705b !important}
+#adminDashboard td {border-color:#e6eee8 !important}
+#adminDashboard .admin-month-bars {background:#e7efe9}
+#adminDashboard .admin-month-enroll {background:#16834a}
+#adminDashboard .admin-month-attempt {background:#70bf8c}
+#adminDashboard .admin-month-cert {background:#e8b94c}
+#adminDashboard .admin-month-legend {color:#718477}
+#adminDashboard .admin-sidebar-toggle {
+  display:flex;align-items:center;gap:10px;width:100%;
+  border:0;border-radius:10px;padding:12px 13px;
+  background:#eaf5ed;color:#176d3b;font-weight:800;text-align:left;
+}
+#adminDashboard .admin-sidebar-toggle:hover {background:#dff0e4}
+#adminDashboard .admin-sidebar.collapsed nav,
+#adminDashboard .admin-sidebar.collapsed h3 {display:none}
+#adminDashboard .admin-sidebar.collapsed {padding-bottom:12px}
+
+/* Área do aluno — mesma linguagem visual */
+#dashboard.student-dashboard {
+  background:#f3f7f4 !important;
+  color:#1b2b21 !important;
+  padding:34px clamp(14px,4vw,54px) 55px !important;
+  min-height:100vh;
+}
+#dashboard .student-eyebrow {color:#16834a !important}
+#dashboard .student-welcome h1 {color:#173c28}
+#dashboard .student-welcome p,
+#dashboard .student-section-heading p {color:#718477 !important}
+#dashboard .student-account-chip {
+  background:#e7f5eb !important;color:#176d3b !important;border:1px solid #cfe5d5 !important;
+}
+#dashboard .student-menu {
+  background:#fff !important;border:1px solid #dce9df !important;
+  border-radius:14px;box-shadow:0 5px 18px rgba(26,74,43,.05);
+}
+#dashboard .student-menu-button {color:#52665a}
+#dashboard .student-menu-button:hover,
+#dashboard .student-menu-button.active {background:#e7f5eb !important;color:#147a40 !important}
+#dashboard .student-menu-button.active {box-shadow:inset 0 -3px 0 #16834a !important}
+#dashboard .student-summary-card,
+#dashboard .student-course-card,
+#dashboard .student-profile-card,
+#dashboard .notification-item,
+#dashboard .assessment-card,
+#dashboard .dash-card {
+  background:#fff !important;color:#24372a !important;
+  border:1px solid #dce9df !important;border-radius:15px;
+  box-shadow:0 5px 20px rgba(26,74,43,.045);
+}
+#dashboard .student-summary-card strong {color:#16834a !important}
+#dashboard .student-summary-card small,
+#dashboard .student-course-card p,
+#dashboard .student-profile-card small {color:#718477 !important}
+#dashboard h2,#dashboard h3,#dashboard h4 {color:#203d2a}
+#dashboard .student-avatar {background:#e4f3e8 !important;color:#16834a}
+#dashboard input,#dashboard select,#dashboard textarea {
+  background:#f8fbf8 !important;color:#24372a !important;border:1px solid #d3e2d7 !important;
+}
+#dashboard .btn {background:#16834a !important;color:#fff !important;border-color:#16834a !important}
+#dashboard .btn-outline {background:#fff !important;color:#16834a !important;border-color:#16834a !important}
+#dashboard .student-status.active {background:#e1f5e8 !important;color:#167341 !important}
+#dashboard .student-status.pending {background:#fff4d9 !important;color:#946600 !important}
+#dashboard .student-status.rejected {background:#fde8e8 !important;color:#a83232 !important}
+
+/* Ajustes comuns para ecrãs pequenos */
+@media(max-width:900px) {
+  #adminDashboard .admin-layout {grid-template-columns:1fr;gap:14px}
+  #adminDashboard .admin-sidebar {position:relative;top:auto;max-height:none;z-index:15}
+  #adminDashboard .admin-sidebar nav {display:flex;flex-direction:column;overflow:visible}
+  #adminDashboard .admin-sidebar.collapsed nav {display:none}
+  #adminDashboard .admin-workspace-toolbar {position:static}
+}
+@media(max-width:600px) {
+  #adminDashboard.dashboard,#dashboard.student-dashboard {padding:22px 12px 38px !important}
+  #adminDashboard .admin-sidebar {padding:11px !important}
+  #adminDashboard .admin-menu-button {width:100%;min-width:0}
+  #adminDashboard .admin-page-title {font-size:22px}
+  #adminDashboard .admin-stat-card .stat-value {font-size:22px}
+  #dashboard .student-menu {position:static;overflow-x:auto;flex-wrap:nowrap}
+  #dashboard .student-menu-button {white-space:nowrap;min-width:max-content}
+  #dashboard .student-summary-grid {grid-template-columns:1fr}
+  #dashboard .student-course-grid {grid-template-columns:1fr}
+  #adminDashboard .admin-stats-section {overflow-x:auto}
+}
+
 </style>
 </head>
 
@@ -763,10 +937,11 @@ footer strong {color:white}
 
 <div class="admin-layout">
 
-  <aside class="admin-sidebar" id="adminSidebar">
+  <aside class="admin-sidebar">
+    <button type="button" class="admin-sidebar-toggle" id="adminSidebarToggle" aria-expanded="true" aria-controls="adminSidebarNav">☰ <span>Menu administrativo</span></button>
     <h3>MENU ADMINISTRATIVO</h3>
 
-    <nav>
+    <nav id="adminSidebarNav">
       <button class="admin-menu-button active"
         data-admin-panel="overview"
         onclick="showAdminPanel('overview')">
@@ -865,11 +1040,8 @@ footer strong {color:white}
 
   <main class="admin-workspace">
     <div class="admin-workspace-toolbar">
-      <div class="admin-toolbar-heading"><strong>Painel administrativo</strong><span id="adminCurrentSection">Visão geral</span></div>
-      <div class="admin-toolbar-actions">
-        <button type="button" class="btn-outline admin-menu-toggle" id="adminMenuToggle" aria-controls="adminSidebar" aria-expanded="true" onclick="toggleAdminMenu()">☰ Menu</button>
-        <button type="button" class="btn-outline" onclick="showAdminPanel('overview')">← Visão geral</button>
-      </div>
+      <div><strong>Painel administrativo</strong><span id="adminCurrentSection">Visão geral</span></div>
+      <button type="button" class="btn-outline" onclick="showAdminPanel('overview')">← Visão geral</button>
     </div>
 
     <div id="adminPageOverview" class="admin-page active"></div>
@@ -4107,26 +4279,6 @@ window.bulkDeleteSelectedLessons = async function() {
   await window.loadAdminModules();
 };
 
-// ABRIR/FECHAR O MENU ADMINISTRATIVO (COMPORTAMENTO RESPONSIVO)
-window.toggleAdminMenu = function() {
-  const layout = document.querySelector('.admin-layout');
-  const toggle = document.getElementById('adminMenuToggle');
-  const isMobile = window.matchMedia('(max-width: 800px)').matches;
-  if (!layout || !toggle) return;
-
-  if (isMobile) {
-    layout.classList.toggle('menu-open');
-    const opened = layout.classList.contains('menu-open');
-    toggle.setAttribute('aria-expanded', String(opened));
-    toggle.textContent = opened ? '✕ Fechar menu' : '☰ Menu';
-  } else {
-    layout.classList.toggle('menu-closed');
-    const opened = !layout.classList.contains('menu-closed');
-    toggle.setAttribute('aria-expanded', String(opened));
-    toggle.textContent = opened ? '☰ Recolher menu' : '☰ Abrir menu';
-  }
-};
-
 // ABRIR UM PAINEL DO MENU LATERAL
 window.showAdminPanel = function(panelName) {
 
@@ -4171,16 +4323,6 @@ window.showAdminPanel = function(panelName) {
 
   if (destination) {
     destination.classList.add('active');
-  }
-
-  if (window.matchMedia('(max-width: 800px)').matches) {
-    const layout = document.querySelector('.admin-layout');
-    const toggle = document.getElementById('adminMenuToggle');
-    if (layout) layout.classList.remove('menu-open');
-    if (toggle) {
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.textContent = '☰ Menu';
-    }
   }
 
   const sectionNames = {overview:'Visão geral',statistics:'Estatísticas avançadas',reports:'Relatórios e exportação',calendar:'Calendário académico',students:'Gestão dos alunos',courses:'Gestão dos cursos',content:'Módulos e aulas',materials:'Materiais de estudo',enrollments:'Matrículas',support:'Suporte aos alunos',community:'Comunidade e moderação',certificates:'Gestão de certificados',assessments:'Testes, exames e classificações',audit:'Auditoria e histórico de alterações',activity:'Actividade recente',permissions:'Permissões administrativas',bulk:'Gestão de conteúdos em massa'};
@@ -5389,5 +5531,35 @@ if(session?.user) await loadUser(session.user);
 await window.verifyCertificateFromUrl();
 
 </script>
+
+<script>
+(function(){
+  function initAdminSidebar(){
+    const sidebar=document.querySelector('#adminDashboard .admin-sidebar');
+    const toggle=document.getElementById('adminSidebarToggle');
+    if(!sidebar||!toggle||toggle.dataset.ready==='1') return;
+    toggle.dataset.ready='1';
+    const nav=document.getElementById('adminSidebarNav');
+    if(!nav) return;
+    function setCollapsed(value){
+      sidebar.classList.toggle('collapsed',value);
+      toggle.setAttribute('aria-expanded',String(!value));
+    }
+    setCollapsed(window.matchMedia('(max-width: 900px)').matches);
+    toggle.addEventListener('click',function(){setCollapsed(!sidebar.classList.contains('collapsed'));});
+    nav.querySelectorAll('.admin-menu-button').forEach(function(button){
+      button.addEventListener('click',function(){
+        if(window.matchMedia('(max-width: 900px)').matches) setCollapsed(true);
+      });
+    });
+    window.addEventListener('resize',function(){
+      if(!window.matchMedia('(max-width: 900px)').matches) setCollapsed(false);
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initAdminSidebar);
+  else initAdminSidebar();
+})();
+</script>
+
 </body>
 </html>
