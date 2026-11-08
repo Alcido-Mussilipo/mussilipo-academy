@@ -379,10 +379,67 @@ footer strong {color:white}
 .support-user-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;background:#211334;border:1px solid #49305f;border-radius:10px}
 @media(max-width:520px){.chat-compose{flex-direction:column}.chat-compose .btn{width:100%}.chat-message{max-width:96%}}
 .community-admin-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chat-attachment{display:inline-flex;gap:7px;align-items:center;margin-top:8px;padding:7px 10px;border:1px solid #74549a;border-radius:8px;color:#eadcff;text-decoration:none;font-size:12px}
+.chat-reply-context{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;margin:8px 0;background:#29183e;border:1px solid #74549a;border-radius:8px;font-size:12px}
+.chat-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.chat-tools input[type=file]{max-width:220px;color:var(--muted);font-size:12px}
+.announcement-card{padding:13px;margin:10px 0;background:#211334;border:1px solid #67458a;border-left:4px solid #a56de0;border-radius:10px}
+.announcement-card small{display:block;color:var(--muted);margin-top:7px}
+.support-status{font-size:11px;padding:4px 8px;border-radius:20px;background:#35214d;color:#e4d5f5}
+.support-status.closed{background:#38252b;color:#f3b7c1}
 .community-admin-actions button{font-size:11px;padding:6px 9px}
 .community-ban-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;background:#211334;border:1px solid #49305f;border-radius:9px;margin:7px 0}
 .admin-help-note{padding:14px;border:1px solid #7350a0;border-radius:10px;background:#211334;margin:12px 0 18px}
 .admin-help-note li{margin:7px 0 7px 20px;color:#e2d7ef}
+
+/* CERTIFICADOS DIGITAIS */
+.certificate-card{background:linear-gradient(135deg,#fff,#f2eaff);color:#24143b;border:5px double #8a5bd1;border-radius:18px;padding:26px;margin:16px 0;box-shadow:0 12px 35px rgba(0,0,0,.22);text-align:center}
+.certificate-card h2{color:#54258d;font-size:25px;margin:8px 0}
+.certificate-card .cert-name{font-size:25px;font-weight:800;margin:18px 0 8px;color:#24143b}
+.certificate-card p{color:#49385d}
+.certificate-meta{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:18px;font-size:13px}
+.certificate-qr{display:inline-flex;flex-direction:column;align-items:center;gap:7px;background:#fff;padding:12px;border-radius:10px;margin-top:18px}
+.certificate-qr canvas,.certificate-qr img{max-width:150px;height:auto}
+.cert-admin-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:13px 0;border-bottom:1px solid #49305f}
+.cert-status-valid{color:#20c997;font-weight:800}.cert-status-revoked{color:#f87171;font-weight:800}
+#certificateVerification{position:fixed;inset:0;z-index:1000;background:rgba(8,3,18,.96);display:none;align-items:center;justify-content:center;padding:18px;overflow:auto}
+#certificateVerification.show{display:flex}
+.verify-box{width:min(620px,100%);background:#1c1030;border:1px solid #7045a5;border-radius:18px;padding:26px;text-align:center}
+.verify-box h2{margin-bottom:12px;color:#d8c1ff}.verify-result{margin-top:18px;padding:18px;border-radius:12px;background:#26163d;text-align:left}
+@media print{body *{visibility:hidden!important}.certificate-card[data-print-hidden='false'],.certificate-card[data-print-hidden='false'] *{visibility:visible!important}.certificate-card[data-print-hidden='false']{position:absolute;inset:0;margin:0;box-shadow:none;min-height:95vh;display:flex;flex-direction:column;justify-content:center}}
+
+
+/* TESTES, EXAMES E CLASSIFICACOES */
+.assessment-card{background:var(--panel);border:1px solid #49305f;border-radius:14px;padding:18px;margin:12px 0}
+.assessment-card h3{margin:0 0 8px}.assessment-meta{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin:10px 0}
+.assessment-question{padding:16px;margin:14px 0;background:#211334;border:1px solid #49305f;border-radius:12px}
+.assessment-option{display:flex;gap:9px;align-items:flex-start;margin:10px 0;color:#eee}
+.assessment-option input{margin-top:4px}.assessment-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.assessment-table{width:100%;border-collapse:collapse;margin-top:12px}.assessment-table th,.assessment-table td{padding:10px;border-bottom:1px solid #49305f;text-align:left;font-size:13px}
+.assessment-table th{color:#d8c1ff}.assessment-form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.assessment-form-grid label{display:flex;flex-direction:column;gap:6px;color:var(--muted);font-size:13px}.assessment-form-grid input,.assessment-form-grid select,.assessment-form-grid textarea{width:100%;padding:11px;border:1px solid #60427d;border-radius:8px;background:#160b25;color:#fff}
+
+
+.admin-stats-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.admin-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin:14px 0}
+.admin-stat-card{background:var(--panel);border:1px solid #49305f;border-radius:13px;padding:15px;min-width:0}
+.admin-stat-card .stat-label{color:var(--muted);font-size:12px;line-height:1.4;display:block}
+.admin-stat-card .stat-value{font-size:25px;font-weight:800;display:block;margin-top:7px;overflow-wrap:anywhere}
+.admin-stat-card .stat-note{font-size:11px;color:var(--muted);display:block;margin-top:4px}
+.admin-stats-section{margin-top:16px;overflow-x:auto}
+.admin-stats-section h3{margin:0 0 10px}
+.admin-stats-table{width:100%;border-collapse:collapse;min-width:650px;font-size:13px}
+.admin-stats-table th,.admin-stats-table td{padding:11px 9px;border-bottom:1px solid rgba(148,120,170,.2);text-align:left;vertical-align:middle}
+.admin-stats-table th{color:var(--muted);font-weight:700;white-space:nowrap}
+.admin-stats-table td:not(:first-child),.admin-stats-table th:not(:first-child){text-align:right}
+.admin-month-row{display:grid;grid-template-columns:74px minmax(0,1fr) 125px;gap:10px;align-items:center;margin:11px 0;font-size:12px}
+.admin-month-bars{display:flex;height:13px;border-radius:20px;overflow:hidden;background:rgba(148,120,170,.12)}
+.admin-month-enroll{background:#8b5cf6}.admin-month-attempt{background:#22c55e}.admin-month-cert{background:#f59e0b}
+.admin-month-legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin:12px 0}
+.admin-month-legend span{display:inline-flex;align-items:center;gap:6px}.admin-month-legend i{width:9px;height:9px;border-radius:3px;display:inline-block}
+.admin-stats-message{color:var(--muted);font-size:13px;margin:8px 0}
+.admin-stats-footnote{color:var(--muted);font-size:12px;margin:14px 2px}
+@media(max-width:600px){.admin-month-row{grid-template-columns:55px minmax(0,1fr);gap:7px}.admin-month-row .admin-month-values{grid-column:2;font-size:11px}.admin-stat-card .stat-value{font-size:22px}}
 </style>
 </head>
 
@@ -509,6 +566,12 @@ footer strong {color:white}
     <button type="button" class="student-menu-button active" data-student-panel="overview" onclick="showStudentPanel('overview')">🏠 Início</button>
     <button type="button" class="student-menu-button" data-student-panel="courses" onclick="showStudentPanel('courses')">📚 Meus cursos</button>
     <button type="button" class="student-menu-button" data-student-panel="learning" onclick="showStudentPanel('learning')">🎥 Aulas e materiais</button>
+    <button type="button" class="student-menu-button" data-student-panel="progress" onclick="showStudentPanel('progress')">📊 Meu progresso</button>
+    <button type="button" class="student-menu-button" data-student-panel="favorites" onclick="showStudentPanel('favorites')">⭐ Favoritos</button>
+    <button type="button" class="student-menu-button" data-student-panel="history" onclick="showStudentPanel('history')">🕘 Histórico</button>
+    <button type="button" class="student-menu-button" data-student-panel="calendar" onclick="showStudentPanel('calendar')">📅 Calendário</button>
+    <button type="button" class="student-menu-button" data-student-panel="certificates" onclick="showStudentPanel('certificates')">🏅 Certificados</button>
+    <button type="button" class="student-menu-button" data-student-panel="assessments" onclick="showStudentPanel('assessments')">📝 Testes e exames</button>
     <button type="button" class="student-menu-button" data-student-panel="profile" onclick="showStudentPanel('profile')">👤 Minha conta</button>
     <button type="button" class="student-menu-button" data-student-panel="notifications" onclick="showStudentPanel('notifications')">🔔 Notificações <span id="notificationCount" class="notification-count hidden">0</span></button>
     <button type="button" class="student-menu-button" data-student-panel="community" onclick="showStudentPanel('community')">💬 Comunidade</button>
@@ -537,6 +600,14 @@ footer strong {color:white}
 
   <div id="studentPageLearning" class="student-page">
     <div class="student-section-heading"><div><h2>🎥 Aulas e materiais</h2><p>Abre um curso aprovado para aceder às aulas, vídeos e ficheiros de estudo.</p></div></div>
+    <div class="dash-card" style="margin-bottom:16px">
+      <h3>🔎 Pesquisar cursos e conteúdos</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <input id="academySearchInput" type="search" minlength="2" maxlength="120" placeholder="Pesquisar curso, módulo ou aula..." style="flex:1;min-width:220px;padding:12px;border-radius:9px;border:1px solid #60447a;background:#160d20;color:white">
+        <button type="button" class="btn" onclick="searchAcademyContent()">Pesquisar</button>
+      </div>
+      <div id="academySearchResults" style="margin-top:12px" aria-live="polite"></div>
+    </div>
     <div id="studentLearningShortcut" class="dash-card">Escolhe um curso aprovado em “Meus cursos” para consultar as aulas e materiais.</div>
     <div class="dash-card hidden" id="learningPanel">
       <button class="btn-outline" onclick="closeLearningCourse()">← Voltar aos meus cursos</button>
@@ -545,6 +616,36 @@ footer strong {color:white}
       <div id="learningProgress" style="margin-top:15px"></div>
       <div id="learningModules" style="margin-top:20px">A carregar aulas...</div>
     </div>
+  </div>
+
+  <div id="studentPageProgress" class="student-page">
+    <div class="student-section-heading"><div><h2>📊 O meu progresso</h2><p>Acompanha a evolução em cada curso e retoma a última aula.</p></div><button class="btn-outline" onclick="loadStudentLearningHub()">↻ Actualizar</button></div>
+    <div id="studentResumeCard" class="dash-card" style="margin-bottom:16px">A carregar a tua última aula...</div>
+    <div id="studentProgressCourses" class="student-course-grid"></div>
+  </div>
+  <div id="studentPageFavorites" class="student-page">
+    <div class="student-section-heading"><div><h2>⭐ Aulas guardadas</h2><p>As aulas que marcaste para rever mais tarde.</p></div><button class="btn-outline" onclick="loadStudentFavorites()">↻ Actualizar</button></div>
+    <div id="studentFavoritesList" class="student-course-grid"><div class="dash-card">A carregar favoritos...</div></div>
+  </div>
+  <div id="studentPageHistory" class="student-page">
+    <div class="student-section-heading"><div><h2>🕘 Histórico de aprendizagem</h2><p>Consulta as aulas que abriste e concluíste recentemente.</p></div><button class="btn-outline" onclick="loadStudentHistory()">↻ Actualizar</button></div>
+    <div id="studentHistoryList"><div class="dash-card">A carregar histórico...</div></div>
+  </div>
+  <div id="studentPageCalendar" class="student-page">
+    <div class="student-section-heading"><div><h2>📅 Calendário académico</h2><p>Exames, prazos, aulas ao vivo e comunicados da academia.</p></div><button class="btn-outline" onclick="loadStudentCalendar()">↻ Actualizar</button></div>
+    <div id="studentCalendarList"><div class="dash-card">A carregar calendário...</div></div>
+  </div>
+
+  <div id="studentPageCertificates" class="student-page">
+    <div class="student-section-heading"><div><h2>🏅 Os meus certificados</h2><p>Consulta, imprime e partilha os teus certificados digitais.</p></div></div>
+    <div id="studentCertificatesList" style="margin-top:18px"><div class="dash-card">A carregar certificados...</div></div>
+  </div>
+
+  <div id="studentPageAssessments" class="student-page">
+    <div class="student-section-heading"><div><h2>📝 Testes e exames</h2><p>Realiza avaliações dos teus cursos e acompanha as tuas classificações.</p></div></div>
+    <div id="studentAssessmentsList" style="margin-top:18px"><div class="dash-card">A carregar avaliações...</div></div>
+    <div id="studentAssessmentWorkspace" class="hidden" style="margin-top:18px"></div>
+    <div id="studentAssessmentHistory" style="margin-top:18px"></div>
   </div>
 
   <div id="studentPageNotifications" class="student-page">
@@ -559,12 +660,15 @@ footer strong {color:white}
 
   <div id="studentPageCommunity" class="student-page">
     <div class="student-section-heading"><div><h2>💬 Comunidade de alunos</h2><p>Partilha dúvidas e troca experiências sobre os cursos com outros alunos.</p></div></div>
+    <div id="studentCommunityAnnouncements" class="dash-card" style="margin:12px 0"><h3>📢 Avisos da administração</h3><div id="studentAnnouncementsList">A carregar avisos...</div></div>
     <div class="chat-box">
       <div id="communityMessages" class="chat-messages" aria-live="polite"><p>A carregar conversa...</p></div>
+      <div id="communityReplyContext" class="chat-reply-context hidden"><span id="communityReplyLabel">A responder a uma mensagem</span><button type="button" class="btn-outline" onclick="clearCommunityReply()">Cancelar</button></div>
       <form id="communityMessageForm" class="chat-compose">
-        <textarea id="communityMessageInput" maxlength="3000" required placeholder="Escreve uma mensagem para a comunidade..."></textarea>
+        <textarea id="communityMessageInput" maxlength="3000" placeholder="Escreve uma mensagem para a comunidade..."></textarea>
         <button class="btn" type="submit" id="sendCommunityMessageBtn">Enviar</button>
       </form>
+      <div class="chat-tools"><label>Anexo (máx. 10 MB) <input id="communityAttachment" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"></label><small>Imagem ou PDF</small></div>
     </div>
   </div>
 
@@ -573,9 +677,10 @@ footer strong {color:white}
     <div class="chat-box">
       <div id="studentSupportMessages" class="chat-messages" aria-live="polite"><p>A carregar conversa...</p></div>
       <form id="studentSupportForm" class="chat-compose">
-        <textarea id="studentSupportInput" maxlength="3000" required placeholder="Escreve a tua dúvida ou pedido de ajuda..."></textarea>
+        <textarea id="studentSupportInput" maxlength="3000" placeholder="Escreve a tua dúvida ou pedido de ajuda..."></textarea>
         <button class="btn" type="submit" id="sendStudentSupportBtn">Enviar ao suporte</button>
       </form>
+      <div class="chat-tools"><label>Anexo (máx. 10 MB) <input id="studentSupportAttachment" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"></label><small>Imagem ou PDF</small></div>
     </div>
   </div>
 
@@ -644,6 +749,24 @@ footer strong {color:white}
       </button>
 
       <button class="admin-menu-button"
+        data-admin-panel="statistics"
+        onclick="showAdminPanel('statistics')">
+        📈 Estatísticas avançadas
+      </button>
+
+      <button class="admin-menu-button"
+        data-admin-panel="reports"
+        onclick="showAdminPanel('reports')">
+        📑 Relatórios e exportação
+      </button>
+
+      <button class="admin-menu-button"
+        data-admin-panel="calendar"
+        onclick="showAdminPanel('calendar')">
+        📅 Calendário académico
+      </button>
+
+      <button class="admin-menu-button"
         data-admin-panel="students"
         onclick="showAdminPanel('students')">
         👨‍🎓 Alunos
@@ -671,6 +794,36 @@ footer strong {color:white}
         data-admin-panel="enrollments"
         onclick="showAdminPanel('enrollments')">
         📝 Matrículas
+      </button>
+      <button class="admin-menu-button"
+        data-admin-panel="certificates"
+        onclick="showAdminPanel('certificates')">
+        🏅 Certificados
+      </button>
+      <button class="admin-menu-button"
+        data-admin-panel="assessments"
+        onclick="showAdminPanel('assessments')">
+        📝 Testes e classificações
+      </button>
+      <button class="admin-menu-button"
+        data-admin-panel="audit"
+        onclick="showAdminPanel('audit')">
+        🧾 Auditoria e alterações
+      </button>
+      <button class="admin-menu-button"
+        data-admin-panel="activity"
+        onclick="showAdminPanel('activity')">
+        🕘 Actividade recente
+      </button>
+      <button class="admin-menu-button"
+        data-admin-panel="permissions"
+        onclick="showAdminPanel('permissions')">
+        🔐 Permissões administrativas
+      </button>
+      <button class="admin-menu-button"
+        data-admin-panel="bulk"
+        onclick="showAdminPanel('bulk')">
+        📦 Conteúdos em massa
       </button>
       <button class="admin-menu-button"
         data-admin-panel="support"
@@ -702,6 +855,123 @@ footer strong {color:white}
     <div id="adminPageMaterials" class="admin-page"></div>
 
     <div id="adminPageEnrollments" class="admin-page"></div>
+
+    <div id="adminPageCertificates" class="admin-page"><h2>🏅 Gestão de certificados</h2><p style="color:var(--muted);margin:6px 0 18px">Emite certificados para alunos com matrícula aprovada e todas as aulas publicadas concluídas.</p><div id="adminCertificatesContent" class="dash-card">A carregar...</div></div>
+    <div id="adminPageAssessments" class="admin-page">
+      <h2>📝 Testes, exames e classificações</h2>
+      <p style="color:var(--muted);margin:6px 0 18px">Cria avaliações, adiciona perguntas, publica e acompanha os resultados.</p>
+      <div class="dash-card" style="margin-bottom:16px">
+        <h3>➕ Criar avaliação</h3>
+        <form id="assessmentCreateForm" onsubmit="createAssessment(event)">
+          <div class="assessment-form-grid">
+            <label>Curso<select id="assessmentCourse" required><option value="">A carregar cursos...</option></select></label>
+            <label>Título<input id="assessmentTitle" required minlength="3" maxlength="180" placeholder="Ex.: Teste do módulo 1"></label>
+            <label>Tipo<select id="assessmentType"><option value="test">Teste</option><option value="exam">Exame</option></select></label>
+            <label>Duração em minutos (opcional)<input id="assessmentDuration" type="number" min="1" max="300" placeholder="Sem limite"></label>
+            <label>Nota mínima (%)<input id="assessmentPassMark" type="number" min="0" max="100" value="50" required></label>
+            <label>Máximo de tentativas<input id="assessmentMaxAttempts" type="number" min="1" max="20" value="1" required></label>
+          </div>
+          <label style="display:block;margin-top:12px;color:var(--muted)">Descrição<textarea id="assessmentDescription" rows="2" style="width:100%;margin-top:6px;padding:10px;background:#160b25;color:white;border:1px solid #60427d;border-radius:8px"></textarea></label>
+          <div class="assessment-actions"><button class="btn" type="submit">Criar avaliação</button></div>
+        </form>
+      </div>
+      <div id="adminAssessmentsList" class="dash-card">A carregar avaliações...</div>
+      <div class="dash-card" style="margin-top:16px"><h3>📊 Resultados e correcções</h3><div id="adminAssessmentResults">A carregar resultados...</div></div>
+    </div>
+    <div id="adminPageStatistics" class="admin-page">
+      <div class="admin-stats-heading">
+        <div><h2>📈 Estatísticas avançadas</h2><p style="color:var(--muted);margin:6px 0 0">Indicadores gerais, desempenho, comparação entre cursos e evolução mensal.</p></div>
+        <button type="button" class="btn-outline" onclick="loadAdminAdvancedStatistics()">↻ Actualizar dados</button>
+      </div>
+      <div id="adminAdvancedStatsMessage" class="admin-stats-message" aria-live="polite">A preparar estatísticas...</div>
+      <div id="adminAdvancedStatsKpis" class="admin-stats-grid"></div>
+      <div class="dash-card admin-stats-section"><h3>🎓 Desempenho académico</h3><div id="adminPerformanceStats" class="admin-stats-grid"></div></div>
+      <div class="dash-card admin-stats-section"><h3>📚 Estatísticas por curso</h3><div id="adminCourseStats">A carregar...</div></div>
+      <div class="dash-card admin-stats-section"><h3>📅 Evolução dos últimos 12 meses</h3><p style="color:var(--muted);font-size:13px">Matrículas, tentativas de avaliações e certificados emitidos por mês.</p><div id="adminMonthlyStats">A carregar...</div></div>
+      <p class="admin-stats-footnote">Os indicadores são calculados a partir dos registos existentes na base de dados. Quando ainda não existem alunos ou tentativas, os valores aparecem a zero.</p>
+    </div>
+    <div id="adminPageReports" class="admin-page">
+      <h2>📑 Relatórios e exportação</h2>
+      <p style="color:var(--muted);margin:6px 0 18px">Consulta os registos da academia e exporta os resultados em CSV para abrir no Excel.</p>
+      <div class="dash-card" style="margin-bottom:16px">
+        <div class="assessment-form-grid">
+          <label>Tipo de relatório<select id="adminReportType"><option value="students">Alunos</option><option value="enrollments">Matrículas</option><option value="certificates">Certificados</option><option value="assessments">Testes, exames e classificações</option></select></label>
+          <label>Data inicial (opcional)<input id="adminReportStart" type="date"></label>
+          <label>Data final (opcional)<input id="adminReportEnd" type="date"></label>
+        </div>
+        <div class="assessment-actions" style="margin-top:14px">
+          <button type="button" class="btn" onclick="loadAdminReport()">Gerar relatório</button>
+          <button type="button" class="btn-outline" id="adminReportCsvBtn" onclick="exportAdminReportCSV()" disabled>⬇ Exportar CSV</button>
+          <button type="button" class="btn-outline" id="adminReportPrintBtn" onclick="printAdminReport()" disabled>🖨 Imprimir</button>
+        </div>
+      </div>
+      <div id="adminReportMessage" class="admin-stats-message" aria-live="polite">Escolhe o relatório e clica em Gerar relatório.</div>
+      <div id="adminReportResults" class="dash-card" style="overflow-x:auto"><p style="color:var(--muted)">Nenhum relatório gerado.</p></div>
+    </div>
+    <div id="adminPageCalendar" class="admin-page">
+      <h2>📅 Gestão do calendário académico</h2>
+      <p style="color:var(--muted);margin:6px 0 18px">Cria eventos e escolhe se ficam visíveis para os alunos.</p>
+      <div class="dash-card" style="margin-bottom:16px">
+        <form id="adminCalendarForm" onsubmit="saveAdminCalendarEvent(event)">
+          <input type="hidden" id="calendarEventId">
+          <div class="assessment-form-grid">
+            <label>Título<input id="calendarTitle" required minlength="3" maxlength="180" placeholder="Ex.: Exame do módulo 1"></label>
+            <label>Tipo<select id="calendarType"><option value="assessment">Teste / Exame</option><option value="deadline">Prazo</option><option value="live_class">Aula ao vivo</option><option value="announcement">Comunicado</option><option value="other">Outro</option></select></label>
+            <label>Data e hora de início<input id="calendarStartsAt" type="datetime-local" required></label>
+            <label>Data e hora de fim (opcional)<input id="calendarEndsAt" type="datetime-local"></label>
+            <label>Curso (opcional)<select id="calendarCourse"><option value="">Todos os alunos</option></select></label>
+          </div>
+          <label style="display:block;margin-top:12px">Descrição<textarea id="calendarDescription" rows="3" style="width:100%;margin-top:6px;padding:10px;background:#160b25;color:white;border:1px solid #60427d;border-radius:8px"></textarea></label>
+          <label style="display:flex;align-items:center;gap:8px;margin:12px 0"><input id="calendarPublished" type="checkbox" checked style="width:auto"> Publicar para os alunos</label>
+          <div class="assessment-actions"><button class="btn" type="submit" id="calendarSaveBtn">Guardar evento</button><button class="btn-outline" type="button" onclick="resetAdminCalendarForm()">Limpar formulário</button></div>
+          <p id="adminCalendarMessage" aria-live="polite" style="margin-top:10px"></p>
+        </form>
+      </div>
+      <div id="adminCalendarEvents" class="dash-card">A carregar eventos...</div>
+    </div>
+
+    <div id="adminPageAudit" class="admin-page">
+      <h2>🧾 Registo de acções e histórico de alterações</h2>
+      <p style="color:var(--muted);margin:6px 0 18px">Consulta operações registadas nas tabelas administrativas, com valores anteriores e novos quando disponíveis.</p>
+      <div class="dash-card" style="margin-bottom:14px">
+        <div class="assessment-form-grid">
+          <label>Tabela<select id="auditTableFilter"><option value="">Todas as tabelas</option><option value="courses">Cursos</option><option value="modules">Módulos</option><option value="lessons">Aulas</option><option value="lesson_materials">Materiais</option><option value="enrollments">Matrículas</option><option value="certificates">Certificados</option><option value="assessments">Avaliações</option><option value="assessment_questions">Perguntas</option><option value="assessment_options">Opções</option></select></label>
+          <label>Acção<select id="auditActionFilter"><option value="">Todas</option><option value="INSERT">Criação</option><option value="UPDATE">Actualização</option><option value="DELETE">Eliminação</option></select></label>
+        </div>
+        <div class="assessment-actions" style="margin-top:12px"><button type="button" class="btn" onclick="loadAdminAuditLogs()">Consultar histórico</button></div>
+      </div>
+      <div id="adminAuditLogs" class="dash-card" style="overflow-x:auto">Clica em Consultar histórico.</div>
+    </div>
+
+    <div id="adminPageActivity" class="admin-page">
+      <div class="student-section-heading"><div><h2>🕘 Actividade administrativa recente</h2><p>Últimas operações registadas na base de dados.</p></div><button type="button" class="btn-outline" onclick="loadAdminRecentActivity()">↻ Actualizar</button></div>
+      <div id="adminRecentActivity" class="dash-card" style="overflow-x:auto">A carregar actividade...</div>
+    </div>
+
+    <div id="adminPagePermissions" class="admin-page">
+      <h2>🔐 Gestão de permissões administrativas</h2>
+      <p style="color:var(--muted);margin:6px 0 18px">Atribui ou retira permissões específicas a contas que já tenham o papel de administrador.</p>
+      <div class="dash-card" style="margin-bottom:14px">
+        <label style="display:block">UUID do administrador<input id="permissionAdminUserId" type="text" placeholder="UUID da conta administradora" style="width:100%;margin-top:6px"></label>
+        <label style="display:block;margin-top:12px">Permissão<select id="permissionKey" style="width:100%;margin-top:6px">
+          <option value="manage_students">Gerir alunos</option><option value="manage_courses">Gerir cursos</option><option value="manage_lessons">Gerir aulas</option><option value="manage_materials">Gerir materiais</option><option value="manage_assessments">Gerir avaliações</option><option value="grade_assessments">Corrigir avaliações</option><option value="manage_certificates">Gerir certificados</option><option value="manage_calendar">Gerir calendário</option><option value="manage_community">Gerir comunidade</option><option value="manage_support">Gerir suporte</option><option value="view_reports">Ver relatórios</option><option value="export_reports">Exportar relatórios</option><option value="view_statistics">Ver estatísticas</option><option value="view_audit_logs">Ver auditoria</option><option value="manage_permissions">Gerir permissões</option><option value="manage_settings">Gerir configurações</option>
+        </select></label>
+        <div class="assessment-actions" style="margin-top:14px"><button type="button" class="btn" onclick="setAdminPermission(true)">Conceder permissão</button><button type="button" class="btn-outline" onclick="setAdminPermission(false)">Retirar permissão</button><button type="button" class="btn-outline" onclick="loadAdminPermissionGrants()">Actualizar lista</button></div>
+        <p id="adminPermissionMessage" aria-live="polite" style="margin-top:10px"></p>
+      </div>
+      <div id="adminPermissionGrants" class="dash-card" style="overflow-x:auto">A carregar permissões...</div>
+      <p class="admin-stats-footnote">Nota: estas permissões estão registadas e podem ser geridas. A aplicação de cada permissão às operações específicas do sistema será activada numa etapa de segurança própria; actualmente o papel admin continua a determinar o acesso geral.</p>
+    </div>
+
+    <div id="adminPageBulk" class="admin-page">
+      <h2>📦 Gestão de conteúdos em massa</h2>
+      <p style="color:var(--muted);margin:6px 0 18px">Selecciona um curso e módulo na área “Módulos e aulas”. Aí poderás seleccionar várias aulas para publicar, despublicar ou eliminar em conjunto.</p>
+      <div class="dash-card">
+        <p>Abre o painel <strong>Módulos e aulas</strong>, escolhe o curso e o módulo e utiliza as caixas de selecção junto às aulas.</p>
+        <button type="button" class="btn" onclick="showAdminPanel('content')">Abrir gestão de módulos e aulas</button>
+      </div>
+    </div>
+
     <div id="adminPageSupport" class="admin-page">
       <h2>🛟 Suporte aos alunos</h2>
       <div class="admin-help-note">
@@ -720,23 +990,37 @@ footer strong {color:white}
       <div class="chat-box">
         <h3 id="adminSupportChatTitle">Selecciona uma conversa</h3>
         <div id="adminSupportMessages" class="chat-messages"><p>As mensagens aparecerão aqui.</p></div>
+        <div class="chat-reply-context"><span id="adminSupportStatus">Estado da conversa: —</span><button type="button" class="btn-outline" id="toggleSupportStatusBtn" onclick="toggleSelectedSupportStatus()" disabled>Fechar conversa</button></div>
         <form id="adminSupportForm" class="chat-compose">
-          <textarea id="adminSupportInput" maxlength="3000" required placeholder="Escreve uma resposta ao aluno..."></textarea>
+          <textarea id="adminSupportInput" maxlength="3000" placeholder="Escreve uma resposta ao aluno..."></textarea>
           <button class="btn" type="submit" id="sendAdminSupportBtn">Responder</button>
         </form>
+        <div class="chat-tools"><label>Anexo (máx. 10 MB) <input id="adminSupportAttachment" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"></label><small>Imagem ou PDF</small></div>
       </div>
     </div>
 
     <div id="adminPageCommunity" class="admin-page">
       <h2>💬 Comunidade e moderação</h2>
       <p style="color:var(--muted);margin:6px 0 14px">Participa na conversa, remove mensagens inadequadas e impede temporária ou permanentemente um aluno de publicar.</p>
+      <div class="dash-card">
+        <h3>📢 Publicar aviso geral</h3>
+        <form id="adminAnnouncementForm" class="form-grid" style="margin-top:10px">
+          <label>Título<input id="announcementTitle" maxlength="120" required placeholder="Ex.: Calendário de avaliações"></label>
+          <label>Mensagem<textarea id="announcementMessage" maxlength="5000" required placeholder="Escreve o aviso para todos os alunos..."></textarea></label>
+          <label style="display:flex;align-items:center;gap:8px"><input id="announcementPublish" type="checkbox" checked style="width:auto"> Publicar imediatamente</label>
+          <button class="btn" type="submit" id="publishAnnouncementBtn">Publicar aviso</button>
+        </form>
+        <div id="adminAnnouncementsList" style="margin-top:12px">A carregar avisos...</div>
+      </div>
       <div class="chat-box">
         <h3>Conversa da comunidade</h3>
         <div id="adminCommunityMessages" class="chat-messages" aria-live="polite"><p>A carregar comunidade...</p></div>
+        <div id="adminCommunityReplyContext" class="chat-reply-context hidden"><span id="adminCommunityReplyLabel">A responder</span><button type="button" class="btn-outline" onclick="clearCommunityReply()">Cancelar</button></div>
         <form id="adminCommunityMessageForm" class="chat-compose">
-          <textarea id="adminCommunityMessageInput" maxlength="3000" required placeholder="Escreve como administração..."></textarea>
+          <textarea id="adminCommunityMessageInput" maxlength="3000" placeholder="Escreve como administração..."></textarea>
           <button class="btn" type="submit" id="sendAdminCommunityMessageBtn">Publicar</button>
         </form>
+        <div class="chat-tools"><label>Anexo (máx. 10 MB) <input id="adminCommunityAttachment" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"></label><small>Imagem ou PDF</small></div>
       </div>
       <div class="dash-card">
         <h3>🚫 Alunos impedidos de publicar</h3>
@@ -1040,6 +1324,8 @@ footer strong {color:white}
   </div>
 </div>
 
+<div id="certificateVerification" role="dialog" aria-modal="true" aria-labelledby="verifyTitle"><div class="verify-box"><div style="font-size:38px">🎓</div><h2 id="verifyTitle">Verificação de certificado</h2><p style="color:var(--muted)">Mussilipo Academy · Consulta pública de autenticidade</p><div id="certificateVerifyResult" class="verify-result" aria-live="polite">A preparar verificação...</div><button class="btn-outline" style="margin-top:18px" type="button" onclick="document.getElementById('certificateVerification').classList.remove('show')">Fechar</button></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script type="module">
 import { createClient } from
 'https://esm.sh/@supabase/supabase-js@2';
@@ -1058,6 +1344,9 @@ let currentProfileName = '';
 let currentUserRole = '';
 let realtimeChannel = null;
 let selectedSupportUserId = null;
+let selectedSupportConversationId = null;
+let selectedSupportConversationStatus = null;
+let communityReplyParentId = null;
 
 const $ = id => document.getElementById(id);
 
@@ -1325,6 +1614,7 @@ if (profile.is_blocked && profile.role === 'student') {
   return;
 }
   currentUser = user;
+  currentUserRole = profile.role;
   currentProfileName = profile.full_name || user.user_metadata?.full_name || user.email.split('@')[0];
   currentUserRole = profile.role;
 
@@ -1373,11 +1663,13 @@ if (profile.role === 'admin') {
   if (profile.role === 'student') {
     await window.loadStudentNotifications();
     await loadCommunityMessages();
+    await loadCommunityAnnouncements();
     await checkStudentCommunityBan();
     await loadStudentSupportMessages();
   } else if (profile.role === 'admin') {
     await loadAdminSupportUsers();
     await loadAdminCommunityMessages();
+    await loadAdminAnnouncements();
     await loadCommunityBans();
   }
   // Actualizar os botões do cabeçalho
@@ -1476,21 +1768,56 @@ function chatDate(value) {
   return Number.isNaN(date.getTime()) ? '' : date.toLocaleString('pt-MZ', { dateStyle: 'short', timeStyle: 'short' });
 }
 
-function renderChatMessages(containerId, rows) {
+async function renderChatMessages(containerId, rows, bucket = 'community-attachments') {
   const container = $(containerId);
   if (!container) return;
   if (!rows || !rows.length) {
     container.innerHTML = '<p style="color:var(--muted)">Ainda não existem mensagens. Sê o primeiro a conversar! 👋</p>';
     return;
   }
-  container.innerHTML = rows.map(row => `
-    <article class="chat-message ${row.sender_id === currentUser?.id ? 'mine' : ''}">
+  const rendered = await Promise.all(rows.map(async row => {
+    let attachment = '';
+    if (row.attachment_url) {
+      const { data } = await supabase.storage.from(bucket).createSignedUrl(row.attachment_url, 3600);
+      if (data?.signedUrl) attachment = `<a class="chat-attachment" href="${escapeHTML(data.signedUrl)}" target="_blank" rel="noopener">📎 ${escapeHTML(row.attachment_name || 'Abrir anexo')}</a>`;
+      else attachment = '<small>Anexo indisponível</small>';
+    }
+    const reply = row.parent_id ? '<small>↳ Resposta a uma mensagem anterior</small>' : '';
+    const replyButton = bucket === 'community-attachments' ? `<button type="button" class="btn-outline" onclick="setCommunityReply('${row.id}','${escapeHTML(row.sender_name || 'Utilizador').replace(/'/g,"&#39;")}')">↩ Responder</button>` : '';
+    return `<article class="chat-message ${row.sender_id === currentUser?.id ? 'mine' : ''}" style="${row.parent_id ? 'margin-left:18px;border-left:3px solid #8f63bd' : ''}">
       <strong>${escapeHTML(row.sender_name || 'Utilizador')} ${row.sender_role === 'admin' ? '👑' : ''}</strong>
-      <div>${escapeHTML(row.message || '')}</div>
+      ${reply}<div>${escapeHTML(row.message || '')}</div>${attachment}
       <small>${chatDate(row.created_at)}</small>
-    </article>
-  `).join('');
+      <div class="community-admin-actions">${replyButton}</div>
+    </article>`;
+  }));
+  container.innerHTML = rendered.join('');
   container.scrollTop = container.scrollHeight;
+}
+
+window.setCommunityReply = function(messageId, senderName) {
+  communityReplyParentId = messageId;
+  ['communityReplyContext','adminCommunityReplyContext'].forEach(id => $(id)?.classList.remove('hidden'));
+  if ($('communityReplyLabel')) $('communityReplyLabel').textContent = 'A responder a ' + senderName;
+  if ($('adminCommunityReplyLabel')) $('adminCommunityReplyLabel').textContent = 'A responder a ' + senderName;
+  const target = currentUserRole === 'admin' ? $('adminCommunityMessageInput') : $('communityMessageInput');
+  target?.focus();
+};
+window.clearCommunityReply = function() {
+  communityReplyParentId = null;
+  ['communityReplyContext','adminCommunityReplyContext'].forEach(id => $(id)?.classList.add('hidden'));
+};
+
+async function uploadChatAttachment(bucket, file, ownerId) {
+  if (!file) return null;
+  const allowed = ['image/jpeg','image/png','image/webp','application/pdf'];
+  if (!allowed.includes(file.type)) throw new Error('Formato não permitido. Usa JPG, PNG, WEBP ou PDF.');
+  if (file.size > 10 * 1024 * 1024) throw new Error('O anexo ultrapassa o limite de 10 MB.');
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(-100) || 'anexo';
+  const path = `${ownerId}/${Date.now()}-${Math.random().toString(36).slice(2,10)}-${safeName}`;
+  const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: false, contentType: file.type });
+  if (error) throw error;
+  return { attachment_url: path, attachment_name: file.name, attachment_type: file.type, attachment_size_bytes: file.size };
 }
 
 async function checkStudentCommunityBan() {
@@ -1514,14 +1841,14 @@ async function checkStudentCommunityBan() {
 async function loadCommunityMessages() {
   if (!currentUser) return;
   const { data, error } = await supabase.from('community_messages')
-    .select('id, sender_id, sender_name, sender_role, message, created_at')
-    .order('created_at', { ascending: true }).limit(150);
+    .select('id, parent_id, sender_id, sender_name, sender_role, message, attachment_url, attachment_name, created_at')
+    .order('created_at', { ascending: true }).limit(200);
   if (error) {
     console.error('Erro ao carregar comunidade:', error);
     $('communityMessages').innerHTML = '<p>Não foi possível carregar a comunidade. Tenta novamente.</p>';
     return;
   }
-  renderChatMessages('communityMessages', data || []);
+  await renderChatMessages('communityMessages', data || [], 'community-attachments');
 }
 
 async function loadAdminCommunityMessages() {
@@ -1529,8 +1856,8 @@ async function loadAdminCommunityMessages() {
   const container = $('adminCommunityMessages');
   if (!container) return;
   const { data, error } = await supabase.from('community_messages')
-    .select('id, sender_id, sender_name, sender_role, message, created_at')
-    .order('created_at', { ascending: true }).limit(200);
+    .select('id, parent_id, sender_id, sender_name, sender_role, message, attachment_url, attachment_name, created_at')
+    .order('created_at', { ascending: true }).limit(300);
   if (error) {
     console.error('Erro ao carregar comunidade administrativa:', error);
     container.textContent = 'Não foi possível carregar a comunidade: ' + error.message;
@@ -1540,14 +1867,17 @@ async function loadAdminCommunityMessages() {
     container.innerHTML = '<p style="color:var(--muted)">Ainda não existem mensagens.</p>';
     return;
   }
-  container.innerHTML = data.map(row => `
-    <article class="chat-message ${row.sender_id === currentUser.id ? 'mine' : ''}">
-      <strong>${escapeHTML(row.sender_name || 'Utilizador')} ${row.sender_role === 'admin' ? '👑 Administração' : '🎓 Aluno'}</strong>
-      <div>${escapeHTML(row.message || '')}</div>
-      <small>${chatDate(row.created_at)}</small>
-      ${row.sender_role === 'student' ? `<div class="community-admin-actions"><button type="button" class="btn-outline" onclick="banCommunityUser('${row.sender_id}')">🚫 Impedir de publicar</button><button type="button" class="btn-outline" onclick="deleteCommunityMessage('${row.id}')">🗑️ Eliminar mensagem</button></div>` : `<div class="community-admin-actions"><button type="button" class="btn-outline" onclick="deleteCommunityMessage('${row.id}')">🗑️ Eliminar mensagem</button></div>`}
-    </article>`).join('');
-  container.scrollTop = container.scrollHeight;
+  await renderChatMessages('adminCommunityMessages', data || [], 'community-attachments');
+  container.querySelectorAll('.chat-message').forEach((article, index) => {
+    const row = data[index];
+    if (!row) return;
+    const actions = document.createElement('div'); actions.className = 'community-admin-actions';
+    if (row.sender_role === 'student') {
+      const ban = document.createElement('button'); ban.type='button'; ban.className='btn-outline'; ban.textContent='🚫 Impedir de publicar'; ban.onclick=()=>window.banCommunityUser(row.sender_id); actions.appendChild(ban);
+    }
+    const del = document.createElement('button'); del.type='button'; del.className='btn-outline'; del.textContent='🗑️ Eliminar mensagem'; del.onclick=()=>window.deleteCommunityMessage(row.id); actions.appendChild(del);
+    article.appendChild(actions);
+  });
 }
 
 async function loadCommunityBans() {
@@ -1609,56 +1939,123 @@ window.deleteCommunityMessage = async function(messageId) {
 async function loadStudentSupportMessages() {
   if (!currentUser || currentUserRole !== 'student') return;
   const { data, error } = await supabase.from('support_messages')
-    .select('id, user_id, sender_id, sender_name, sender_role, message, created_at')
+    .select('id, conversation_id, user_id, sender_id, sender_name, sender_role, message, attachment_url, attachment_name, created_at')
     .eq('user_id', currentUser.id).order('created_at', { ascending: true }).limit(200);
   if (error) {
     console.error('Erro ao carregar suporte:', error);
     $('studentSupportMessages').innerHTML = '<p>Não foi possível carregar a conversa de suporte.</p>';
     return;
   }
-  renderChatMessages('studentSupportMessages', data || []);
+  await renderChatMessages('studentSupportMessages', data || [], 'support-attachments');
 }
 
 async function loadAdminSupportUsers() {
   if (!currentUser || currentUserRole !== 'admin') return;
   const list = $('adminSupportUsers');
   if (!list) return;
-  const { data, error } = await supabase.from('support_messages')
-    .select('user_id, sender_name, message, created_at')
-    .order('created_at', { ascending: false }).limit(500);
+  const { data: conversations, error } = await supabase.from('support_conversations')
+    .select('id, user_id, status, updated_at').order('updated_at', { ascending: false }).limit(300);
   if (error) {
-    console.error('Erro ao carregar pedidos de suporte:', error);
-    list.textContent = 'Não foi possível carregar as conversas. Verifica as permissões da tabela.';
+    console.error('Erro ao carregar conversas de suporte:', error);
+    list.textContent = 'Não foi possível carregar as conversas: ' + error.message;
     return;
   }
-  const latest = new Map();
-  (data || []).forEach(row => { if (!latest.has(row.user_id)) latest.set(row.user_id, row); });
-  if (!latest.size) {
+  if (!conversations?.length) {
     list.innerHTML = '<p style="color:var(--muted)">Ainda não existem pedidos de suporte.</p>';
     return;
   }
-  list.innerHTML = Array.from(latest.entries()).map(([userId, row]) => `
-    <div class="support-user-item">
-      <div><strong>${escapeHTML(row.sender_name || 'Aluno')}</strong><br><small>${escapeHTML(String(row.message || '').slice(0,90))}</small><br><small>${chatDate(row.created_at)}</small></div>
-      <button type="button" class="btn-outline" onclick="openAdminSupportChat('${userId}')">Abrir conversa</button>
-    </div>
-  `).join('');
+  const ids = [...new Set(conversations.map(c => c.user_id))];
+  const [{ data: profiles }, { data: messages }] = await Promise.all([
+    supabase.from('profiles').select('id, full_name').in('id', ids),
+    supabase.from('support_messages').select('conversation_id, message, created_at, sender_role').in('conversation_id', conversations.map(c => c.id)).order('created_at', { ascending: false })
+  ]);
+  const names = new Map((profiles || []).map(p => [p.id, p.full_name || 'Aluno']));
+  const latest = new Map(); (messages || []).forEach(m => { if (!latest.has(m.conversation_id)) latest.set(m.conversation_id, m); });
+  list.innerHTML = conversations.map(c => {
+    const last = latest.get(c.id);
+    return `<div class="support-user-item"><div><strong>${escapeHTML(names.get(c.user_id) || 'Aluno')}</strong><br><span class="support-status ${c.status === 'closed' ? 'closed' : ''}">${c.status === 'closed' ? 'Fechada' : 'Aberta'}</span><br><small>${escapeHTML(String(last?.message || 'Sem mensagens').slice(0,90))}</small><br><small>${chatDate(last?.created_at || c.updated_at)}</small></div><button type="button" class="btn-outline" onclick="openAdminSupportChat('${c.id}','${c.user_id}')">Abrir conversa</button></div>`;
+  }).join('');
 }
+window.loadAdminSupportUsers = loadAdminSupportUsers;
 
-window.openAdminSupportChat = async function(userId) {
-  if (!currentUser || currentUserRole !== 'admin' || !userId) return;
+window.openAdminSupportChat = async function(conversationId, userId) {
+  if (!currentUser || currentUserRole !== 'admin' || !conversationId || !userId) return;
+  selectedSupportConversationId = conversationId;
   selectedSupportUserId = userId;
+  const conversation = await supabase.from('support_conversations').select('status').eq('id', conversationId).maybeSingle();
+  selectedSupportConversationStatus = conversation.data?.status || 'open';
   $('adminSupportChatTitle').textContent = 'Conversa privada · ' + userId;
+  $('adminSupportStatus').textContent = 'Estado da conversa: ' + (selectedSupportConversationStatus === 'closed' ? 'Fechada' : 'Aberta');
+  $('toggleSupportStatusBtn').disabled = false;
+  $('toggleSupportStatusBtn').textContent = selectedSupportConversationStatus === 'closed' ? 'Reabrir conversa' : 'Fechar conversa';
   const { data, error } = await supabase.from('support_messages')
-    .select('id, user_id, sender_id, sender_name, sender_role, message, created_at')
-    .eq('user_id', userId).order('created_at', { ascending: true }).limit(200);
+    .select('id, conversation_id, user_id, sender_id, sender_name, sender_role, message, attachment_url, attachment_name, created_at')
+    .eq('conversation_id', conversationId).order('created_at', { ascending: true }).limit(200);
   if (error) {
     console.error('Erro ao abrir conversa:', error);
     $('adminSupportMessages').textContent = 'Não foi possível abrir esta conversa.';
     return;
   }
-  renderChatMessages('adminSupportMessages', data || []);
+  await renderChatMessages('adminSupportMessages', data || [], 'support-attachments');
 };
+
+window.toggleSelectedSupportStatus = async function() {
+  if (!currentUser || currentUserRole !== 'admin' || !selectedSupportConversationId) return;
+  const next = selectedSupportConversationStatus === 'closed' ? 'open' : 'closed';
+  const { error } = await supabase.from('support_conversations').update({ status: next }).eq('id', selectedSupportConversationId);
+  if (error) { alert('Não foi possível actualizar o estado: ' + error.message); return; }
+  selectedSupportConversationStatus = next;
+  $('adminSupportStatus').textContent = 'Estado da conversa: ' + (next === 'closed' ? 'Fechada' : 'Aberta');
+  $('toggleSupportStatusBtn').textContent = next === 'closed' ? 'Reabrir conversa' : 'Fechar conversa';
+  await loadAdminSupportUsers();
+};
+
+async function loadCommunityAnnouncements() {
+  if (!currentUser) return;
+  const { data, error } = await supabase.from('community_announcements')
+    .select('id, title, message, created_at').eq('is_published', true).order('created_at', { ascending: false }).limit(30);
+  const box = $('studentAnnouncementsList'); if (!box) return;
+  if (error) { box.textContent = 'Não foi possível carregar os avisos.'; return; }
+  box.innerHTML = data?.length ? data.map(a => `<article class="announcement-card"><strong>${escapeHTML(a.title)}</strong><p>${escapeHTML(a.message)}</p><small>${chatDate(a.created_at)}</small></article>`).join('') : '<p style="color:var(--muted)">Ainda não existem avisos publicados.</p>';
+}
+
+async function loadAdminAnnouncements() {
+  if (!currentUser || currentUserRole !== 'admin') return;
+  const box = $('adminAnnouncementsList'); if (!box) return;
+  const { data, error } = await supabase.from('community_announcements').select('id,title,message,is_published,created_at').order('created_at',{ascending:false}).limit(50);
+  if (error) { box.textContent = 'Não foi possível carregar avisos: ' + error.message; return; }
+  box.innerHTML = data?.length ? data.map(a => `<article class="announcement-card"><strong>${escapeHTML(a.title)}</strong> <span class="support-status ${a.is_published?'':'closed'}">${a.is_published?'Publicado':'Rascunho'}</span><p>${escapeHTML(a.message).replace(/\n/g,'<br>')}</p><small>${chatDate(a.created_at)}</small><div class="community-admin-actions"><button type="button" class="btn-outline" onclick="toggleAnnouncement('${a.id}',${!a.is_published})">${a.is_published?'Ocultar':'Publicar'}</button><button type="button" class="btn-outline" onclick="deleteAnnouncement('${a.id}')">Eliminar</button></div></article>`).join('') : '<p style="color:var(--muted)">Ainda não foram criados avisos.</p>';
+}
+
+// PUBLICAR/OCULTAR OU ELIMINAR AVISOS (ADMIN)
+window.toggleAnnouncement = async function(id, published) {
+  if (!currentUser || currentUserRole !== 'admin') return;
+  const { error } = await supabase.from('community_announcements').update({ is_published: published }).eq('id', id);
+  if (error) { alert('Não foi possível actualizar o aviso: ' + error.message); return; }
+  await Promise.all([loadAdminAnnouncements(), loadCommunityAnnouncements()]);
+};
+window.deleteAnnouncement = async function(id) {
+  if (!currentUser || currentUserRole !== 'admin') return;
+  if (!confirm('Eliminar definitivamente este aviso?')) return;
+  const { error } = await supabase.from('community_announcements').delete().eq('id', id);
+  if (error) { alert('Não foi possível eliminar o aviso: ' + error.message); return; }
+  await Promise.all([loadAdminAnnouncements(), loadCommunityAnnouncements()]);
+};
+
+$('adminAnnouncementForm')?.addEventListener('submit', async event => {
+  event.preventDefault();
+  if (!currentUser || currentUserRole !== 'admin') return;
+  const button = $('publishAnnouncementBtn'); button.disabled = true;
+  const { error } = await supabase.from('community_announcements').insert({
+    title: $('announcementTitle').value.trim(), message: $('announcementMessage').value.trim(),
+    is_published: $('announcementPublish').checked, created_by: currentUser.id
+  });
+  button.disabled = false;
+  if (error) { alert('Não foi possível publicar o aviso: ' + error.message); return; }
+  $('adminAnnouncementForm').reset(); $('announcementPublish').checked = true;
+  await Promise.all([loadAdminAnnouncements(), loadCommunityAnnouncements()]);
+  alert('Aviso guardado com sucesso.');
+});
 
 async function sendChatMessage(table, values, buttonId, inputId, reloadFn) {
   const input = $(inputId);
@@ -1679,44 +2076,41 @@ async function sendChatMessage(table, values, buttonId, inputId, reloadFn) {
   }
 }
 
+async function submitChatForm({ table, bucket, inputId, fileId, buttonId, reloadFn, extra = {}, parentId = null, ownerId = null }) {
+  const input = $(inputId), fileInput = $(fileId), button = $(buttonId);
+  const message = input?.value.trim(); const file = fileInput?.files?.[0] || null;
+  if (!currentUser || (!message && !file)) { alert('Escreve uma mensagem ou selecciona um anexo.'); return; }
+  if (button) button.disabled = true;
+  try {
+    const attachment = file ? await uploadChatAttachment(bucket, file, ownerId || currentUser.id) : {};
+    const { error } = await supabase.from(table).insert({ ...extra, sender_id: currentUser.id, sender_name: currentProfileName, sender_role: currentUserRole, message: message || (file ? 'Enviou um anexo.' : ''), ...attachment, ...(parentId ? { parent_id: parentId } : {}) });
+    if (error) throw error;
+    input.value = ''; if (fileInput) fileInput.value = '';
+    await reloadFn();
+  } catch (error) {
+    console.error('Erro ao enviar mensagem:', error);
+    alert('Não foi possível enviar a mensagem: ' + error.message);
+  } finally { if (button) button.disabled = false; }
+}
+
 $('communityMessageForm')?.addEventListener('submit', event => {
   event.preventDefault();
-  sendChatMessage('community_messages', message => ({
-    sender_id: currentUser.id, sender_name: currentProfileName,
-    sender_role: currentUserRole, message
-  }), 'sendCommunityMessageBtn', 'communityMessageInput', loadCommunityMessages);
+  if (currentUserRole !== 'student') return;
+  submitChatForm({ table:'community_messages', bucket:'community-attachments', inputId:'communityMessageInput', fileId:'communityAttachment', buttonId:'sendCommunityMessageBtn', reloadFn:loadCommunityMessages, parentId:communityReplyParentId });
+  clearCommunityReply();
 });
-
 $('adminCommunityMessageForm')?.addEventListener('submit', event => {
-  event.preventDefault();
-  if (currentUserRole !== 'admin') return;
-  sendChatMessage('community_messages', message => ({
-    sender_id: currentUser.id, sender_name: currentProfileName,
-    sender_role: 'admin', message
-  }), 'sendAdminCommunityMessageBtn', 'adminCommunityMessageInput', async () => {
-    await loadAdminCommunityMessages();
-    await loadCommunityMessages();
-  });
+  event.preventDefault(); if (currentUserRole !== 'admin') return;
+  submitChatForm({ table:'community_messages', bucket:'community-attachments', inputId:'adminCommunityMessageInput', fileId:'adminCommunityAttachment', buttonId:'sendAdminCommunityMessageBtn', reloadFn:async()=>{await loadAdminCommunityMessages();await loadCommunityMessages();}, parentId:communityReplyParentId });
+  clearCommunityReply();
 });
-
 $('studentSupportForm')?.addEventListener('submit', event => {
-  event.preventDefault();
-  sendChatMessage('support_messages', message => ({
-    user_id: currentUser.id, sender_id: currentUser.id,
-    sender_name: currentProfileName, sender_role: 'student', message
-  }), 'sendStudentSupportBtn', 'studentSupportInput', loadStudentSupportMessages);
+  event.preventDefault(); if (currentUserRole !== 'student') return;
+  submitChatForm({ table:'support_messages', bucket:'support-attachments', inputId:'studentSupportInput', fileId:'studentSupportAttachment', buttonId:'sendStudentSupportBtn', reloadFn:loadStudentSupportMessages, extra:{ user_id:currentUser.id }, ownerId:currentUser.id });
 });
-
 $('adminSupportForm')?.addEventListener('submit', event => {
-  event.preventDefault();
-  if (!selectedSupportUserId) { alert('Selecciona primeiro uma conversa de aluno.'); return; }
-  sendChatMessage('support_messages', message => ({
-    user_id: selectedSupportUserId, sender_id: currentUser.id,
-    sender_name: currentProfileName, sender_role: 'admin', message
-  }), 'sendAdminSupportBtn', 'adminSupportInput', async () => {
-    await window.openAdminSupportChat(selectedSupportUserId);
-    await loadAdminSupportUsers();
-  });
+  event.preventDefault(); if (!selectedSupportUserId || !selectedSupportConversationId) { alert('Selecciona primeiro uma conversa de aluno.'); return; }
+  submitChatForm({ table:'support_messages', bucket:'support-attachments', inputId:'adminSupportInput', fileId:'adminSupportAttachment', buttonId:'sendAdminSupportBtn', reloadFn:async()=>{await window.openAdminSupportChat(selectedSupportConversationId,selectedSupportUserId);await loadAdminSupportUsers();}, extra:{ user_id:selectedSupportUserId, conversation_id:selectedSupportConversationId }, ownerId:selectedSupportUserId });
 });
 
 async function startAcademyRealtime() {
@@ -1737,8 +2131,10 @@ async function startAcademyRealtime() {
     })
     .on('postgres_changes', { event: '*', schema: 'public', table: 'support_messages', ...(currentUserRole === 'student' ? { filter: 'user_id=eq.' + userId } : {}) }, () => {
       if (currentUserRole === 'student') loadStudentSupportMessages();
-      else { loadAdminSupportUsers(); if (selectedSupportUserId) window.openAdminSupportChat(selectedSupportUserId); }
+      else { loadAdminSupportUsers(); if (selectedSupportConversationId) window.openAdminSupportChat(selectedSupportConversationId, selectedSupportUserId); }
     })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'support_conversations' }, () => { if (currentUserRole === 'admin') loadAdminSupportUsers(); })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'community_announcements' }, () => { loadCommunityAnnouncements(); if (currentUserRole === 'admin') loadAdminAnnouncements(); })
     .subscribe(status => {
       if (status === 'CHANNEL_ERROR') console.error('Erro na ligação em tempo real do Supabase.');
     });
@@ -1938,8 +2334,9 @@ window.openLearningCourse = async function(courseId) {
   if (lessonIds.length > 0) {
     const { data: materials, error: materialsError } = await supabase
       .from('lesson_materials')
-      .select('id, lesson_id, title, file_name, storage_path, file_size')
-      .in('lesson_id', lessonIds);
+      .select('id, lesson_id, title, file_name, storage_path, file_size, material_type, description, display_order, is_downloadable, file_size_bytes')
+      .in('lesson_id', lessonIds)
+      .order('display_order', { ascending: true });
 
     if (materialsError) {
       console.error('Erro ao carregar materiais:', materialsError);
@@ -1986,6 +2383,17 @@ window.openLearningCourse = async function(courseId) {
     progress = progressRows || [];
   }
 
+  let notesByLesson = new Map();
+  if (lessonIds.length > 0) {
+    const { data: noteRows, error: notesError } = await supabase
+      .from('student_lesson_notes')
+      .select('lesson_id, note_text, updated_at')
+      .eq('user_id', currentUser.id)
+      .in('lesson_id', lessonIds);
+    if (notesError) console.warn('Não foi possível carregar as notas:', notesError);
+    else notesByLesson = new Map((noteRows || []).map(note => [note.lesson_id, note]));
+  }
+
   const completedIds = new Set(
     progress
       .filter(item => item.completed)
@@ -2029,7 +2437,7 @@ window.openLearningCourse = async function(courseId) {
              const lessonMaterials = materialsByLesson.get(lesson.id) || [];
 
              return `
-                <div style="border-top:1px solid #49305f;margin-top:15px;padding-top:15px">
+                <div id="lesson-${lesson.id}" style="border-top:1px solid #49305f;margin-top:15px;padding-top:15px">
 
                   <h4>
                     Aula ${lessonIndex + 1}: ${escapeHTML(lesson.title)}
@@ -2107,12 +2515,14 @@ ${lesson.content ? `
           <div>
             <strong>${escapeHTML(material.title)}</strong>
             <p style="font-size:12px;color:var(--muted)">
-              ${escapeHTML(material.file_name)}
+              ${escapeHTML(material.material_type || 'material')} · ${escapeHTML(material.file_name || '')}
             </p>
+            ${material.description ? `<p style="font-size:13px;color:var(--muted);margin-top:4px">${escapeHTML(material.description)}</p>` : ''}
           </div>
 
-          <a
+          ${material.is_downloadable === false ? '<span style="color:var(--muted);font-size:12px">Consulta online</span>' : `<a
             href="${escapeHTML(material.signedUrl)}"
+            download="${escapeHTML(material.file_name || material.title || 'material')}"
             target="_blank"
             rel="noopener noreferrer"
             style="
@@ -2126,20 +2536,27 @@ ${lesson.content ? `
               font-weight:bold;
             ">
             📥 Abrir / Descarregar
-          </a>
+          </a>`}
         </div>
       `).join('')}
     </div>
   ` : ''}
    
 
-                  <div style="margin-top:15px">
+                  <div class="dash-card" style="margin-top:14px;padding:13px;background:#10091a;border:1px solid #49305f">
+                    <label for="lesson-note-${lesson.id}" style="display:block;font-weight:700;margin-bottom:8px">📝 As minhas notas privadas</label>
+                    <textarea id="lesson-note-${lesson.id}" class="student-lesson-note" data-lesson-id="${lesson.id}" maxlength="10000" rows="3" placeholder="Escreve aqui apontamentos desta aula..." style="width:100%;padding:11px;border-radius:9px;border:1px solid #60447a;background:#160d20;color:white;resize:vertical">${escapeHTML(notesByLesson.get(lesson.id)?.note_text || '')}</textarea>
+                    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px">
+                      <small style="color:var(--muted)">Só tu podes consultar estas notas.</small>
+                      <button type="button" class="btn-outline save-lesson-note" data-lesson-id="${lesson.id}">💾 Guardar nota</button>
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:15px">
+                    <button type="button" class="btn-outline open-study-lesson" data-lesson-id="${lesson.id}">▶ Registar / continuar aula</button>
+                    <button type="button" class="btn-outline toggle-lesson-favorite" data-lesson-id="${lesson.id}">⭐ Guardar nos favoritos</button>
                     ${completed
-                      ? '<span style="color:#41d6a1;font-weight:bold">✅ Aula concluída</span>'
-                      : `<button class="btn complete-lesson"
-                           data-lesson-id="${lesson.id}">
-                           Marcar como concluída
-                         </button>`
+                      ? '<span style="color:#41d6a1;font-weight:bold;align-self:center">✅ Aula concluída</span>'
+                      : `<button class="btn complete-lesson" data-lesson-id="${lesson.id}">Marcar como concluída</button>`
                     }
                   </div>
 
@@ -2153,6 +2570,54 @@ ${lesson.content ? `
     `;
   }).join('');
 
+  // GUARDAR NOTAS PRIVADAS POR AULA
+  modulesContainer.querySelectorAll('.save-lesson-note').forEach(button => {
+    button.addEventListener('click', async () => {
+      const lessonId = button.dataset.lessonId;
+      const textarea = modulesContainer.querySelector(`#lesson-note-${CSS.escape(lessonId)}`);
+      const noteText = textarea?.value ?? '';
+      button.disabled = true;
+      const { error } = await supabase.from('student_lesson_notes').upsert({
+        user_id: currentUser.id,
+        lesson_id: lessonId,
+        note_text: noteText,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,lesson_id' });
+      button.disabled = false;
+      if (error) { alert('Não foi possível guardar a nota: ' + error.message); return; }
+      button.textContent = '✓ Nota guardada';
+      setTimeout(() => { button.textContent = '💾 Guardar nota'; }, 1800);
+    });
+  });
+
+  // CARREGAR FAVORITOS E LIGAR OS CONTROLos DE ESTUDO
+  let favoriteIds = new Set();
+  const { data: favoriteRows, error: favoriteError } = await supabase.rpc('get_student_lesson_favorites');
+  if (!favoriteError) favoriteIds = new Set((favoriteRows || []).map(item => item.lesson_id));
+  modulesContainer.querySelectorAll('.toggle-lesson-favorite').forEach(button => {
+    const lessonId = button.dataset.lessonId;
+    const isSaved = favoriteIds.has(lessonId);
+    button.textContent = isSaved ? '⭐ Remover dos favoritos' : '⭐ Guardar nos favoritos';
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      const { error } = await supabase.rpc('toggle_student_lesson_favorite', { p_lesson_id: lessonId, p_favorite: !favoriteIds.has(lessonId) });
+      button.disabled = false;
+      if (error) { alert('Não foi possível actualizar os favoritos: ' + error.message); return; }
+      if (favoriteIds.has(lessonId)) favoriteIds.delete(lessonId); else favoriteIds.add(lessonId);
+      button.textContent = favoriteIds.has(lessonId) ? '⭐ Remover dos favoritos' : '⭐ Guardar nos favoritos';
+    });
+  });
+  modulesContainer.querySelectorAll('.open-study-lesson').forEach(button => {
+    button.addEventListener('click', async () => {
+      const { error } = await supabase.rpc('record_lesson_activity', { p_lesson_id: button.dataset.lessonId, p_activity_type: 'opened' });
+      if (error) { alert('Não foi possível registar esta aula: ' + error.message); return; }
+      const lessonBlock = document.getElementById('lesson-' + button.dataset.lessonId);
+      lessonBlock?.scrollIntoView({behavior:'smooth', block:'center'});
+      button.textContent = '▶ Aula em estudo';
+      window.loadStudentLearningHub?.();
+    });
+  });
+
   // LIGAR OS BOTÕES DE CONCLUSÃO
   modulesContainer.querySelectorAll('.complete-lesson').forEach(button => {
     button.addEventListener('click', () => {
@@ -2165,28 +2630,50 @@ ${lesson.content ? `
 // MARCAR AULA COMO CONCLUÍDA
 window.markLessonComplete = async function(lessonId) {
   if (!currentUser) return;
-
-  const { error } = await supabase
-    .from('lesson_progress')
-    .upsert({
-      user_id: currentUser.id,
-      lesson_id: lessonId,
-      completed: true,
-      completed_at: new Date().toISOString()
-    }, {
-      onConflict: 'user_id,lesson_id'
-    });
-
-  if (error) {
-    alert('Não foi possível guardar o progresso: ' + error.message);
+  const { data, error } = await supabase.rpc('complete_student_lesson', {
+    p_lesson_id: lessonId
+  });
+  if (error || data !== true) {
+    alert('Não foi possível concluir a aula: ' + (error?.message || 'operação não confirmada.'));
     return;
   }
-
-  alert('🎉 Aula concluída! O teu progresso foi atualizado.');
-
+  alert('🎉 Aula concluída! O teu progresso foi actualizado.');
   await window.openLearningCourse(currentLearningCourseId);
+  window.loadStudentLearningHub?.();
 };
 
+
+// PESQUISAR CURSOS E CONTEÚDOS AUTORIZADOS AO ALUNO
+window.searchAcademyContent = async function() {
+  const input = document.getElementById('academySearchInput');
+  const results = document.getElementById('academySearchResults');
+  const term = (input?.value || '').trim();
+  if (!results) return;
+  if (term.length < 2) { results.textContent = 'Escreve pelo menos 2 caracteres.'; return; }
+  results.textContent = 'A pesquisar...';
+  const { data, error } = await supabase.rpc('search_academy_content', {
+    p_search: term,
+    p_limit: 50
+  });
+  if (error) { results.textContent = 'Erro na pesquisa: ' + error.message; return; }
+  if (!data?.length) { results.textContent = 'Não foram encontrados resultados nos teus cursos activos.'; return; }
+  results.innerHTML = data.map((item, index) => `
+    <button type="button" class="btn-outline academy-search-result" data-index="${index}" style="display:block;width:100%;text-align:left;margin-top:7px;padding:12px">
+      <strong>${item.result_type === 'curso' ? '📚 Curso' : '🎓 Aula'}: ${escapeHTML(item.result_type === 'curso' ? item.course_title : item.lesson_title)}</strong>
+      ${item.result_type === 'aula' ? `<small style="display:block;color:var(--muted);margin-top:4px">${escapeHTML(item.course_title)} · ${escapeHTML(item.module_title || '')}</small>` : ''}
+    </button>`).join('');
+  results.querySelectorAll('.academy-search-result').forEach(button => {
+    button.addEventListener('click', async () => {
+      const item = data[Number(button.dataset.index)];
+      await window.openLearningCourse(item.course_id);
+      if (item.lesson_id) {
+        const target = document.getElementById('lesson-' + item.lesson_id);
+        target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        await supabase.rpc('record_lesson_activity', { p_lesson_id: item.lesson_id, p_activity_type: 'opened' });
+      }
+    });
+  });
+};
 
 // VOLTAR À LISTA DE INSCRIÇÕES
 window.closeLearningCourse = function() {
@@ -2315,9 +2802,75 @@ window.showCatalog = function() {
 };
 
 
+// ==========================================
+// EXPERIÊNCIA DE APRENDIZAGEM DO ALUNO
+// ==========================================
+function academyDate(value) {
+  if (!value) return '—';
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? '—' : d.toLocaleString('pt-MZ', {dateStyle:'medium', timeStyle:'short'});
+}
+
+window.loadStudentLearningHub = async function() {
+  if (!currentUser) return;
+  const resume = $('studentResumeCard');
+  const coursesBox = $('studentProgressCourses');
+  if (resume) resume.textContent = 'A carregar a tua última aula...';
+  if (coursesBox) coursesBox.innerHTML = '<div class="dash-card">A calcular o progresso...</div>';
+  const { data, error } = await supabase.rpc('get_student_learning_dashboard');
+  if (error) {
+    if (resume) resume.textContent = 'Não foi possível carregar o painel: ' + error.message;
+    if (coursesBox) coursesBox.innerHTML = '';
+    return;
+  }
+  const last = data?.last_lesson;
+  if (resume) resume.innerHTML = last
+    ? `<strong>▶ Retomar aprendizagem</strong><p style="margin:8px 0">${escapeHTML(last.lesson_title)} · ${escapeHTML(last.course_title)}</p><small style="color:var(--muted)">Último acesso: ${academyDate(last.last_accessed_at)}</small><div style="margin-top:12px"><button class="btn" onclick="resumeStudentLesson('${last.course_id}','${last.lesson_id}')">Continuar última aula</button></div>`
+    : '<strong>🎓 Ainda não começaste uma aula.</strong><p style="margin-top:8px;color:var(--muted)">Quando começares a estudar, a tua última aula aparecerá aqui.</p>';
+  const courses = data?.courses || [];
+  if (coursesBox) coursesBox.innerHTML = courses.length ? courses.map(c => `<article class="dash-card"><h3>${escapeHTML(c.course_title)}</h3><p style="margin:8px 0;color:var(--muted)">${c.completed_lessons} de ${c.total_lessons} aulas concluídas</p><div style="height:9px;background:#38234e;border-radius:20px;overflow:hidden"><div style="height:100%;width:${Math.min(100,Number(c.progress_percentage)||0)}%;background:var(--green)"></div></div><strong style="display:block;margin-top:8px">${Number(c.progress_percentage)||0}% concluído</strong></article>`).join('') : '<div class="dash-card">Ainda não tens cursos activos para acompanhar.</div>';
+};
+
+window.resumeStudentLesson = async function(courseId, lessonId) {
+  await window.openLearningCourse(courseId);
+  const { error } = await supabase.rpc('record_lesson_activity', {p_lesson_id:lessonId,p_activity_type:'opened'});
+  if (error) console.warn('Não foi possível registar a retoma:', error);
+  setTimeout(() => {
+    document.getElementById('lesson-' + lessonId)?.scrollIntoView({behavior:'smooth',block:'center'});
+  }, 350);
+};
+
+window.loadStudentFavorites = async function() {
+  const box = $('studentFavoritesList'); if (!box || !currentUser) return;
+  box.innerHTML = '<div class="dash-card">A carregar favoritos...</div>';
+  const {data,error} = await supabase.rpc('get_student_lesson_favorites');
+  if (error) { box.innerHTML = `<div class="dash-card">Erro ao carregar favoritos: ${escapeHTML(error.message)}</div>`; return; }
+  box.innerHTML = data?.length ? data.map(x => `<article class="dash-card"><h3>⭐ ${escapeHTML(x.lesson_title)}</h3><p style="color:var(--muted);margin:6px 0">${escapeHTML(x.course_title)}</p><small>Guardada em ${academyDate(x.saved_at)}</small><div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="openLearningCourse('${x.course_id}')">Abrir curso</button><button class="btn-outline" onclick="removeStudentFavorite('${x.lesson_id}')">Remover</button></div></article>`).join('') : '<div class="dash-card">Ainda não guardaste aulas nos favoritos.</div>';
+};
+window.removeStudentFavorite = async function(lessonId) {
+  const {error} = await supabase.rpc('toggle_student_lesson_favorite',{p_lesson_id:lessonId,p_favorite:false});
+  if (error) { alert('Não foi possível remover: '+error.message); return; }
+  window.loadStudentFavorites();
+};
+window.loadStudentHistory = async function() {
+  const box = $('studentHistoryList'); if (!box || !currentUser) return;
+  box.innerHTML = '<div class="dash-card">A carregar histórico...</div>';
+  const {data,error} = await supabase.rpc('get_student_learning_history',{p_limit:100});
+  if (error) { box.innerHTML = `<div class="dash-card">Erro ao carregar histórico: ${escapeHTML(error.message)}</div>`; return; }
+  box.innerHTML = data?.length ? `<div class="dash-card">${data.map(x => `<div style="padding:12px 0;border-bottom:1px solid #38234e"><strong>${x.activity_type==='completed'?'✅ Aula concluída':'▶ Aula aberta'}: ${escapeHTML(x.lesson_title)}</strong><p style="color:var(--muted);margin-top:4px">${escapeHTML(x.course_title||'Curso indisponível')} · ${academyDate(x.activity_date)}</p></div>`).join('')}</div>` : '<div class="dash-card">O teu histórico aparecerá aqui quando começares a estudar.</div>';
+};
+window.loadStudentCalendar = async function() {
+  const box = $('studentCalendarList'); if (!box || !currentUser) return;
+  box.innerHTML = '<div class="dash-card">A carregar calendário...</div>';
+  const {data,error} = await supabase.rpc('get_student_academy_calendar',{p_limit:200});
+  if (error) { box.innerHTML = `<div class="dash-card">Erro ao carregar calendário: ${escapeHTML(error.message)}</div>`; return; }
+  const labels={assessment:'📝 Teste / Exame',deadline:'⏰ Prazo',live_class:'🎥 Aula ao vivo',announcement:'📢 Comunicado',other:'📌 Outro'};
+  box.innerHTML = data?.length ? `<div class="dash-card">${data.map(x => `<article style="padding:14px 0;border-bottom:1px solid #38234e"><strong>${labels[x.event_type]||'📌 Evento'} · ${escapeHTML(x.title)}</strong><p style="margin:6px 0;color:var(--muted)">${escapeHTML(x.course_title||'Todos os cursos')} · ${academyDate(x.starts_at)}${x.ends_at?' — '+academyDate(x.ends_at):''}</p>${x.description?`<p>${escapeHTML(x.description)}</p>`:''}</article>`).join('')}</div>` : '<div class="dash-card">Ainda não existem eventos publicados no calendário.</div>';
+};
+
 // NAVEGAÇÃO DA ÁREA DO ALUNO
 window.showStudentPanel = function(panelName, scroll = true) {
-  const valid = ['overview', 'courses', 'learning', 'profile', 'notifications', 'community', 'support'];
+  const valid = ['overview', 'courses', 'learning', 'progress', 'favorites', 'history', 'calendar', 'certificates', 'assessments', 'profile', 'notifications', 'community', 'support'];
   if (!valid.includes(panelName)) return;
   document.querySelectorAll('.student-page').forEach(page => page.classList.remove('active'));
   document.querySelectorAll('.student-menu-button').forEach(button => {
@@ -2325,8 +2878,14 @@ window.showStudentPanel = function(panelName, scroll = true) {
   });
   const page = document.getElementById('studentPage' + panelName.charAt(0).toUpperCase() + panelName.slice(1));
   if (page) page.classList.add('active');
+  if (panelName === 'progress') window.loadStudentLearningHub?.();
+  if (panelName === 'favorites') window.loadStudentFavorites?.();
+  if (panelName === 'history') window.loadStudentHistory?.();
+  if (panelName === 'calendar') window.loadStudentCalendar?.();
+  if (panelName === 'certificates') window.loadStudentCertificates?.();
+  if (panelName === 'assessments') { window.loadStudentAssessments?.(); window.loadStudentAssessmentHistory?.(); }
   if (panelName === 'notifications') window.loadStudentNotifications?.();
-  if (panelName === 'community') loadCommunityMessages();
+  if (panelName === 'community') { loadCommunityMessages(); loadCommunityAnnouncements(); }
   if (panelName === 'support') loadStudentSupportMessages();
   if (panelName === 'learning' && !$('learningPanel')?.classList.contains('hidden')) {
     $('studentLearningShortcut').classList.add('hidden');
@@ -2492,6 +3051,147 @@ window.createCourse = async function(event) {
  message.textContent = '✅ Curso guardado com sucesso!';
 $('courseForm').reset();
 await loadAdminCourses();
+
+// ==========================================
+// CERTIFICADOS DIGITAIS MUSSILIPO ACADEMY
+// ==========================================
+function certificateVerifyUrl(code) {
+  const url = new URL(window.location.href);
+  url.search = '';
+  url.hash = '';
+  url.searchParams.set('certificate', code);
+  return url.toString();
+}
+
+function certificateDate(value) {
+  return value ? new Date(value).toLocaleDateString('pt-MZ', {day:'2-digit',month:'long',year:'numeric'}) : '—';
+}
+
+window.loadStudentCertificates = async function() {
+  const box = $('studentCertificatesList');
+  if (!box || !currentUser) return;
+  box.innerHTML = '<div class="dash-card">A carregar certificados...</div>';
+  const {data, error} = await supabase
+    .from('certificates')
+    .select('id, certificate_code, issued_at, revoked_at, course_id')
+    .eq('user_id', currentUser.id)
+    .order('issued_at', {ascending:false});
+  if (error) {
+    box.innerHTML = '<div class="dash-card">Não foi possível carregar os certificados: '+escapeHTML(error.message)+'</div>';
+    return;
+  }
+  if (!data?.length) {
+    box.innerHTML = '<div class="dash-card"><h3>Ainda não tens certificados</h3><p style="margin-top:8px;color:var(--muted)">Quando concluíres todas as aulas publicadas de um curso e a administração emitir o certificado, ele aparecerá aqui.</p></div>';
+    return;
+  }
+  const courseIds = [...new Set(data.map(c=>c.course_id))];
+  const {data:courses} = await supabase.from('courses').select('id,title').in('id',courseIds);
+  const courseMap = Object.fromEntries((courses||[]).map(c=>[c.id,c.title]));
+  box.innerHTML = data.map((cert,i)=>{
+    const revoked = !!cert.revoked_at;
+    return `<article class="certificate-card" id="studentCert-${i}">
+      <div style="font-size:13px;letter-spacing:3px;color:#76539b;font-weight:800">MUSSILIPO ACADEMY</div>
+      <div style="font-size:42px;margin:8px">🎓</div>
+      <h2>CERTIFICADO DE CONCLUSÃO</h2>
+      <p>Certificamos que</p>
+      <div class="cert-name">${escapeHTML(currentProfileName || currentUser.user_metadata?.full_name || 'Aluno')}</div>
+      <p>concluiu com sucesso o curso</p>
+      <h3 style="color:#54258d;margin:8px 0">${escapeHTML(courseMap[cert.course_id] || 'Curso')}</h3>
+      <div class="certificate-meta"><span>Emitido em: ${certificateDate(cert.issued_at)}</span><span>Código: ${escapeHTML(cert.certificate_code)}</span></div>
+      <div class="certificate-qr"><div id="certQr-${i}"></div><small style="color:#49385d">Lê para verificar autenticidade</small></div>
+      <p style="margin-top:12px;font-weight:800;color:${revoked?'#b91c1c':'#15803d'}">${revoked?'CERTIFICADO REVOGADO':'CERTIFICADO VÁLIDO'}</p>
+      <div style="margin-top:16px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
+        <button class="btn" type="button" onclick="window.printCertificate('studentCert-${i}')">🖨️ Imprimir / Guardar PDF</button>
+        <button class="btn-outline cert-copy-link" type="button">🔗 Copiar ligação de verificação</button>
+      </div>
+    </article>`;
+  }).join('');
+  data.forEach((cert,i)=>{
+    const target = $('certQr-'+i);
+    if (target && window.QRCode) new QRCode(target,{text:certificateVerifyUrl(cert.certificate_code),width:132,height:132,correctLevel:QRCode.CorrectLevel.M});
+    const article = $('studentCert-'+i);
+    const copyButton = article?.querySelector('.cert-copy-link');
+    if (copyButton) copyButton.addEventListener('click',()=>{
+      const link=certificateVerifyUrl(cert.certificate_code);
+      if(navigator.clipboard?.writeText) navigator.clipboard.writeText(link).then(()=>alert('Ligação copiada!')).catch(()=>prompt('Copia esta ligação:',link));
+      else prompt('Copia esta ligação:',link);
+    });
+  });
+};
+
+window.printCertificate = function(id) {
+  const card = document.getElementById(id);
+  if (!card) return;
+  document.querySelectorAll('.certificate-card').forEach(el=>el.dataset.printHidden='true');
+  card.dataset.printHidden='false';
+  window.print();
+  document.querySelectorAll('.certificate-card').forEach(el=>delete el.dataset.printHidden);
+};
+
+window.loadAdminCertificates = async function() {
+  const box = $('adminCertificatesContent');
+  if (!box || currentUserRole !== 'admin') return;
+  box.innerHTML = 'A carregar alunos e certificados...';
+  const [enrRes, profRes, courseRes, certRes, modulesRes, lessonsRes, progressRes] = await Promise.all([
+    supabase.from('enrollments').select('user_id,course_id,status').eq('status','active'),
+    supabase.from('profiles').select('id,full_name').eq('role','student'),
+    supabase.from('courses').select('id,title'),
+    supabase.from('certificates').select('id,user_id,course_id,certificate_code,issued_at,revoked_at,revoked_reason').order('issued_at',{ascending:false}),
+    supabase.from('modules').select('id,course_id'),
+    supabase.from('lessons').select('id,module_id,is_published').eq('is_published',true),
+    supabase.from('lesson_progress').select('user_id,lesson_id,completed').eq('completed',true)
+  ]);
+  const failed=[enrRes,profRes,courseRes,certRes,modulesRes,lessonsRes,progressRes].find(r=>r.error);
+  if (failed) { box.innerHTML='<p style="color:#f87171">Erro ao carregar: '+escapeHTML(failed.error.message)+'</p>'; return; }
+  const profiles=Object.fromEntries((profRes.data||[]).map(x=>[x.id,x]));
+  const courses=Object.fromEntries((courseRes.data||[]).map(x=>[x.id,x]));
+  const moduleCourse=Object.fromEntries((modulesRes.data||[]).map(x=>[x.id,x.course_id]));
+  const lessonsByCourse={};
+  (lessonsRes.data||[]).forEach(l=>{const cid=moduleCourse[l.module_id];if(cid)(lessonsByCourse[cid]??=[]).push(l.id);});
+  const progressByUser={};
+  (progressRes.data||[]).forEach(x=>{if(x.completed)(progressByUser[x.user_id]??=new Set()).add(x.lesson_id);});
+  const certKey=new Map((certRes.data||[]).map(c=>[c.user_id+'|'+c.course_id,c]));
+  const enrollments=enrRes.data||[];
+  const rows=enrollments.map(e=>{
+    const lessons=lessonsByCourse[e.course_id]||[];
+    const done=lessons.filter(id=>progressByUser[e.user_id]?.has(id)).length;
+    return {...e,lessons:lessons.length,done,ready:lessons.length>0&&done>=lessons.length,cert:certKey.get(e.user_id+'|'+e.course_id)};
+  });
+  box.innerHTML=`<h3>Alunos com matrícula aprovada</h3><p style="color:var(--muted);margin:5px 0 12px">A emissão só fica disponível quando todas as aulas publicadas estiverem concluídas.</p>`+
+    (rows.length?rows.map((r,i)=>`<div class="cert-admin-row"><div><strong>${escapeHTML(profiles[r.user_id]?.full_name||'Aluno')}</strong><p style="font-size:13px;color:var(--muted)">${escapeHTML(courses[r.course_id]?.title||'Curso')} · ${r.done}/${r.lessons} aulas concluídas</p><p style="font-size:12px">${r.cert?(r.cert.revoked_at?'<span class="cert-status-revoked">Revogado</span>':'<span class="cert-status-valid">Certificado emitido</span>'):(r.ready?'<span class="cert-status-valid">Elegível para emissão</span>':'<span style="color:#fbbf24">Em conclusão</span>')}</p>${r.cert?`<small>Código: ${escapeHTML(r.cert.certificate_code)}</small>`:''}</div><div>${!r.cert||r.cert.revoked_at?`<button class="btn" type="button" data-issue="${i}" ${r.ready?'':'disabled'}>${r.cert?'Emitir novamente':'Emitir certificado'}</button>`: `<button class="btn-outline" type="button" data-revoke="${i}">Revogar</button>`}</div></div>`).join(''):'<p>Ainda não existem matrículas aprovadas.</p>')+
+    `<h3 style="margin-top:25px">Histórico de certificados</h3>`+
+    ((certRes.data||[]).length?(certRes.data||[]).map(c=>`<div class="cert-admin-row"><div><strong>${escapeHTML(profiles[c.user_id]?.full_name||'Aluno')}</strong><p style="font-size:13px;color:var(--muted)">${escapeHTML(courses[c.course_id]?.title||'Curso')} · ${escapeHTML(c.certificate_code)}</p><small>${c.revoked_at?'Revogado em '+certificateDate(c.revoked_at):'Emitido em '+certificateDate(c.issued_at)}</small></div><span class="${c.revoked_at?'cert-status-revoked':'cert-status-valid'}">${c.revoked_at?'REVOGADO':'VÁLIDO'}</span></div>`).join(''):'<p>Ainda não foram emitidos certificados.</p>');
+  box.querySelectorAll('[data-issue]').forEach(btn=>btn.addEventListener('click',async()=>{
+    const row=rows[Number(btn.dataset.issue)]; if(!row||!confirm('Emitir certificado para '+(profiles[row.user_id]?.full_name||'este aluno')+'?'))return;
+    btn.disabled=true;btn.textContent='A emitir...';
+    const {error}=await supabase.rpc('admin_issue_certificate',{p_user_id:row.user_id,p_course_id:row.course_id});
+    if(error){alert('Não foi possível emitir: '+error.message);btn.disabled=false;btn.textContent='Tentar novamente';return;}
+    alert('Certificado emitido com sucesso!'); await window.loadAdminCertificates();
+  }));
+  box.querySelectorAll('[data-revoke]').forEach(btn=>btn.addEventListener('click',async()=>{
+    const row=rows[Number(btn.dataset.revoke)]; if(!row?.cert)return;
+    const reason=prompt('Indica o motivo da revogação (mínimo 3 caracteres):'); if(reason===null)return;
+    const {error}=await supabase.rpc('admin_revoke_certificate',{p_certificate_id:row.cert.id,p_reason:reason});
+    if(error){alert('Não foi possível revogar: '+error.message);return;}
+    alert('Certificado revogado.'); await window.loadAdminCertificates();
+  }));
+};
+
+window.verifyCertificateFromUrl = async function() {
+  const code=new URLSearchParams(window.location.search).get('certificate');
+  if(!code)return;
+  const modal=$('certificateVerification'); if(!modal)return;
+  modal.classList.add('show');
+  const result=$('certificateVerifyResult');
+  result.innerHTML='A verificar certificado...';
+  const {data,error}=await supabase.rpc('verify_certificate',{p_certificate_code:code});
+  if(error){result.innerHTML='<p style="color:#f87171">Não foi possível verificar este certificado. Tenta novamente.</p>';return;}
+  const cert=Array.isArray(data)?data[0]:data;
+  if(!cert){result.innerHTML='<p style="color:#fbbf24;font-weight:bold">CERTIFICADO NÃO ENCONTRADO</p><p>O código indicado não corresponde a um certificado registado na Mussilipo Academy.</p>';return;}
+  const valid=cert.certificate_status==='VÁLIDO';
+  result.innerHTML=`<p style="font-size:20px;font-weight:900;color:${valid?'#20c997':'#f87171'}">${valid?'✓ CERTIFICADO VÁLIDO':'✕ CERTIFICADO REVOGADO'}</p><p style="margin-top:12px"><strong>Aluno:</strong> ${escapeHTML(cert.student_name||'—')}</p><p><strong>Curso:</strong> ${escapeHTML(cert.course_title||'—')}</p><p><strong>Data de emissão:</strong> ${certificateDate(cert.issued_at)}</p><p><strong>Código:</strong> ${escapeHTML(cert.certificate_code)}</p><p style="margin-top:12px;font-size:12px;color:var(--muted)">Verificado na plataforma oficial Mussilipo Academy.</p>`;
+};
+
 await loadPublicCourses();
   } catch (error) {
     console.error('Erro ao criar curso:', error);
@@ -2985,10 +3685,22 @@ window.loadAdminLessons = async function() {
 
   container.innerHTML = `
     <h3 style="margin-bottom:12px">📖 Aulas deste módulo</h3>
+    <div class="dash-card" style="margin-bottom:12px">
+      <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="selectAllBulkLessons" style="width:auto"> Seleccionar todas as aulas deste módulo</label>
+      <div class="assessment-actions" style="margin-top:12px">
+        <button type="button" class="btn" onclick="bulkPublishSelectedLessons(true)">Publicar seleccionadas</button>
+        <button type="button" class="btn-outline" onclick="bulkPublishSelectedLessons(false)">Despublicar seleccionadas</button>
+        <button type="button" class="btn-outline" onclick="bulkDeleteSelectedLessons()">Eliminar seleccionadas</button>
+      </div>
+      <p id="bulkLessonsMessage" aria-live="polite" style="margin-top:8px"></p>
+    </div>
 
     ${lessons.map((lesson, index) => `
       <div class="dash-card" style="margin-top:12px">
-
+        <label style="display:flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--muted)">
+          <input class="bulk-lesson-checkbox" type="checkbox" value="${lesson.id}" style="width:auto">
+          Seleccionar para operação em massa
+        </label>
         <strong>
           ${index + 1}. ${escapeHTML(lesson.title)}
         </strong>
@@ -3021,6 +3733,10 @@ window.loadAdminLessons = async function() {
     button.addEventListener('click', () => {
       window.editAdminLesson(button.dataset.lessonId);
     });
+  });
+  const selectAll = $('selectAllBulkLessons');
+  selectAll?.addEventListener('change', () => {
+    container.querySelectorAll('.bulk-lesson-checkbox').forEach(box => { box.checked = selectAll.checked; });
   });
 };
 
@@ -3244,16 +3960,144 @@ window.organizeAdminPanels = function() {
 };
 
 
+// ==========================================
+// GESTÃO DO CALENDÁRIO ACADÉMICO (ADMIN)
+// ==========================================
+window.resetAdminCalendarForm = function() {
+  $('adminCalendarForm')?.reset();
+  $('calendarEventId').value = '';
+  $('calendarPublished').checked = true;
+  $('calendarSaveBtn').textContent = 'Guardar evento';
+};
+window.loadAdminCalendarEvents = async function() {
+  const box = $('adminCalendarEvents'); if (!box) return;
+  box.textContent = 'A carregar eventos...';
+  const {data,error} = await supabase.from('academy_calendar_events').select('id,title,description,event_type,course_id,starts_at,ends_at,is_published').order('starts_at',{ascending:true});
+  if (error) { box.textContent = 'Erro ao carregar eventos: '+error.message; return; }
+  const {data: courses} = await supabase.from('courses').select('id,title').order('title');
+  const select = $('calendarCourse');
+  if (select) { const current=select.value; select.innerHTML='<option value="">Todos os alunos</option>'+(courses||[]).map(c=>`<option value="${c.id}">${escapeHTML(c.title)}</option>`).join(''); select.value=current; }
+  const labels={assessment:'Teste / Exame',deadline:'Prazo',live_class:'Aula ao vivo',announcement:'Comunicado',other:'Outro'};
+  box.innerHTML = data?.length ? data.map(x=>`<article style="padding:14px 0;border-bottom:1px solid #38234e"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><strong>${escapeHTML(x.title)}</strong><p style="color:var(--muted);margin:5px 0">${labels[x.event_type]||x.event_type} · ${academyDate(x.starts_at)} · ${x.is_published?'Publicado':'Rascunho'}</p><p>${escapeHTML(x.description||'')}</p></div><div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap"><button class="btn-outline" onclick="editAdminCalendarEvent('${x.id}')">Editar</button><button class="btn-outline" onclick="deleteAdminCalendarEvent('${x.id}')">Eliminar</button></div></div></article>`).join('') : 'Ainda não existem eventos no calendário.';
+  window.adminCalendarCache = data || [];
+};
+window.saveAdminCalendarEvent = async function(event) {
+  event.preventDefault();
+  const msg=$('adminCalendarMessage'); msg.textContent='A guardar evento...';
+  const toIso=id=>$(id).value ? new Date($(id).value).toISOString() : null;
+  const args={p_title:$('calendarTitle').value.trim(),p_event_type:$('calendarType').value,p_starts_at:toIso('calendarStartsAt'),p_event_id:$('calendarEventId').value||null,p_description:$('calendarDescription').value.trim()||null,p_course_id:$('calendarCourse').value||null,p_ends_at:toIso('calendarEndsAt'),p_is_published:$('calendarPublished').checked};
+  const {error}=await supabase.rpc('admin_save_calendar_event',args);
+  if(error){msg.textContent='Erro: '+error.message;return;}
+  msg.textContent='✅ Evento guardado.'; window.resetAdminCalendarForm(); await window.loadAdminCalendarEvents();
+};
+window.editAdminCalendarEvent = function(id) {
+  const x=(window.adminCalendarCache||[]).find(e=>e.id===id); if(!x)return;
+  $('calendarEventId').value=x.id; $('calendarTitle').value=x.title; $('calendarType').value=x.event_type; $('calendarDescription').value=x.description||''; $('calendarCourse').value=x.course_id||''; $('calendarStartsAt').value=new Date(x.starts_at).toISOString().slice(0,16); $('calendarEndsAt').value=x.ends_at?new Date(x.ends_at).toISOString().slice(0,16):''; $('calendarPublished').checked=x.is_published; $('calendarSaveBtn').textContent='Actualizar evento'; $('adminCalendarForm').scrollIntoView({behavior:'smooth',block:'center'});
+};
+window.deleteAdminCalendarEvent = async function(id) {
+  if(!confirm('Tens a certeza de que queres eliminar este evento?'))return;
+  const {error}=await supabase.from('academy_calendar_events').delete().eq('id',id);
+  if(error){alert('Não foi possível eliminar: '+error.message);return;}
+  await window.loadAdminCalendarEvents();
+};
+
+// ==========================================
+// AUDITORIA, ACTIVIDADE E PERMISSÕES ADMIN
+// ==========================================
+window.loadAdminAuditLogs = async function() {
+  const box = $('adminAuditLogs'); if (!box) return;
+  box.textContent = 'A consultar histórico...';
+  const table = $('auditTableFilter')?.value || null;
+  const action = $('auditActionFilter')?.value || null;
+  const {data,error} = await supabase.rpc('admin_get_audit_logs', {
+    p_limit: 100, p_offset: 0, p_table_name: table, p_action: action
+  });
+  if (error) { box.textContent = 'Erro ao consultar auditoria: ' + error.message; return; }
+  if (!data?.length) { box.innerHTML = '<p>Não existem registos para estes filtros.</p>'; return; }
+  box.innerHTML = `<table class="admin-stats-table"><thead><tr><th>Data</th><th>Administrador</th><th>Acção</th><th>Tabela</th><th>Registo</th><th>Detalhes</th></tr></thead><tbody>${data.map((r,i)=>`<tr><td>${escapeHTML(academyDate(r.created_at))}</td><td>${escapeHTML(r.administrator_name||'—')}</td><td>${escapeHTML(r.action)}</td><td>${escapeHTML(r.table_name)}</td><td>${escapeHTML(r.record_id||'—')}</td><td><details><summary>Ver dados</summary><strong>Antes</strong><pre style="white-space:pre-wrap;max-width:420px;overflow:auto">${escapeHTML(r.old_data?JSON.stringify(r.old_data,null,2):'—')}</pre><strong>Depois</strong><pre style="white-space:pre-wrap;max-width:420px;overflow:auto">${escapeHTML(r.new_data?JSON.stringify(r.new_data,null,2):'—')}</pre></details></td></tr>`).join('')}</tbody></table>`;
+};
+
+window.loadAdminRecentActivity = async function() {
+  const box = $('adminRecentActivity'); if (!box) return;
+  box.textContent = 'A consultar actividade...';
+  const {data,error} = await supabase.rpc('admin_get_recent_activity',{p_limit:30});
+  if (error) { box.textContent = 'Erro ao carregar actividade: ' + error.message; return; }
+  if (!data?.length) { box.innerHTML = '<p>Ainda não existem operações registadas.</p>'; return; }
+  box.innerHTML = `<table class="admin-stats-table"><thead><tr><th>Data</th><th>Administrador</th><th>Acção</th><th>Área</th><th>Registo</th></tr></thead><tbody>${data.map(r=>`<tr><td>${escapeHTML(academyDate(r.activity_date))}</td><td>${escapeHTML(r.administrator_name||'—')}</td><td>${escapeHTML(r.action)}</td><td>${escapeHTML(r.affected_area)}</td><td>${escapeHTML(r.record_id||'—')}</td></tr>`).join('')}</tbody></table>`;
+};
+
+window.loadAdminPermissionGrants = async function() {
+  const box = $('adminPermissionGrants'); if (!box) return;
+  box.textContent = 'A consultar permissões...';
+  const {data,error} = await supabase.from('admin_permission_grants').select('id,admin_user_id,permission_key,granted_by,created_at').order('created_at',{ascending:false}).limit(300);
+  if (error) { box.textContent = 'Erro ao consultar permissões: ' + error.message; return; }
+  if (!data?.length) { box.innerHTML = '<p>Ainda não foram atribuídas permissões específicas.</p>'; return; }
+  box.innerHTML = `<table class="admin-stats-table"><thead><tr><th>UUID administrador</th><th>Permissão</th><th>Data</th><th>Acção</th></tr></thead><tbody>${data.map(r=>`<tr><td>${escapeHTML(r.admin_user_id)}</td><td>${escapeHTML(r.permission_key)}</td><td>${escapeHTML(academyDate(r.created_at))}</td><td><button type="button" class="btn-outline" onclick="quickRevokeAdminPermission('${r.admin_user_id}','${r.permission_key}')">Retirar</button></td></tr>`).join('')}</tbody></table>`;
+};
+
+window.setAdminPermission = async function(enabled) {
+  const userId = $('permissionAdminUserId')?.value.trim();
+  const key = $('permissionKey')?.value;
+  const message = $('adminPermissionMessage');
+  if (!userId || !key) { if(message) message.textContent='Indica o UUID e a permissão.'; return; }
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(userId)) { if(message) message.textContent='O UUID não tem um formato válido.'; return; }
+  const verb = enabled ? 'conceder' : 'retirar';
+  if (!confirm(`Confirmas ${verb} a permissão ${key} a este administrador?`)) return;
+  const {error} = await supabase.rpc('admin_set_permission',{p_admin_user_id:userId,p_permission_key:key,p_enabled:enabled});
+  if (error) { if(message) message.textContent='Não foi possível actualizar a permissão: '+error.message; return; }
+  if (message) message.textContent = enabled ? 'Permissão concedida.' : 'Permissão retirada.';
+  await window.loadAdminPermissionGrants();
+};
+window.quickRevokeAdminPermission = async function(userId,key) {
+  $('permissionAdminUserId').value = userId; $('permissionKey').value = key;
+  await window.setAdminPermission(false);
+};
+
+function getSelectedBulkLessonIds() {
+  return Array.from(document.querySelectorAll('#adminLessons .bulk-lesson-checkbox:checked')).map(x=>x.value).filter(Boolean);
+}
+window.bulkPublishSelectedLessons = async function(publish) {
+  const ids = getSelectedBulkLessonIds(); const message = $('bulkLessonsMessage');
+  if (!ids.length) { if(message) message.textContent='Selecciona pelo menos uma aula.'; return; }
+  if (ids.length > 200) { if(message) message.textContent='O limite é de 200 aulas por operação.'; return; }
+  if (!confirm(`Confirmas ${publish?'publicar':'despublicar'} ${ids.length} aula(s)?`)) return;
+  if(message) message.textContent='A actualizar aulas...';
+  const {data,error} = await supabase.rpc('admin_bulk_publish_lessons',{p_lesson_ids:ids,p_publish:publish});
+  if(error) { if(message) message.textContent='Erro: '+error.message; return; }
+  if(message) message.textContent=`Operação concluída: ${data} aula(s) actualizada(s).`;
+  await window.loadAdminLessons();
+};
+window.bulkDeleteSelectedLessons = async function() {
+  const ids = getSelectedBulkLessonIds(); const message = $('bulkLessonsMessage');
+  if (!ids.length) { if(message) message.textContent='Selecciona pelo menos uma aula.'; return; }
+  if (ids.length > 100) { if(message) message.textContent='O limite é de 100 aulas por eliminação.'; return; }
+  if (!confirm(`ATENÇÃO: vais eliminar definitivamente ${ids.length} aula(s) e os dados dependentes configurados para cascata. Esta operação não pode ser anulada. Continuar?`)) return;
+  if(message) message.textContent='A eliminar aulas...';
+  const {data,error} = await supabase.rpc('admin_bulk_delete_lessons',{p_lesson_ids:ids});
+  if(error) { if(message) message.textContent='Erro: '+error.message; return; }
+  if(message) message.textContent=`Eliminação concluída: ${data} aula(s) removida(s).`;
+  await window.loadAdminModules();
+};
+
 // ABRIR UM PAINEL DO MENU LATERAL
 window.showAdminPanel = function(panelName) {
 
   const validPanels = [
     'overview',
+    'statistics',
+    'reports',
+    'calendar',
     'students',
     'courses',
     'content',
     'materials',
     'enrollments',
+    'certificates',
+    'assessments',
+    'audit',
+    'activity',
+    'permissions',
+    'bulk',
     'support',
     'community'
   ];
@@ -3281,9 +4125,21 @@ window.showAdminPanel = function(panelName) {
     destination.classList.add('active');
   }
 
-  const sectionNames = {overview:'Visão geral',students:'Gestão dos alunos',courses:'Gestão dos cursos',content:'Módulos e aulas',materials:'Materiais de estudo',enrollments:'Matrículas',support:'Suporte aos alunos',community:'Comunidade e moderação'};
+  const sectionNames = {overview:'Visão geral',statistics:'Estatísticas avançadas',reports:'Relatórios e exportação',calendar:'Calendário académico',students:'Gestão dos alunos',courses:'Gestão dos cursos',content:'Módulos e aulas',materials:'Materiais de estudo',enrollments:'Matrículas',support:'Suporte aos alunos',community:'Comunidade e moderação',certificates:'Gestão de certificados',assessments:'Testes, exames e classificações',audit:'Auditoria e histórico de alterações',activity:'Actividade recente',permissions:'Permissões administrativas',bulk:'Gestão de conteúdos em massa'};
   const currentSection = document.getElementById('adminCurrentSection');
   if (currentSection) currentSection.textContent = sectionNames[panelName] || 'Painel administrativo';
+
+  if (panelName === 'statistics') {
+    window.loadAdminAdvancedStatistics();
+  }
+
+  if (panelName === 'calendar') {
+    window.loadAdminCalendarEvents?.();
+  }
+
+  if (panelName === 'reports') {
+    window.resetAdminReportView?.();
+  }
 
   if (panelName === 'courses') {
     window.loadAdminCourses();
@@ -3300,12 +4156,23 @@ window.showAdminPanel = function(panelName) {
 
   if (panelName === 'community') {
     loadAdminCommunityMessages();
+    loadAdminAnnouncements();
     loadCommunityBans();
   }
 
   if (panelName === 'enrollments') {
     window.loadAdminEnrollments();
   }
+  if (panelName === 'certificates') {
+    window.loadAdminCertificates();
+  }
+  if (panelName === 'assessments') {
+    window.loadAdminAssessments?.();
+    window.loadAdminAssessmentResults?.();
+  }
+  if (panelName === 'audit') window.loadAdminAuditLogs?.();
+  if (panelName === 'activity') window.loadAdminRecentActivity?.();
+  if (panelName === 'permissions') window.loadAdminPermissionGrants?.();
   if (panelName === 'support') {
     window.loadAdminSupportUsers();
   }
@@ -4152,10 +5019,316 @@ window.uploadLessonMaterial = async function() {
   }
 };
   
+// ==========================================
+// TESTES, EXAMES E CLASSIFICACOES
+// ==========================================
+window.loadAssessmentCourses = async function() {
+  const select = $('assessmentCourse');
+  if (!select) return;
+  const {data, error} = await supabase.from('courses').select('id,title').order('title');
+  if (error) { select.innerHTML = '<option value="">Erro ao carregar cursos</option>'; console.error(error); return; }
+  select.innerHTML = '<option value="">Selecciona um curso</option>' + (data||[]).map(c=>`<option value="${escapeHTML(c.id)}">${escapeHTML(c.title)}</option>`).join('');
+};
+
+window.createAssessment = async function(event) {
+  event.preventDefault();
+  if (currentUserRole !== 'admin') return alert('Acesso não autorizado.');
+  const duration = $('assessmentDuration').value;
+  const payload = {
+    course_id: $('assessmentCourse').value,
+    title: $('assessmentTitle').value.trim(),
+    description: $('assessmentDescription').value.trim() || null,
+    assessment_type: $('assessmentType').value,
+    duration_minutes: duration ? Number(duration) : null,
+    passing_score: Number($('assessmentPassMark').value),
+    max_attempts: Number($('assessmentMaxAttempts').value),
+    created_by: currentUser.id,
+    is_published: false
+  };
+  if (!payload.course_id || !payload.title) return alert('Preenche o curso e o título.');
+  const {data,error} = await supabase.from('assessments').insert(payload).select('id').single();
+  if (error) return alert('Erro ao criar avaliação: '+error.message);
+  $('assessmentCreateForm').reset();
+  $('assessmentPassMark').value='50'; $('assessmentMaxAttempts').value='1';
+  alert('Avaliação criada como rascunho. Agora adiciona as perguntas.');
+  await window.loadAdminAssessments();
+  window.addAssessmentQuestion(data.id);
+};
+
+window.addAssessmentQuestion = async function(assessmentId) {
+  if (currentUserRole !== 'admin') return;
+  const questionText = prompt('Escreve o enunciado da pergunta:');
+  if (questionText === null) return;
+  if (questionText.trim().length < 3) return alert('O enunciado é demasiado curto.');
+  const type = prompt('Tipo: escreve 1 para escolha múltipla, 2 para verdadeiro/falso ou 3 para resposta escrita.','1');
+  if (type === null) return;
+  const types = {'1':'multiple_choice','2':'true_false','3':'short_answer'};
+  if (!types[type.trim()]) return alert('Tipo inválido.');
+  const pointsRaw = prompt('Quantos pontos vale esta pergunta?','1');
+  if (pointsRaw === null) return;
+  const points = Number(pointsRaw);
+  if (!Number.isFinite(points) || points <= 0) return alert('Indica uma pontuação válida.');
+  const {data:old,error:oldError} = await supabase.from('assessment_questions').select('position').eq('assessment_id',assessmentId).order('position',{ascending:false}).limit(1);
+  if (oldError) return alert(oldError.message);
+  const position = old?.length ? Number(old[0].position)+1 : 1;
+  const {data:q,error} = await supabase.from('assessment_questions').insert({assessment_id:assessmentId,question_text:questionText.trim(),question_type:types[type.trim()],points,position}).select('id').single();
+  if (error) return alert('Erro ao adicionar pergunta: '+error.message);
+  if (types[type.trim()] !== 'short_answer') {
+    const options = type.trim()==='2' ? ['Verdadeiro','Falso'] : [];
+    if (type.trim()==='1') {
+      for (let i=1;i<=4;i++) { const value=prompt(`Opção ${i} (deixa vazio para terminar):`); if(value===null)return; if(!value.trim())break; options.push(value.trim()); }
+    }
+    if (options.length < 2) { await supabase.from('assessment_questions').delete().eq('id',q.id); return alert('Adiciona pelo menos duas opções. Pergunta cancelada.'); }
+    let correctIndex;
+    if (type.trim()==='2') correctIndex=prompt('Resposta correcta: 1 para Verdadeiro ou 2 para Falso','1');
+    else correctIndex=prompt(`Número da opção correcta (1 a ${options.length}):`,'1');
+    const idx=Number(correctIndex)-1;
+    if (!Number.isInteger(idx) || idx<0 || idx>=options.length) { await supabase.from('assessment_questions').delete().eq('id',q.id); return alert('Opção correcta inválida. Pergunta cancelada.'); }
+    const rows=options.map((option_text,i)=>({question_id:q.id,option_text,is_correct:i===idx,position:i+1}));
+    const {error:optError}=await supabase.from('assessment_options').insert(rows);
+    if(optError)return alert('Pergunta criada, mas houve erro nas opções: '+optError.message);
+  }
+  alert('Pergunta adicionada.');
+  await window.loadAdminAssessments();
+};
+
+window.loadAdminAdvancedStatistics = async function() {
+  const message = $('adminAdvancedStatsMessage');
+  const kpis = $('adminAdvancedStatsKpis');
+  const performance = $('adminPerformanceStats');
+  const coursesBox = $('adminCourseStats');
+  const monthlyBox = $('adminMonthlyStats');
+  if (!message || !kpis || !performance || !coursesBox || !monthlyBox) return;
+  message.textContent = 'A actualizar estatísticas...';
+  kpis.innerHTML = '';
+  performance.innerHTML = '';
+  coursesBox.textContent = 'A carregar...';
+  monthlyBox.textContent = 'A carregar...';
+
+  const [general, performanceResult, coursesResult, monthlyResult] = await Promise.all([
+    supabase.rpc('admin_get_advanced_statistics'),
+    supabase.rpc('admin_get_performance_statistics'),
+    supabase.rpc('admin_get_course_statistics'),
+    supabase.rpc('admin_get_monthly_statistics')
+  ]);
+  const failures = [general, performanceResult, coursesResult, monthlyResult].filter(r => r.error);
+  if (failures.length) {
+    const details = failures.map(r => r.error.message).join(' | ');
+    message.textContent = 'Não foi possível carregar todas as estatísticas: ' + details;
+    coursesBox.textContent = coursesResult.error ? 'Erro: ' + coursesResult.error.message : 'Dados carregados.';
+    monthlyBox.textContent = monthlyResult.error ? 'Erro: ' + monthlyResult.error.message : 'Dados carregados.';
+    return;
+  }
+
+  const g = general.data || {};
+  const p = performanceResult.data || {};
+  const number = value => Number(value || 0).toLocaleString('pt-MZ');
+  const percent = value => Number(value || 0).toLocaleString('pt-MZ', {minimumFractionDigits:1, maximumFractionDigits:2}) + '%';
+  const card = (label, value, note='') => `<div class="admin-stat-card"><span class="stat-label">${label}</span><strong class="stat-value">${value}</strong>${note ? `<span class="stat-note">${note}</span>` : ''}</div>`;
+
+  kpis.innerHTML = [
+    card('Total de alunos', number(g.total_students)),
+    card('Alunos bloqueados', number(g.blocked_students)),
+    card('Cursos publicados', number(g.published_courses)),
+    card('Total de matrículas', number(g.total_enrollments)),
+    card('Matrículas activas', number(g.active_enrollments)),
+    card('Certificados válidos', number(g.valid_certificates), `${number(g.total_certificates)} emitidos no total`),
+    card('Avaliações publicadas', number(g.published_assessments)),
+    card('Tentativas realizadas', number(g.total_attempts))
+  ].join('');
+
+  performance.innerHTML = [
+    card('Média das classificações', percent(p.average_percentage)),
+    card('Taxa de aprovação', percent(p.approval_rate)),
+    card('Aguardam correcção', number(p.pending_corrections)),
+    card('Tentativas corrigidas', number(p.completed_attempts)),
+    card('Em andamento', number(p.in_progress_attempts)),
+    card('Aprovados', number(g.passed_attempts)),
+    card('Não aprovados', number(g.failed_attempts)),
+    card('Certificados emitidos', number(g.total_certificates))
+  ].join('');
+
+  const courseRows = coursesResult.data || [];
+  if (!courseRows.length) {
+    coursesBox.innerHTML = '<p>Ainda não existem cursos registados.</p>';
+  } else {
+    coursesBox.innerHTML = `<table class="admin-stats-table"><thead><tr><th>Curso</th><th>Matrículas</th><th>Activas</th><th>Avaliações</th><th>Tentativas</th><th>Média</th><th>Aprovação</th></tr></thead><tbody>${courseRows.map(c => `<tr><td>${escapeHTML(c.course_title || 'Curso')}</td><td>${number(c.total_enrollments)}</td><td>${number(c.active_enrollments)}</td><td>${number(c.total_assessments)}</td><td>${number(c.total_attempts)}</td><td>${percent(c.average_percentage)}</td><td>${percent(c.approval_rate)}</td></tr>`).join('')}</tbody></table>`;
+  }
+
+  const months = monthlyResult.data || [];
+  if (!months.length) {
+    monthlyBox.innerHTML = '<p>Sem dados mensais disponíveis.</p>';
+  } else {
+    const maxTotal = Math.max(1, ...months.map(m => Number(m.new_enrollments||0) + Number(m.assessment_attempts||0) + Number(m.certificates_issued||0)));
+    const fmtMonth = value => new Intl.DateTimeFormat('pt-MZ', {month:'short', year:'2-digit'}).format(new Date(value + 'T12:00:00'));
+    monthlyBox.innerHTML = `<div class="admin-month-legend"><span><i class="admin-month-enroll"></i>Matrículas</span><span><i class="admin-month-attempt"></i>Tentativas</span><span><i class="admin-month-cert"></i>Certificados</span></div>` + months.map(m => {
+      const a = Number(m.new_enrollments||0), b = Number(m.assessment_attempts||0), c = Number(m.certificates_issued||0);
+      const widthA = a / maxTotal * 100, widthB = b / maxTotal * 100, widthC = c / maxTotal * 100;
+      return `<div class="admin-month-row"><strong>${fmtMonth(m.month_start)}</strong><div class="admin-month-bars" title="${a} matrículas, ${b} tentativas, ${c} certificados"><span class="admin-month-enroll" style="width:${widthA}%"></span><span class="admin-month-attempt" style="width:${widthB}%"></span><span class="admin-month-cert" style="width:${widthC}%"></span></div><span class="admin-month-values">${a} · ${b} · ${c}</span></div>`;
+    }).join('');
+  }
+  message.textContent = 'Estatísticas actualizadas com sucesso. Última actualização: ' + new Date().toLocaleString('pt-MZ');
+};
+
+
+/* ==========================================
+   RELATÓRIOS E EXPORTAÇÃO CSV
+========================================== */
+window.adminReportRows = [];
+window.adminReportColumns = [];
+window.adminReportTitle = '';
+
+window.resetAdminReportView = function() {
+  const msg = $('adminReportMessage');
+  if (msg && !window.adminReportRows.length) msg.textContent = 'Escolhe o relatório e clica em Gerar relatório.';
+};
+
+window.loadAdminReport = async function() {
+  const type = $('adminReportType')?.value;
+  const start = $('adminReportStart')?.value || null;
+  const end = $('adminReportEnd')?.value || null;
+  const message = $('adminReportMessage');
+  const box = $('adminReportResults');
+  const csvBtn = $('adminReportCsvBtn');
+  const printBtn = $('adminReportPrintBtn');
+  if (!type || !message || !box) return;
+  if (start && end && start > end) { message.textContent = 'A data inicial não pode ser posterior à data final.'; return; }
+  message.textContent = 'A gerar relatório...';
+  box.textContent = 'A consultar os registos...';
+  if (csvBtn) csvBtn.disabled = true;
+  if (printBtn) printBtn.disabled = true;
+  const { data, error } = await supabase.rpc('admin_get_export_report', {
+    p_report_type: type, p_start_date: start, p_end_date: end
+  });
+  if (error) {
+    message.textContent = 'Não foi possível gerar o relatório: ' + error.message;
+    box.textContent = 'Verifica as permissões e a função SQL.';
+    window.adminReportRows = [];
+    return;
+  }
+  const rows = Array.isArray(data?.rows) ? data.rows : [];
+  const titles = {students:'Relatório de alunos', enrollments:'Relatório de matrículas', certificates:'Relatório de certificados', assessments:'Relatório de avaliações e classificações'};
+  window.adminReportRows = rows;
+  window.adminReportTitle = titles[type] || 'Relatório Mussilipo Academy';
+  window.adminReportColumns = rows.length ? Object.keys(rows[0]) : [];
+  if (!rows.length) {
+    box.innerHTML = '<p>Não existem registos para este relatório ou período.</p>';
+  } else {
+    const cols = window.adminReportColumns;
+    box.innerHTML = `<h3>${escapeHTML(window.adminReportTitle)}</h3><p style="color:var(--muted)">${rows.length.toLocaleString('pt-MZ')} registo(s)</p><table class="admin-stats-table"><thead><tr>${cols.map(c=>`<th>${escapeHTML(c.replaceAll('_',' '))}</th>`).join('')}</tr></thead><tbody>${rows.map(row=>`<tr>${cols.map(c=>`<td>${escapeHTML(formatAdminReportValue(row[c]))}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  }
+  if (csvBtn) csvBtn.disabled = rows.length === 0;
+  if (printBtn) printBtn.disabled = rows.length === 0;
+  message.textContent = `${window.adminReportTitle}: ${rows.length.toLocaleString('pt-MZ')} registo(s). Relatório gerado em ${new Date().toLocaleString('pt-MZ')}.`;
+};
+
+function formatAdminReportValue(value) {
+  if (value === null || value === undefined || value === '') return '—';
+  if (typeof value === 'boolean') return value ? 'Sim' : 'Não';
+  if (typeof value === 'object') return JSON.stringify(value);
+  return String(value);
+}
+
+window.exportAdminReportCSV = function() {
+  const rows = window.adminReportRows || [];
+  const cols = window.adminReportColumns || [];
+  if (!rows.length || !cols.length) return alert('Gera primeiro um relatório com registos.');
+  const cell = value => {
+    let text = formatAdminReportValue(value);
+    if (/^[=+@\-\t\r]/.test(text)) text = "'" + text;
+    return '"' + text.replaceAll('"','""') + '"';
+  };
+  const csv = '\uFEFF' + [cols.map(cell).join(';'), ...rows.map(row=>cols.map(c=>cell(row[c])).join(';'))].join('\r\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const slug = (window.adminReportTitle || 'relatorio').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  a.href = url; a.download = `${slug || 'relatorio'}-${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+};
+
+window.printAdminReport = function() {
+  const box = $('adminReportResults');
+  if (!box || !(window.adminReportRows || []).length) return alert('Gera primeiro um relatório com registos.');
+  const w = window.open('', '_blank');
+  if (!w) return alert('Permite janelas pop-up para imprimir o relatório.');
+  w.document.write(`<!doctype html><html lang="pt"><head><meta charset="utf-8"><title>${escapeHTML(window.adminReportTitle)}</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}h2{margin-bottom:6px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #bbb;padding:7px;text-align:left}th{background:#eee}p{color:#555}@media print{body{padding:0}}</style></head><body><h2>${escapeHTML(window.adminReportTitle)}</h2><p>Gerado em ${new Date().toLocaleString('pt-MZ')} · ${window.adminReportRows.length} registo(s)</p>${box.querySelector('table')?.outerHTML || ''}</body></html>`);
+  w.document.close(); w.focus(); w.print();
+};
+
+window.loadAdminAssessments = async function() {
+  const box=$('adminAssessmentsList'); if(!box)return;
+  box.textContent='A carregar avaliações...';
+  await window.loadAssessmentCourses();
+  const {data,error}=await supabase.from('assessments').select('id,course_id,title,assessment_type,duration_minutes,passing_score,max_attempts,is_published,courses(title),assessment_questions(id)').order('created_at',{ascending:false});
+  if(error){box.textContent='Erro: '+error.message;return;}
+  if(!data?.length){box.innerHTML='<p>Ainda não existem avaliações. Cria a primeira acima.</p>';return;}
+  box.innerHTML='<h3>📋 Avaliações criadas</h3>'+data.map(a=>`<div class="assessment-card"><h3>${escapeHTML(a.title)}</h3><div class="assessment-meta"><span>${escapeHTML(a.courses?.title||'Curso')}</span><span>${a.assessment_type==='exam'?'Exame':'Teste'}</span><span>${a.assessment_questions?.length||0} pergunta(s)</span><span>Nota mínima: ${Number(a.passing_score)}%</span><span>${a.is_published?'Publicado':'Rascunho'}</span></div><div class="assessment-actions"><button class="btn-outline" onclick="addAssessmentQuestion('${a.id}')">＋ Pergunta</button><button class="btn-outline" onclick="toggleAssessmentPublish('${a.id}',${!!a.is_published})">${a.is_published?'Retirar publicação':'Publicar'}</button><button class="btn-outline" onclick="deleteAssessment('${a.id}')">Eliminar</button></div></div>`).join('');
+};
+
+window.toggleAssessmentPublish = async function(id,published) {
+  const {data:questions,error:qerr}=await supabase.from('assessment_questions').select('id').eq('assessment_id',id);
+  if(qerr)return alert(qerr.message);
+  if(!published && (!questions||questions.length===0))return alert('Adiciona pelo menos uma pergunta antes de publicar.');
+  const {error}=await supabase.from('assessments').update({is_published:!published}).eq('id',id);
+  if(error)return alert('Erro: '+error.message);
+  await window.loadAdminAssessments();
+};
+window.deleteAssessment = async function(id) {
+  if(!confirm('Eliminar esta avaliação e todas as perguntas e tentativas associadas? Esta acção é permanente.'))return;
+  const {error}=await supabase.from('assessments').delete().eq('id',id);
+  if(error)return alert('Erro ao eliminar: '+error.message);
+  await window.loadAdminAssessments(); await window.loadAdminAssessmentResults();
+};
+
+window.loadStudentAssessments = async function() {
+  const box=$('studentAssessmentsList'); if(!box)return;
+  box.textContent='A carregar avaliações...';
+  const {data:enrollments,error:eerr}=await supabase.from('enrollments').select('course_id').eq('user_id',currentUser.id).eq('status','active');
+  if(eerr){box.textContent='Erro: '+eerr.message;return;}
+  const courseIds=(enrollments||[]).map(x=>x.course_id);
+  if(!courseIds.length){box.innerHTML='<div class="dash-card">Ainda não tens matrículas aprovadas com avaliações disponíveis.</div>';return;}
+  const {data,error}=await supabase.from('assessments').select('id,course_id,title,description,assessment_type,duration_minutes,passing_score,max_attempts,courses(title)').eq('is_published',true).in('course_id',courseIds).order('created_at',{ascending:false});
+  if(error){box.textContent='Erro ao carregar avaliações: '+error.message;return;}
+  if(!data?.length){box.innerHTML='<div class="dash-card">Ainda não há testes ou exames publicados nos teus cursos.</div>';return;}
+  const {data:history}=await supabase.rpc('get_assessment_results',{p_user_id:null});
+  box.innerHTML=data.map(a=>{const tries=(history||[]).filter(h=>h.assessment_id===a.id);const used=tries.length;return `<div class="assessment-card"><h3>${escapeHTML(a.title)}</h3><p>${escapeHTML(a.description||'Avaliação do curso.')}</p><div class="assessment-meta"><span>${escapeHTML(a.courses?.title||'Curso')}</span><span>${a.assessment_type==='exam'?'Exame':'Teste'}</span><span>${a.duration_minutes?`${a.duration_minutes} min`:'Sem limite de tempo'}</span><span>Nota mínima ${Number(a.passing_score)}%</span><span>Tentativas: ${used}/${a.max_attempts}</span></div><button class="btn" ${used>=a.max_attempts?'disabled':''} onclick="beginStudentAssessment('${a.id}')">${used>=a.max_attempts?'Limite de tentativas atingido':'Iniciar avaliação'}</button></div>`;}).join('');
+};
+
+window.beginStudentAssessment = async function(id) {
+  const workspace=$('studentAssessmentWorkspace'); workspace.classList.remove('hidden'); workspace.innerHTML='<div class="dash-card">A preparar avaliação...</div>';
+  const {data:attemptId,error:startError}=await supabase.rpc('start_assessment',{p_assessment_id:id});
+  if(startError){workspace.innerHTML=`<div class="dash-card">Não foi possível iniciar: ${escapeHTML(startError.message)}</div>`;return;}
+  const {data,error}=await supabase.rpc('get_assessment_questions',{p_assessment_id:id});
+  if(error){workspace.innerHTML=`<div class="dash-card">Erro ao carregar perguntas: ${escapeHTML(error.message)}</div>`;return;}
+  window.activeAssessmentAttempt=attemptId;
+  window.activeAssessmentData=data;
+  workspace.innerHTML=`<div class="assessment-card"><h2>${escapeHTML(data.title)}</h2><p>${escapeHTML(data.description||'Lê cada pergunta e responde com atenção.')}</p><div class="assessment-meta"><span>${data.questions.length} pergunta(s)</span><span>${data.duration_minutes?data.duration_minutes+' minutos':'Sem limite de tempo'}</span></div><form id="studentAssessmentForm" onsubmit="submitStudentAssessment(event)">${data.questions.map((q,i)=>`<div class="assessment-question"><strong>${i+1}. ${escapeHTML(q.question_text)}</strong><p class="assessment-meta">${Number(q.points)} ponto(s)</p>${q.question_type==='short_answer'?`<textarea name="answer_${q.id}" rows="3" placeholder="Escreve a tua resposta..." style="width:100%;padding:10px;background:#160b25;color:white;border:1px solid #60427d;border-radius:8px"></textarea>`:(q.options||[]).map(o=>`<label class="assessment-option"><input type="radio" name="answer_${q.id}" value="${o.id}"><span>${escapeHTML(o.option_text)}</span></label>`).join('')}</div>`).join('')}<div class="assessment-actions"><button class="btn" type="submit">Enviar respostas</button><button class="btn-outline" type="button" onclick="cancelStudentAssessment()">Sair</button></div></form></div>`;
+  workspace.scrollIntoView({behavior:'smooth',block:'start'});
+};
+window.cancelStudentAssessment=function(){if(!confirm('Sair agora? Esta tentativa ficará iniciada e contará para o limite de tentativas.'))return;$('studentAssessmentWorkspace').classList.add('hidden');window.activeAssessmentAttempt=null;};
+window.submitStudentAssessment=async function(event){
+  event.preventDefault(); if(!window.activeAssessmentAttempt||!window.activeAssessmentData)return;
+  const form=event.currentTarget; const answers=window.activeAssessmentData.questions.map(q=>{const selected=form.querySelector(`input[name="answer_${q.id}"]:checked`);const text=form.querySelector(`[name="answer_${q.id}"]`);return {question_id:q.id,selected_option_id:selected?.value||null,answer_text:q.question_type==='short_answer'?(text?.value||''):null};});
+  if(answers.some((a,i)=>window.activeAssessmentData.questions[i].question_type!=='short_answer'&&!a.selected_option_id))return alert('Responde a todas as perguntas de escolha antes de enviar.');
+  if(answers.some((a,i)=>window.activeAssessmentData.questions[i].question_type==='short_answer'&&!a.answer_text.trim()))return alert('Preenche todas as respostas escritas antes de enviar.');
+  if(!confirm('Confirmas o envio definitivo das respostas?'))return;
+  const {data,error}=await supabase.rpc('submit_assessment',{p_attempt_id:window.activeAssessmentAttempt,p_answers:answers});
+  if(error)return alert('Não foi possível enviar: '+error.message);
+  const result=Array.isArray(data)?data[0]:data;
+  $('studentAssessmentWorkspace').innerHTML=`<div class="assessment-card"><h2>✅ Avaliação enviada</h2>${result?.attempt_status==='submitted'?'<p>As respostas escritas aguardam correcção do professor.</p>':`<p>Nota: ${result?.score??0} / ${result?.total_points??0}</p><p>Classificação: ${Number(result?.percentage||0).toFixed(1)}%</p><h3>${result?.passed?'Aprovado':'Não aprovado'}</h3>`}</div>`;
+  window.activeAssessmentAttempt=null; await window.loadStudentAssessmentHistory(); await window.loadStudentAssessments();
+};
+window.loadStudentAssessmentHistory=async function(){const box=$('studentAssessmentHistory');if(!box)return;const {data,error}=await supabase.rpc('get_assessment_results',{p_user_id:null});if(error){box.textContent='Não foi possível carregar o histórico: '+error.message;return;}box.innerHTML='<h3 style="margin:20px 0 10px">📈 O meu histórico</h3>'+(data?.length?`<div class="assessment-card"><table class="assessment-table"><thead><tr><th>Avaliação</th><th>Tentativa</th><th>Nota</th><th>Estado</th></tr></thead><tbody>${data.map(r=>`<tr><td>${escapeHTML(r.assessment_title)}</td><td>${r.attempt_number}</td><td>${r.percentage==null?'Pendente':Number(r.percentage).toFixed(1)+'%'}</td><td>${r.status==='submitted'?'A aguardar correcção':r.passed?'Aprovado':r.status==='graded'?'Não aprovado':'Em curso'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="dash-card">Ainda não realizaste avaliações.</p>');};
+
+window.loadAdminAssessmentResults=async function(){const box=$('adminAssessmentResults');if(!box)return;box.textContent='A carregar resultados...';const {data,error}=await supabase.rpc('get_assessment_results',{p_user_id:null});if(error){box.textContent='Erro: '+error.message;return;}if(!data?.length){box.textContent='Ainda não existem tentativas.';return;}box.innerHTML=`<table class="assessment-table"><thead><tr><th>Aluno</th><th>Avaliação</th><th>Tentativa</th><th>Nota</th><th>Estado</th><th>Acção</th></tr></thead><tbody>${data.map(r=>`<tr><td>${escapeHTML(r.student_name)}</td><td>${escapeHTML(r.assessment_title)}</td><td>${r.attempt_number}</td><td>${r.percentage==null?'Pendente':Number(r.percentage).toFixed(1)+'%'}</td><td>${r.status==='submitted'?'A corrigir':r.passed?'Aprovado':r.status==='graded'?'Não aprovado':'Em curso'}</td><td>${r.status==='submitted'?`<button class="btn-outline" onclick="gradeAssessmentAttempt('${r.attempt_id}')">Corrigir</button>`:'—'}</td></tr>`).join('')}</tbody></table>`;};
+window.gradeAssessmentAttempt=async function(attemptId){const {data:answers,error}=await supabase.from('assessment_answers').select('question_id,answer_text,assessment_questions(question_text,points,question_type)').eq('attempt_id',attemptId);if(error)return alert(error.message);const manual=[];for(const a of (answers||[]).filter(x=>x.assessment_questions?.question_type==='short_answer')){const raw=prompt(`Pergunta: ${a.assessment_questions.question_text}\nResposta do aluno: ${a.answer_text||'(vazia)'}\nPontuação máxima: ${a.assessment_questions.points}\n\nNota atribuída:`,String(a.assessment_questions.points));if(raw===null)return;const points=Number(raw);if(!Number.isFinite(points)||points<0||points>Number(a.assessment_questions.points))return alert('Pontuação inválida.');const feedback=prompt('Comentário para o aluno (opcional):','')||'';manual.push({question_id:a.question_id,points_awarded:points,teacher_feedback:feedback});}const {data,error:gradeError}=await supabase.rpc('admin_grade_attempt',{p_attempt_id:attemptId,p_manual_grades:manual});if(gradeError)return alert('Erro na correcção: '+gradeError.message);alert('Avaliação corrigida com sucesso.');await window.loadAdminAssessmentResults();};
+
 await loadPublicCourses();
 
 const {data:{session}} = await supabase.auth.getSession();
 if(session?.user) await loadUser(session.user);
+await window.verifyCertificateFromUrl();
 
 </script>
 </body>
