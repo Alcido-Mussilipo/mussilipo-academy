@@ -5460,24 +5460,7 @@ window.printAdminReport = function() {
 .student-welcome{position:relative;overflow:hidden;border-radius:18px;padding:24px!important;background:#fff url('assets/aluno-banner.jpg') right center/auto 100% no-repeat!important;border:1px solid #dce9df;}
 .chat-box{position:relative;}
 .chat-box::before{content:"";display:block;height:95px;margin-bottom:12px;border-radius:10px;background:url('assets/comunidade-banner.jpg') center/cover no-repeat;}
-/* Imagens de cursos: preservar a proporção e não esticar */
-.course-cover img,
-img.course-cover {
-  display:block;
-  width:100%;
-  height:180px;
-  object-fit:contain;
-  object-position:center;
-  background:#f7f7f7;
-  border-radius:12px;
-}
-@media(max-width:650px){
-  #adminDashboard > h1{padding-top:100px!important}
-  #adminDashboard > h1::before{height:86px}
-  .student-welcome{background-image:linear-gradient(90deg,rgba(255,255,255,.96),rgba(255,255,255,.78)),url('assets/aluno-banner.jpg')!important;background-size:cover!important}
-  .course-cover img,
-  img.course-cover{height:150px;}
-}
+@media(max-width:650px){#adminDashboard > h1{padding-top:100px!important}#adminDashboard > h1::before{height:86px}.student-welcome{background-image:linear-gradient(90deg,rgba(255,255,255,.96),rgba(255,255,255,.78)),url('assets/aluno-banner.jpg')!important;background-size:cover!important}}
 </style>
 
 </body></html>`);
@@ -5598,6 +5581,200 @@ await window.verifyCertificateFromUrl();
 .chat-box{position:relative;}
 .chat-box::before{content:"";display:block;height:95px;margin-bottom:12px;border-radius:10px;background:url('assets/comunidade-banner.jpg') center/cover no-repeat;}
 @media(max-width:650px){#adminDashboard > h1{padding-top:100px!important}#adminDashboard > h1::before{height:86px}.student-welcome{background-image:linear-gradient(90deg,rgba(255,255,255,.96),rgba(255,255,255,.78)),url('assets/aluno-banner.jpg')!important;background-size:cover!important}}
+</style>
+
+
+<style id="mussilipo-layout-fix">
+/* ===== ADMIN: banner separado do título, sem sobreposição ===== */
+#adminDashboard > h1 {
+  position: relative !important;
+  padding: 0 !important;
+  margin: 18px 0 8px !important;
+  line-height: 1.25 !important;
+}
+#adminDashboard > h1::before {
+  content: none !important;
+  display: none !important;
+}
+#adminDashboard::before {
+  content: "";
+  display: block;
+  width: min(100%, 1000px);
+  aspect-ratio: 3 / 1;
+  margin: 0 0 22px;
+  border-radius: 16px;
+  background: url("assets/admin-banner.jpg") center / cover no-repeat;
+}
+#adminDashboard > p {
+  margin: 0 0 22px !important;
+  color: #52675a !important;
+  line-height: 1.6;
+}
+
+/* ===== ÁREA DO ALUNO: boas-vindas equilibradas ===== */
+.student-welcome {
+  min-height: 170px !important;
+  padding: clamp(18px, 3vw, 28px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 20px !important;
+  background-color: #fff !important;
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.88) 58%, rgba(255,255,255,.12) 100%),
+    url("assets/aluno-banner.jpg") !important;
+  background-repeat: no-repeat !important;
+  background-position: center, right center !important;
+  background-size: cover, auto 100% !important;
+}
+.student-welcome > div:first-child {
+  max-width: min(70%, 760px);
+  position: relative;
+  z-index: 1;
+}
+.student-welcome h1 {
+  line-height: 1.25 !important;
+  overflow-wrap: anywhere;
+}
+.student-account-chip {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== MENUS: melhor espaçamento e adaptação ===== */
+.student-menu {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 12px !important;
+  position: relative !important;
+  top: auto !important;
+}
+.student-menu-button {
+  white-space: normal !important;
+  line-height: 1.35 !important;
+  padding: 11px 13px !important;
+}
+#adminDashboard .admin-layout {
+  gap: 20px !important;
+}
+
+/* ===== COMUNIDADE: contraste e leitura ===== */
+.chat-box {
+  padding: 16px !important;
+  background: #160b25 !important;
+  color: #f7f2fc !important;
+}
+.chat-box::before {
+  height: auto !important;
+  aspect-ratio: 3 / 1 !important;
+  width: 100% !important;
+  background-position: center !important;
+  background-size: cover !important;
+  margin-bottom: 16px !important;
+}
+.chat-messages {
+  height: min(55vh, 480px) !important;
+  min-height: 260px !important;
+  padding: 10px !important;
+  gap: 12px !important;
+}
+.chat-message {
+  max-width: 90% !important;
+  color: #f8f5fc !important;
+  background: #352348 !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  line-height: 1.55 !important;
+  font-size: 14px !important;
+}
+.chat-message strong {
+  color: #ffffff !important;
+  display: block;
+  margin-bottom: 5px;
+}
+.chat-message div {
+  color: #f5effa !important;
+}
+.chat-message small {
+  color: #d6c6e8 !important;
+}
+.chat-message.mine {
+  background: #49306b !important;
+}
+.chat-compose {
+  align-items: stretch !important;
+  gap: 10px !important;
+}
+.chat-compose textarea {
+  min-height: 58px !important;
+  color: #1c2430 !important;
+  background: #fff !important;
+  border: 1px solid #cbd5ce !important;
+  font-size: 14px !important;
+}
+.chat-compose .btn {
+  min-width: 90px;
+}
+
+/* ===== IMAGENS DOS CURSOS: sem deformar ===== */
+img.course-cover,
+.course-cover {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  object-position: center;
+  background: #f5f7f6;
+  display: block;
+  border-radius: 12px;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 760px) {
+  #adminDashboard::before {
+    width: 100%;
+    aspect-ratio: 3 / 1;
+    margin-bottom: 16px;
+  }
+  #adminDashboard > h1 {
+    padding: 0 !important;
+    font-size: clamp(23px, 6vw, 32px) !important;
+  }
+  .student-welcome {
+    min-height: 150px !important;
+    background-image:
+      linear-gradient(90deg, rgba(255,255,255,.97), rgba(255,255,255,.82)),
+      url("assets/aluno-banner.jpg") !important;
+    background-position: center, right center !important;
+    background-size: cover, auto 100% !important;
+  }
+  .student-welcome > div:first-child {
+    max-width: 100%;
+  }
+  .student-menu {
+    position: relative !important;
+    top: auto !important;
+  }
+  .student-menu-button {
+    flex: 1 1 145px;
+    text-align: left;
+  }
+  .chat-messages {
+    height: 360px !important;
+    min-height: 240px !important;
+  }
+  .chat-message {
+    max-width: 100% !important;
+  }
+  .chat-compose {
+    flex-direction: column !important;
+  }
+  .chat-compose .btn {
+    width: 100%;
+  }
+}
 </style>
 
 </body>
