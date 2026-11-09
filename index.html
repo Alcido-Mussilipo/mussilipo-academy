@@ -653,7 +653,7 @@ footer strong {color:white}
 
   <button class="btn-outline" id="loginBtn" onclick="openModal('login')">Entrar</button>
   <button class="btn" id="registerBtn" onclick="openModal('register')">Criar conta</button>
-  <button class="btn hidden" id="logoutBtn" onclick="logout()">Sair</button>
+  <button class="btn hidden" id="logoutBtn" onclick="logout()">Terminar sessão</button>
 </nav>
 </header>
 
@@ -753,15 +753,11 @@ footer strong {color:white}
 <!-- ÁREA DO ALUNO -->
 <section class="dashboard student-dashboard" id="dashboard">
   <div class="student-welcome">
-    <div>
-      <span class="student-eyebrow">MUSSILIPO ACADEMY · ÁREA DO ALUNO</span>
-      <h1>Olá, <span id="studentName">Aluno</span>! 👋</h1>
-      <p>Continua a tua jornada de aprendizagem.</p>
-    </div>
-    <div class="student-account-chip">🎓 Conta de aluno</div>
-  </div>
-
-  <nav class="student-menu" aria-label="Menu do aluno">
+    <div class="student-menu-wrap">
+      <button type="button" class="student-menu-trigger" id="studentMenuTrigger"
+        aria-expanded="false" aria-controls="studentMenuDropdown"
+        onclick="toggleStudentMenu()">☰ Menu <span aria-hidden="true">▾</span></button>
+      <nav class="student-menu student-menu-dropdown" id="studentMenuDropdown" aria-label="Menu do aluno" hidden>
     <button type="button" class="student-menu-button active" data-student-panel="overview" onclick="showStudentPanel('overview')">🏠 Início</button>
     <button type="button" class="student-menu-button" data-student-panel="courses" onclick="showStudentPanel('courses')">📚 Meus cursos</button>
     <button type="button" class="student-menu-button" data-student-panel="learning" onclick="showStudentPanel('learning')">🎥 Aulas e materiais</button>
@@ -775,7 +771,18 @@ footer strong {color:white}
     <button type="button" class="student-menu-button" data-student-panel="notifications" onclick="showStudentPanel('notifications')">🔔 Notificações <span id="notificationCount" class="notification-count hidden">0</span></button>
     <button type="button" class="student-menu-button" data-student-panel="community" onclick="showStudentPanel('community')">💬 Comunidade</button>
     <button type="button" class="student-menu-button" data-student-panel="support" onclick="showStudentPanel('support')">🛟 Suporte</button>
-  </nav>
+          <div class="student-menu-divider" role="separator"></div>
+        <button type="button" class="student-menu-button student-logout-option" onclick="logout()">↪ Terminar sessão</button>
+      </nav>
+    </div>
+    <div class="student-welcome-content">
+    <div>
+      <h1>Olá, <span id="studentName">Aluno</span>! 👋</h1>
+      <p>Continua a tua jornada de aprendizagem.</p>
+    </div>
+    <div class="student-account-chip">🎓 Conta de aluno</div>
+    </div>
+  </div>
 
   <div id="studentPageOverview" class="student-page active">
     <div class="student-summary-grid">
@@ -3069,15 +3076,32 @@ window.loadStudentCalendar = async function() {
 };
 
 // NAVEGAÇÃO DA ÁREA DO ALUNO
+window.toggleStudentMenu = function(force) {
+  const menu = document.getElementById('studentMenuDropdown');
+  const trigger = document.getElementById('studentMenuTrigger');
+  if (!menu || !trigger) return;
+  const open = typeof force === 'boolean' ? force : menu.hidden;
+  menu.hidden = !open;
+  trigger.setAttribute('aria-expanded', String(open));
+};
+
 window.showStudentPanel = function(panelName, scroll = true) {
-  const valid = ['overview', 'courses', 'learning', 'progress', 'favorites', 'history', 'calendar', 'certificates', 'assessments', 'profile', 'notifications', 'community', 'support'];
+  const valid = ['overview','courses','learning','progress','favorites','history','calendar','certificates','assessments','profile','notifications','community','support'];
   if (!valid.includes(panelName)) return;
+
   document.querySelectorAll('.student-page').forEach(page => page.classList.remove('active'));
-  document.querySelectorAll('.student-menu-button').forEach(button => {
+  document.querySelectorAll('.student-menu-button[data-student-panel]').forEach(button => {
     button.classList.toggle('active', button.dataset.studentPanel === panelName);
   });
+
   const page = document.getElementById('studentPage' + panelName.charAt(0).toUpperCase() + panelName.slice(1));
   if (page) page.classList.add('active');
+
+  const welcome = document.querySelector('#dashboard .student-welcome');
+  if (welcome) welcome.classList.toggle('student-welcome-hidden', panelName !== 'overview');
+
+  window.toggleStudentMenu(false);
+
   if (panelName === 'progress') window.loadStudentLearningHub?.();
   if (panelName === 'favorites') window.loadStudentFavorites?.();
   if (panelName === 'history') window.loadStudentHistory?.();
@@ -3085,14 +3109,15 @@ window.showStudentPanel = function(panelName, scroll = true) {
   if (panelName === 'certificates') window.loadStudentCertificates?.();
   if (panelName === 'assessments') { window.loadStudentAssessments?.(); window.loadStudentAssessmentHistory?.(); }
   if (panelName === 'notifications') window.loadStudentNotifications?.();
-  if (panelName === 'community') { loadCommunityMessages(); loadCommunityAnnouncements(); }
-  if (panelName === 'support') loadStudentSupportMessages();
-  if (panelName === 'learning' && !$('learningPanel')?.classList.contains('hidden')) {
-    $('studentLearningShortcut').classList.add('hidden');
-  } else if (panelName === 'learning') {
-    $('studentLearningShortcut').classList.remove('hidden');
+  if (panelName === 'community') { window.loadCommunityMessages?.(); window.loadCommunityAnnouncements?.(); }
+  if (panelName === 'support') window.loadStudentSupportMessages?.();
+
+  if (panelName === 'learning') {
+    const shortcut = $('studentLearningShortcut');
+    if (shortcut) shortcut.classList.toggle('hidden', !$('learningPanel')?.classList.contains('hidden'));
   }
-  if (scroll && $('dashboard')) $('dashboard').scrollIntoView({behavior:'smooth', block:'start'});
+
+  if (scroll && page) page.scrollIntoView({behavior:'smooth', block:'start'});
 };
 
 // VOLTAR À ÁREA DO ALUNO
@@ -5512,16 +5537,6 @@ window.printAdminReport = function() {
   const w = window.open('', '_blank');
   if (!w) return alert('Permite janelas pop-up para imprimir o relatório.');
   w.document.write(`<!doctype html><html lang="pt"><head><meta charset="utf-8"><title>${escapeHTML(window.adminReportTitle)}</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}h2{margin-bottom:6px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #bbb;padding:7px;text-align:left}th{background:#eee}p{color:#555}@media print{body{padding:0}}</style></head><body><h2>${escapeHTML(window.adminReportTitle)}</h2><p>Gerado em ${new Date().toLocaleString('pt-MZ')} · ${window.adminReportRows.length} registo(s)</p>${box.querySelector('table')?.outerHTML || ''}
-<style id="mussilipo-image-assets">
-/* Imagens decorativas: manter a pasta assets ao lado deste index.html */
-#adminDashboard > h1{position:relative;padding-top:128px!important;}
-#adminDashboard > h1::before{content:"";display:block;position:absolute;left:0;top:0;width:min(100%,920px);height:112px;background:url('assets/admin-banner.jpg') center/cover no-repeat;border-radius:16px;}
-.student-welcome{position:relative;overflow:hidden;border-radius:18px;padding:24px!important;background:#fff url('assets/aluno-banner.jpg') right center/auto 100% no-repeat!important;border:1px solid #dce9df;}
-.chat-box{position:relative;}
-.chat-box::before{content:"";display:block;height:95px;margin-bottom:12px;border-radius:10px;background:url('assets/comunidade-banner.jpg') center/cover no-repeat;}
-@media(max-width:650px){#adminDashboard > h1{padding-top:100px!important}#adminDashboard > h1::before{height:86px}.student-welcome{background-image:linear-gradient(90deg,rgba(255,255,255,.96),rgba(255,255,255,.78)),url('assets/aluno-banner.jpg')!important;background-size:cover!important}}
-</style>
-
 </body></html>`);
   w.document.close(); w.focus(); w.print();
 };
@@ -5573,7 +5588,7 @@ window.beginStudentAssessment = async function(id) {
   if(error){workspace.innerHTML=`<div class="dash-card">Erro ao carregar perguntas: ${escapeHTML(error.message)}</div>`;return;}
   window.activeAssessmentAttempt=attemptId;
   window.activeAssessmentData=data;
-  workspace.innerHTML=`<div class="assessment-card"><h2>${escapeHTML(data.title)}</h2><p>${escapeHTML(data.description||'Lê cada pergunta e responde com atenção.')}</p><div class="assessment-meta"><span>${data.questions.length} pergunta(s)</span><span>${data.duration_minutes?data.duration_minutes+' minutos':'Sem limite de tempo'}</span></div><form id="studentAssessmentForm" onsubmit="submitStudentAssessment(event)">${data.questions.map((q,i)=>`<div class="assessment-question"><strong>${i+1}. ${escapeHTML(q.question_text)}</strong><p class="assessment-meta">${Number(q.points)} ponto(s)</p>${q.question_type==='short_answer'?`<textarea name="answer_${q.id}" rows="3" placeholder="Escreve a tua resposta..." style="width:100%;padding:10px;background:#160b25;color:white;border:1px solid #60427d;border-radius:8px"></textarea>`:(q.options||[]).map(o=>`<label class="assessment-option"><input type="radio" name="answer_${q.id}" value="${o.id}"><span>${escapeHTML(o.option_text)}</span></label>`).join('')}</div>`).join('')}<div class="assessment-actions"><button class="btn" type="submit">Enviar respostas</button><button class="btn-outline" type="button" onclick="cancelStudentAssessment()">Sair</button></div></form></div>`;
+  workspace.innerHTML=`<div class="assessment-card"><h2>${escapeHTML(data.title)}</h2><p>${escapeHTML(data.description||'Lê cada pergunta e responde com atenção.')}</p><div class="assessment-meta"><span>${data.questions.length} pergunta(s)</span><span>${data.duration_minutes?data.duration_minutes+' minutos':'Sem limite de tempo'}</span></div><form id="studentAssessmentForm" onsubmit="submitStudentAssessment(event)">${data.questions.map((q,i)=>`<div class="assessment-question"><strong>${i+1}. ${escapeHTML(q.question_text)}</strong><p class="assessment-meta">${Number(q.points)} ponto(s)</p>${q.question_type==='short_answer'?`<textarea name="answer_${q.id}" rows="3" placeholder="Escreve a tua resposta..." style="width:100%;padding:10px;background:#160b25;color:white;border:1px solid #60427d;border-radius:8px"></textarea>`:(q.options||[]).map(o=>`<label class="assessment-option"><input type="radio" name="answer_${q.id}" value="${o.id}"><span>${escapeHTML(o.option_text)}</span></label>`).join('')}</div>`).join('')}<div class="assessment-actions"><button class="btn" type="submit">Enviar respostas</button><button class="btn-outline" type="button" onclick="cancelStudentAssessment()">Terminar sessão</button></div></form></div>`;
   workspace.scrollIntoView({behavior:'smooth',block:'start'});
 };
 window.cancelStudentAssessment=function(){if(!confirm('Sair agora? Esta tentativa ficará iniciada e contará para o limite de tentativas.'))return;$('studentAssessmentWorkspace').classList.add('hidden');window.activeAssessmentAttempt=null;};
@@ -5632,15 +5647,6 @@ await window.verifyCertificateFromUrl();
 </script>
 
 
-<style id="mussilipo-image-assets">
-/* Imagens decorativas: manter a pasta assets ao lado deste index.html */
-#adminDashboard > h1{position:relative;padding-top:128px!important;}
-#adminDashboard > h1::before{content:"";display:block;position:absolute;left:0;top:0;width:min(100%,920px);height:112px;background:url('assets/admin-banner.jpg') center/cover no-repeat;border-radius:16px;}
-.student-welcome{position:relative;overflow:hidden;border-radius:18px;padding:24px!important;background:#fff url('assets/aluno-banner.jpg') right center/auto 100% no-repeat!important;border:1px solid #dce9df;}
-.chat-box{position:relative;}
-.chat-box::before{content:"";display:block;height:95px;margin-bottom:12px;border-radius:10px;background:url('assets/comunidade-banner.jpg') center/cover no-repeat;}
-@media(max-width:650px){#adminDashboard > h1{padding-top:100px!important}#adminDashboard > h1::before{height:86px}.student-welcome{background-image:linear-gradient(90deg,rgba(255,255,255,.96),rgba(255,255,255,.78)),url('assets/aluno-banner.jpg')!important;background-size:cover!important}}
-</style>
 
 
 <style id="mussilipo-layout-fix">
@@ -5833,6 +5839,102 @@ img.course-cover,
   .chat-compose .btn {
     width: 100%;
   }
+}
+</style>
+
+
+<style id="mussilipo-student-menu-final">
+/* Menu do aluno: dropdown compacto junto ao título, com sobreposição */
+#dashboard .student-topbar {
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  position:relative; z-index:30; margin:0 0 18px; padding:12px 16px;
+  background:#fff; border:1px solid #d8e6dc; border-radius:14px;
+}
+#dashboard .student-topbar-title {font-weight:800;color:#173b27;font-size:16px}
+#dashboard .student-menu-wrap {position:relative; z-index:50}
+#dashboard .student-menu-trigger {
+  border:0;border-radius:10px;padding:10px 16px;background:#16834a;color:#fff;
+  font-weight:800;cursor:pointer;min-width:112px
+}
+#dashboard .student-menu-dropdown {
+  position:absolute;right:0;top:calc(100% + 8px);width:min(290px,85vw);
+  max-height:70vh;overflow-y:auto;display:flex;flex-direction:column;gap:4px;
+  padding:9px;background:#fff;border:1px solid #d5e4da;border-radius:13px;
+  box-shadow:0 16px 40px rgba(20,50,30,.20);z-index:9999
+}
+#dashboard .student-menu-dropdown[hidden] {display:none!important}
+#dashboard .student-menu-dropdown .student-menu-button {
+  text-align:left;width:100%;border:0;border-radius:8px;padding:11px 12px;
+  background:#fff;color:#26382c;cursor:pointer;font-weight:650
+}
+#dashboard .student-menu-dropdown .student-menu-button:hover,
+#dashboard .student-menu-dropdown .student-menu-button.active {
+  background:#e8f5ec!important;color:#147a40!important
+}
+#dashboard .student-menu-divider {height:1px;background:#dce8df;margin:5px 2px}
+#dashboard .student-menu-dropdown .student-logout-option {color:#a32d2d!important}
+#dashboard .student-menu-dropdown .student-logout-option:hover {background:#fff0f0!important}
+#dashboard .student-welcome-hidden {display:none!important}
+#dashboard .student-page {scroll-margin-top:18px}
+@media(max-width:650px) {
+  #dashboard .student-topbar {align-items:center;padding:10px 12px}
+  #dashboard .student-menu-dropdown {max-height:70vh;right:0}
+}
+/* Paleta verde/branco com texto escuro para legibilidade */
+:root {--bg:#f4f8f5;--panel:#fff;--panel2:#edf4ef;--purple:#16834a;--light:#16834a;--green:#16834a;--muted:#617267}
+html,body {background:#f4f8f5!important;color:#202b23!important}
+header {background:rgba(255,255,255,.97)!important;border-bottom:1px solid #dce8df!important}
+header nav a {color:#33483a!important}
+header nav a:hover {color:#16834a!important}
+.btn {background:#16834a!important;color:#fff!important;border-color:#16834a!important}
+.btn:hover {background:#116b3c!important}
+.btn-outline {background:#fff!important;color:#146b39!important;border-color:#16834a!important}
+footer {background:#eaf3ec!important;color:#52665a!important;border-color:#dce8df!important}
+#adminDashboard {background:#f4f8f5!important;color:#202b23!important}
+#adminDashboard .dash-card,#adminDashboard .admin-card,#adminDashboard .admin-workspace,#adminDashboard .admin-sidebar {
+ background:#fff!important;color:#202b23!important;border-color:#dce8df!important
+}
+#adminDashboard h1,#adminDashboard h2,#adminDashboard h3,#adminDashboard h4 {color:#20382a!important}
+#adminDashboard p,#adminDashboard small {color:#586b5e}
+.chat-message {background:#f0f4f1!important;color:#202b23!important;border:1px solid #dce8df!important}
+.chat-message strong {color:#173b27!important}
+.chat-message div {color:#26382c!important}
+.chat-message small {color:#617267!important}
+.chat-message.mine {background:#e0f2e6!important;color:#173b27!important}
+.chat-compose textarea {background:#fff!important;color:#202b23!important;border:1px solid #cbd5ce!important}
+</style>
+<script id="mussilipo-student-menu-behavior">
+(function(){
+  document.addEventListener('click', function(event) {
+    const wrap = document.querySelector('#dashboard .student-menu-wrap');
+    if (wrap && !wrap.contains(event.target)) window.toggleStudentMenu?.(false);
+  });
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') window.toggleStudentMenu?.(false);
+  });
+})();
+</script>
+
+
+<style id="student-menu-layout-final">
+/* Na área do aluno, esconder o cabeçalho público escuro */
+body:has(#dashboard.show) > header {display:none!important}
+#dashboard.student-dashboard {background:#f3f8f4!important;color:#203329!important}
+#dashboard .student-welcome {position:relative!important;display:flex!important;align-items:center!important;justify-content:space-between!important;min-height:150px;padding:38px 190px 38px 28px!important;background:#fff!important;border:1px solid #d7e8dc!important;border-radius:17px!important;overflow:visible!important}
+#dashboard .student-welcome-content {min-width:0}
+#dashboard .student-menu-wrap {position:absolute!important;right:24px!important;top:22px!important;z-index:100!important}
+#dashboard .student-menu-trigger {background:#16834a!important;color:#fff!important;border:0!important;border-radius:10px!important;padding:11px 17px!important;font-weight:800!important;cursor:pointer!important;box-shadow:0 3px 10px rgba(22,131,74,.16)}
+#dashboard .student-menu-dropdown {position:absolute!important;right:0!important;top:calc(100% + 8px)!important;width:270px!important;max-width:calc(100vw - 36px)!important;max-height:72vh!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;gap:4px!important;padding:9px!important;background:#fff!important;border:1px solid #d5e5da!important;border-radius:13px!important;box-shadow:0 14px 36px rgba(24,55,35,.22)!important;z-index:99999!important}
+#dashboard .student-menu-dropdown[hidden] {display:none!important}
+#dashboard .student-menu-dropdown .student-menu-button {width:100%!important;min-width:0!important;white-space:normal!important;text-align:left!important;background:#fff!important;color:#26392d!important;padding:11px 12px!important;border:0!important;border-radius:8px!important}
+#dashboard .student-menu-dropdown .student-menu-button:hover,#dashboard .student-menu-dropdown .student-menu-button.active {background:#e8f5ec!important;color:#13763d!important;box-shadow:none!important}
+#dashboard .student-menu-dropdown .student-menu-divider {height:1px!important;background:#dbe8df!important;margin:5px 2px!important;flex:none!important}
+#dashboard .student-menu-dropdown .student-logout-option {color:#a33131!important;border-top:0!important}
+#dashboard .student-menu-dropdown .student-logout-option:hover {background:#fff0f0!important;color:#9b2929!important}
+@media(max-width:650px){
+ #dashboard .student-welcome {padding:68px 18px 22px!important;align-items:flex-start!important}
+ #dashboard .student-menu-wrap {top:14px!important;right:14px!important}
+ #dashboard .student-menu-dropdown {width:250px!important}
 }
 </style>
 
