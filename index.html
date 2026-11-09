@@ -5917,7 +5917,7 @@ footer {background:#eaf3ec!important;color:#52665a!important;border-color:#dce8d
 
 
 <style id="student-menu-layout-final">
-/* Na área do aluno, esconder o cabeçalho público escuro */
+/* Cabeçalho público oculto apenas enquanto a área do aluno está aberta */
 body:has(#dashboard.show) > header {display:none!important}
 #dashboard.student-dashboard {background:#f3f8f4!important;color:#203329!important}
 #dashboard .student-welcome {position:relative!important;display:flex!important;align-items:center!important;justify-content:space-between!important;min-height:150px;padding:38px 190px 38px 28px!important;background:#fff!important;border:1px solid #d7e8dc!important;border-radius:17px!important;overflow:visible!important}
@@ -5937,6 +5937,40 @@ body:has(#dashboard.show) > header {display:none!important}
  #dashboard .student-menu-dropdown {width:250px!important}
 }
 </style>
+
+
+<style id="remove-student-top-banner-only">
+/* Na área do aluno, retirar o banner superior inteiro:
+   fundo, logótipo grande e botão de saída. Não altera as cores do restante site. */
+body:has(#dashboard.show) > header {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+</style>
+<script id="student-header-visibility-fix">
+(function () {
+  function updateStudentHeader() {
+    const dashboard = document.getElementById('dashboard');
+    const header = document.querySelector('body > header');
+    if (!dashboard || !header) return;
+    const studentAreaIsVisible = dashboard.classList.contains('show');
+    header.style.display = studentAreaIsVisible ? 'none' : '';
+  }
+  document.addEventListener('DOMContentLoaded', updateStudentHeader);
+  const dashboard = document.getElementById('dashboard');
+  if (dashboard && window.MutationObserver) {
+    new MutationObserver(updateStudentHeader).observe(dashboard, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  }
+  updateStudentHeader();
+})();
+</script>
 
 </body>
 </html>
