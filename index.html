@@ -3460,6 +3460,7 @@ window.loadPublicCourses = async function() {
     });
   });
 };
+
 window.loadAdminCourses = async function() {
   const container = $('adminCourses');
 
@@ -3506,20 +3507,78 @@ window.loadAdminCourses = async function() {
       <button
         type="button"
         class="btn edit-course-btn"
-        data-course-id="${course.id}"
+        data-course-id="${escapeHTML(course.id)}"
         style="margin-top:12px">
         ✏️ Editar curso
+      </button>
+
+      <button
+        type="button"
+        class="btn delete-course-btn"
+        data-course-id="${escapeHTML(course.id)}"
+        style="margin-top:12px;background:#dc2626;color:white">
+        🗑️ Eliminar curso
       </button>
 
     </div>
   `).join('');
 
+  // Editar curso
   container.querySelectorAll('.edit-course-btn').forEach(button => {
     button.addEventListener('click', () => {
       window.editAdminCourse(button.dataset.courseId);
     });
   });
+
+  // Eliminar curso
+  container.querySelectorAll('.delete-course-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+      await window.deleteAdminCourse(button.dataset.courseId);
+    });
+  });
 };
+
+
+// Função para eliminar curso
+window.deleteAdminCourse = async function(courseId) {
+
+  const confirmar = confirm(
+    '⚠️ Tens a certeza que queres eliminar este curso?\n\n' +
+    'Esta ação poderá ser irreversível.'
+  );
+
+  if (!confirmar) return;
+
+  const button = document.querySelector(
+    `.delete-course-btn[data-course-id="${CSS.escape(courseId)}"]`
+  );
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = 'A eliminar...';
+  }
+
+  const { error } = await supabase
+    .from('courses')
+    .delete()
+    .eq('id', courseId);
+
+  if (error) {
+    alert('❌ Erro ao eliminar curso: ' + error.message);
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = '🗑️ Eliminar curso';
+    }
+
+    return;
+  }
+
+  alert('✅ Curso eliminado com sucesso!');
+
+  await window.loadAdminCourses();
+};
+
  // EDITAR CURSO EXISTENTE
 window.editAdminCourse = async function(courseId) {
 
