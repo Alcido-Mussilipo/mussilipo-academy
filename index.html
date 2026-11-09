@@ -653,7 +653,7 @@ footer strong {color:white}
 
   <button class="btn-outline" id="loginBtn" onclick="openModal('login')">Entrar</button>
   <button class="btn" id="registerBtn" onclick="openModal('register')">Criar conta</button>
-  <button class="btn hidden" id="logoutBtn" onclick="logout()">Sair</button>
+  <button class="btn hidden" id="logoutBtn" onclick="logout()">Terminar sessão</button>
 </nav>
 </header>
 
@@ -754,28 +754,39 @@ footer strong {color:white}
 <section class="dashboard student-dashboard" id="dashboard">
   <div class="student-welcome">
     <div>
-      <span class="student-eyebrow">MUSSILIPO ACADEMY · ÁREA DO ALUNO</span>
+      
       <h1>Olá, <span id="studentName">Aluno</span>! 👋</h1>
       <p>Continua a tua jornada de aprendizagem.</p>
     </div>
     <div class="student-account-chip">🎓 Conta de aluno</div>
   </div>
 
-  <nav class="student-menu" aria-label="Menu do aluno">
-    <button type="button" class="student-menu-button active" data-student-panel="overview" onclick="showStudentPanel('overview')">🏠 Início</button>
-    <button type="button" class="student-menu-button" data-student-panel="courses" onclick="showStudentPanel('courses')">📚 Meus cursos</button>
-    <button type="button" class="student-menu-button" data-student-panel="learning" onclick="showStudentPanel('learning')">🎥 Aulas e materiais</button>
-    <button type="button" class="student-menu-button" data-student-panel="progress" onclick="showStudentPanel('progress')">📊 Meu progresso</button>
-    <button type="button" class="student-menu-button" data-student-panel="favorites" onclick="showStudentPanel('favorites')">⭐ Favoritos</button>
-    <button type="button" class="student-menu-button" data-student-panel="history" onclick="showStudentPanel('history')">🕘 Histórico</button>
-    <button type="button" class="student-menu-button" data-student-panel="calendar" onclick="showStudentPanel('calendar')">📅 Calendário</button>
-    <button type="button" class="student-menu-button" data-student-panel="certificates" onclick="showStudentPanel('certificates')">🏅 Certificados</button>
-    <button type="button" class="student-menu-button" data-student-panel="assessments" onclick="showStudentPanel('assessments')">📝 Testes e exames</button>
-    <button type="button" class="student-menu-button" data-student-panel="profile" onclick="showStudentPanel('profile')">👤 Minha conta</button>
-    <button type="button" class="student-menu-button" data-student-panel="notifications" onclick="showStudentPanel('notifications')">🔔 Notificações <span id="notificationCount" class="notification-count hidden">0</span></button>
-    <button type="button" class="student-menu-button" data-student-panel="community" onclick="showStudentPanel('community')">💬 Comunidade</button>
-    <button type="button" class="student-menu-button" data-student-panel="support" onclick="showStudentPanel('support')">🛟 Suporte</button>
-  </nav>
+  <div class="student-topbar">
+    <div class="student-topbar-title">Área do aluno</div>
+    <div class="student-menu-wrap">
+      <button type="button" class="student-menu-trigger" id="studentMenuTrigger"
+        aria-expanded="false" aria-controls="studentMenuDropdown"
+        onclick="toggleStudentMenu()">☰ Menu <span aria-hidden="true">▾</span></button>
+      <nav class="student-menu student-menu-dropdown" id="studentMenuDropdown"
+        aria-label="Menu do aluno" hidden>
+        <button type="button" class="student-menu-button active" data-student-panel="overview" onclick="showStudentPanel('overview')">🏠 Início</button>
+        <button type="button" class="student-menu-button" data-student-panel="courses" onclick="showStudentPanel('courses')">📚 Meus cursos</button>
+        <button type="button" class="student-menu-button" data-student-panel="learning" onclick="showStudentPanel('learning')">🎥 Aulas e materiais</button>
+        <button type="button" class="student-menu-button" data-student-panel="progress" onclick="showStudentPanel('progress')">📊 Meu progresso</button>
+        <button type="button" class="student-menu-button" data-student-panel="favorites" onclick="showStudentPanel('favorites')">⭐ Favoritos</button>
+        <button type="button" class="student-menu-button" data-student-panel="history" onclick="showStudentPanel('history')">🕘 Histórico</button>
+        <button type="button" class="student-menu-button" data-student-panel="calendar" onclick="showStudentPanel('calendar')">📅 Calendário</button>
+        <button type="button" class="student-menu-button" data-student-panel="certificates" onclick="showStudentPanel('certificates')">🏅 Certificados</button>
+        <button type="button" class="student-menu-button" data-student-panel="assessments" onclick="showStudentPanel('assessments')">📝 Testes e exames</button>
+        <button type="button" class="student-menu-button" data-student-panel="profile" onclick="showStudentPanel('profile')">👤 Minha conta</button>
+        <button type="button" class="student-menu-button" data-student-panel="notifications" onclick="showStudentPanel('notifications')">🔔 Notificações <span id="notificationCount" class="notification-count hidden">0</span></button>
+        <button type="button" class="student-menu-button" data-student-panel="community" onclick="showStudentPanel('community')">💬 Comunidade</button>
+        <button type="button" class="student-menu-button" data-student-panel="support" onclick="showStudentPanel('support')">🛟 Suporte</button>
+        <div class="student-menu-divider" role="separator"></div>
+        <button type="button" class="student-menu-button student-logout-option" onclick="logout()">↪ Terminar sessão</button>
+      </nav>
+    </div>
+  </div>
 
   <div id="studentPageOverview" class="student-page active">
     <div class="student-summary-grid">
@@ -1875,7 +1886,9 @@ if (profile.role === 'admin') {
   // Actualizar os botões do cabeçalho
   $('loginBtn').classList.add('hidden');
   $('registerBtn').classList.add('hidden');
-  $('logoutBtn').classList.remove('hidden');
+  // A conta de aluno termina a sessão pelo último item do menu do aluno.
+  if (profile.role === 'student') $('logoutBtn').classList.add('hidden');
+  else $('logoutBtn').classList.remove('hidden');
 }
 
 
@@ -3069,15 +3082,32 @@ window.loadStudentCalendar = async function() {
 };
 
 // NAVEGAÇÃO DA ÁREA DO ALUNO
+window.toggleStudentMenu = function(force) {
+  const menu = document.getElementById('studentMenuDropdown');
+  const trigger = document.getElementById('studentMenuTrigger');
+  if (!menu || !trigger) return;
+  const open = typeof force === 'boolean' ? force : menu.hidden;
+  menu.hidden = !open;
+  trigger.setAttribute('aria-expanded', String(open));
+};
+
 window.showStudentPanel = function(panelName, scroll = true) {
   const valid = ['overview', 'courses', 'learning', 'progress', 'favorites', 'history', 'calendar', 'certificates', 'assessments', 'profile', 'notifications', 'community', 'support'];
   if (!valid.includes(panelName)) return;
+
   document.querySelectorAll('.student-page').forEach(page => page.classList.remove('active'));
-  document.querySelectorAll('.student-menu-button').forEach(button => {
+  document.querySelectorAll('.student-menu-button[data-student-panel]').forEach(button => {
     button.classList.toggle('active', button.dataset.studentPanel === panelName);
   });
+
   const page = document.getElementById('studentPage' + panelName.charAt(0).toUpperCase() + panelName.slice(1));
   if (page) page.classList.add('active');
+
+  const welcome = document.querySelector('#dashboard .student-welcome');
+  if (welcome) welcome.classList.toggle('student-welcome-hidden', panelName !== 'overview');
+
+  window.toggleStudentMenu(false);
+
   if (panelName === 'progress') window.loadStudentLearningHub?.();
   if (panelName === 'favorites') window.loadStudentFavorites?.();
   if (panelName === 'history') window.loadStudentHistory?.();
@@ -3092,7 +3122,10 @@ window.showStudentPanel = function(panelName, scroll = true) {
   } else if (panelName === 'learning') {
     $('studentLearningShortcut').classList.remove('hidden');
   }
-  if (scroll && $('dashboard')) $('dashboard').scrollIntoView({behavior:'smooth', block:'start'});
+
+  // A página selecionada fica visível diretamente, sem obrigar o aluno a procurar
+  // a secção através de scroll longo.
+  if (scroll && page) page.scrollIntoView({behavior:'smooth', block:'start'});
 };
 
 // VOLTAR À ÁREA DO ALUNO
@@ -5520,6 +5553,211 @@ window.printAdminReport = function() {
 .chat-box{position:relative;}
 .chat-box::before{content:"";display:block;height:95px;margin-bottom:12px;border-radius:10px;background:url('assets/comunidade-banner.jpg') center/cover no-repeat;}
 @media(max-width:650px){#adminDashboard > h1{padding-top:100px!important}#adminDashboard > h1::before{height:86px}.student-welcome{background-image:linear-gradient(90deg,rgba(255,255,255,.96),rgba(255,255,255,.78)),url('assets/aluno-banner.jpg')!important;background-size:cover!important}}
+</style>
+
+
+<style id="mussilipo-student-menu-final">
+/* Menu do aluno: compacto, recolhível e sobreposto ao conteúdo */
+#dashboard .student-topbar {
+  position: sticky;
+  top: 10px;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border: 1px solid #d8e8dc;
+  border-radius: 14px;
+  background: rgba(255,255,255,.97);
+  box-shadow: 0 8px 24px rgba(20,65,38,.09);
+}
+#dashboard .student-topbar-title {
+  color: #173b27;
+  font-size: 16px;
+  font-weight: 800;
+}
+#dashboard .student-menu-wrap { position: relative; }
+#dashboard .student-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 1px solid #16834a;
+  border-radius: 10px;
+  background: #16834a;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+}
+#dashboard .student-menu-trigger:hover { background: #116b3c; }
+#dashboard .student-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 9px);
+  right: 0;
+  z-index: 1300;
+  display: flex;
+  flex-direction: column;
+  width: min(290px, calc(100vw - 34px));
+  max-height: min(72vh, 560px);
+  overflow-y: auto;
+  padding: 8px;
+  border: 1px solid #d8e8dc;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 18px 42px rgba(15,50,28,.2);
+}
+#dashboard .student-menu-dropdown[hidden] { display: none !important; }
+#dashboard .student-menu-dropdown .student-menu-button {
+  width: 100%;
+  flex: 0 0 auto;
+  text-align: left;
+  border: 0;
+  border-radius: 9px;
+  padding: 11px 12px;
+  color: #26382c;
+  background: #fff;
+  font-weight: 600;
+  box-shadow: none !important;
+}
+#dashboard .student-menu-dropdown .student-menu-button:hover,
+#dashboard .student-menu-dropdown .student-menu-button.active {
+  color: #126b38 !important;
+  background: #eaf5ed !important;
+}
+#dashboard .student-menu-divider {
+  height: 1px;
+  margin: 6px 4px;
+  background: #e0e9e2;
+}
+#dashboard .student-menu-dropdown .student-logout-option {
+  color: #26382c;
+  font-weight: 800;
+}
+#dashboard .student-welcome-hidden { display: none !important; }
+
+/* Paleta verde e branco, com texto escuro para legibilidade */
+#dashboard.student-dashboard { background: #f4f8f5 !important; color: #202b23 !important; }
+#dashboard .student-welcome,
+#dashboard .dash-card,
+#dashboard .student-summary-card,
+#dashboard .student-course-card,
+#dashboard .student-profile-card,
+#dashboard .notification-item,
+#dashboard .assessment-card,
+#dashboard .chat-box {
+  background-color: #fff !important;
+  color: #202b23 !important;
+  border-color: #dce8df !important;
+}
+#dashboard h1, #dashboard h2, #dashboard h3, #dashboard h4,
+#dashboard strong, #dashboard label { color: #20382a; }
+#dashboard p, #dashboard small, #dashboard .student-section-heading p {
+  color: #586b5e;
+}
+#dashboard input, #dashboard select, #dashboard textarea,
+#dashboard .chat-compose textarea {
+  background: #fff !important;
+  color: #202b23 !important;
+  border: 1px solid #cbdccf !important;
+}
+#dashboard input::placeholder, #dashboard textarea::placeholder { color: #77877c !important; }
+#dashboard .btn {
+  background: #16834a !important;
+  color: #fff !important;
+  border-color: #16834a !important;
+}
+#dashboard .btn:hover { background: #116b3c !important; }
+#dashboard .btn-outline {
+  color: #146b39 !important;
+  background: #fff !important;
+  border-color: #16834a !important;
+}
+#dashboard .chat-messages {
+  background: #f6f9f7 !important;
+  color: #202b23 !important;
+  border-color: #dce8df !important;
+}
+#dashboard .chat-messages * { color: #202b23; }
+#dashboard .chat-compose { background: #fff !important; }
+#dashboard .student-account-chip {
+  background: #eaf5ed !important;
+  color: #176d3b !important;
+  border-color: #cfe5d5 !important;
+}
+#dashboard .student-menu-button.active { box-shadow: none !important; }
+#dashboard .student-page { scroll-margin-top: 92px; }
+
+@media (max-width: 650px) {
+  #dashboard .student-topbar { top: 6px; padding: 10px 11px; }
+  #dashboard .student-topbar-title { font-size: 14px; }
+  #dashboard .student-menu-dropdown { max-height: 70vh; }
+}
+</style>
+<script id="mussilipo-student-menu-behavior">
+(function(){
+  document.addEventListener('click', function(event) {
+    const wrap = document.querySelector('#dashboard .student-menu-wrap');
+    if (wrap && !wrap.contains(event.target)) window.toggleStudentMenu?.(false);
+  });
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') window.toggleStudentMenu?.(false);
+  });
+})();
+</script>
+
+
+<style id="mussilipo-global-green-white-theme">
+/* Tema global Mussilipo Academy: verde, branco e neutros escuros para contraste */
+:root {
+  --bg:#f4f8f5;
+  --panel:#ffffff;
+  --panel2:#edf4ef;
+  --purple:#16834a;
+  --light:#16834a;
+  --white:#ffffff;
+  --muted:#617267;
+  --green:#16834a;
+}
+html, body { background:#f4f8f5 !important; color:#202b23 !important; }
+body { color:#202b23 !important; }
+header { background:rgba(255,255,255,.97) !important; border-bottom:1px solid #dce8df !important; }
+.logo, header .logo { color:#173b27 !important; }
+.logo span { color:#16834a !important; }
+header nav a { color:#33483a !important; }
+header nav a:hover { color:#16834a !important; }
+.btn { background:#16834a !important; color:#fff !important; border-color:#16834a !important; }
+.btn:hover { background:#116b3c !important; }
+.btn-outline { background:#fff !important; color:#146b39 !important; border-color:#16834a !important; }
+.hero { background:linear-gradient(135deg,#eaf5ed 0%,#f8fbf9 58%,#dcefe2 100%) !important; color:#20382a !important; }
+.hero h1, .hero h2, .hero h3 { color:#173b27 !important; }
+.hero h1 span, .hero small { color:#16834a !important; }
+.hero p, .hero .stats small { color:#52665a !important; }
+section, .section-title, .features, .feature, .course, .course-content, .cta, footer,
+.modal, .modal-content, .auth-modal, .payment-modal, .certificate-modal,
+.public-card, .feature-card, .stats > div {
+  color:#202b23;
+}
+.feature, .course, .cta, .modal-content, .public-card, .feature-card, .stats > div {
+  background:#fff !important; border-color:#dce8df !important;
+}
+section h1, section h2, section h3, section h4, .section-title h2,
+.course h3, .feature h3, .cta h2 { color:#20382a !important; }
+section p, .course p, .feature p, .section-title p { color:#586b5e !important; }
+input, select, textarea { color:#202b23; }
+input::placeholder, textarea::placeholder { color:#77877c; }
+footer { background:#eaf3ec !important; color:#52665a !important; border-color:#dce8df !important; }
+#adminDashboard { background:#f4f8f5 !important; color:#202b23 !important; }
+#adminDashboard .admin-sidebar, #adminDashboard .admin-workspace,
+#adminDashboard .dash-card, #adminDashboard .admin-card {
+  background:#fff !important; color:#202b23 !important; border-color:#dce8df !important;
+}
+#adminDashboard h1, #adminDashboard h2, #adminDashboard h3,
+#adminDashboard h4, #adminDashboard strong { color:#20382a !important; }
+#adminDashboard p, #adminDashboard small { color:#586b5e; }
+/* As cores de estado (erro/sucesso/aviso) continuam distintas quando necessárias. */
 </style>
 
 </body></html>`);
