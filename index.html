@@ -771,6 +771,7 @@ footer strong {color:white}
     <button type="button" class="student-menu-button" data-student-panel="notifications" onclick="showStudentPanel('notifications')">🔔 Notificações <span id="notificationCount" class="notification-count hidden">0</span></button>
     <button type="button" class="student-menu-button" data-student-panel="community" onclick="showStudentPanel('community')">💬 Comunidade</button>
     <button type="button" class="student-menu-button" data-student-panel="support" onclick="showStudentPanel('support')">🛟 Suporte</button>
+          <button type="button" class="student-menu-button" data-student-panel="catalog" onclick="showStudentPanel('catalog')">🌍 Explorar novos cursos</button>
           <div class="student-menu-divider" role="separator"></div>
         <button type="button" class="student-menu-button student-logout-option" onclick="logout()">↪ Terminar sessão</button>
       </nav>
@@ -3010,22 +3011,22 @@ window.enroll = async function(courseId, name, type) {
 
 // ABRIR CATÁLOGO DE CURSOS
 window.showCatalog = function() {
+  if (currentUser) {
+    $('mainContent').classList.add('hidden');
+    $('adminDashboard').classList.remove('show');
+    $('dashboard').classList.add('show');
+    window.showStudentPanel('catalog');
+    return;
+  }
 
   $('dashboard').classList.remove('show');
   $('adminDashboard').classList.remove('show');
-
   $('mainContent').classList.remove('hidden');
 
   const backButton = $('studentBackButton');
+  if (backButton) backButton.classList.add('hidden');
 
-  if (backButton) {
-    backButton.classList.toggle('hidden', !currentUser);
-  }
-
-  $('cursos').scrollIntoView({
-    behavior: 'smooth',
-    block: 'start'
-  });
+  $('cursos').scrollIntoView({behavior:'smooth', block:'start'});
 };
 
 
@@ -3106,7 +3107,7 @@ window.toggleStudentMenu = function(force) {
 };
 
 window.showStudentPanel = function(panelName, scroll = true) {
-  const valid = ['overview','courses','learning','progress','favorites','history','calendar','certificates','assessments','profile','notifications','community','support'];
+  const valid = ['overview','courses','catalog','learning','progress','favorites','history','calendar','certificates','assessments','profile','notifications','community','support'];
   if (!valid.includes(panelName)) return;
 
   document.querySelectorAll('.student-page').forEach(page => page.classList.remove('active'));
@@ -4427,6 +4428,9 @@ window.showAdminPanel = function(panelName) {
 
   if (destination) {
     destination.classList.add('active');
+    requestAnimationFrame(() => {
+      destination.scrollIntoView({behavior:'smooth', block:'start'});
+    });
   }
 
   const sectionNames = {overview:'Visão geral',statistics:'Estatísticas avançadas',reports:'Relatórios e exportação',calendar:'Calendário académico',students:'Gestão dos alunos',courses:'Gestão dos cursos',content:'Módulos e aulas',materials:'Materiais de estudo',enrollments:'Matrículas',support:'Suporte aos alunos',community:'Comunidade e moderação',certificates:'Gestão de certificados',assessments:'Testes, exames e classificações',audit:'Auditoria e histórico de alterações',activity:'Actividade recente',permissions:'Permissões administrativas',bulk:'Gestão de conteúdos em massa'};
@@ -6075,6 +6079,13 @@ body:has(#dashboard.show) > header {
 }
 </style>
 
+<style id="direct-panel-navigation-fix">
+  #adminDashboard .admin-page {scroll-margin-top:24px}
+  #dashboard .student-page {scroll-margin-top:20px}
+  #dashboard #studentPageCatalog .student-catalog {margin-top:8px}
+  #dashboard #studentNewCatalogList {grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:16px}
+</style>
+
 <script id="mussilipo-requested-functionality">
 (function(){
   'use strict';
@@ -6105,32 +6116,50 @@ body:has(#dashboard.show) > header {
 
   /* 2. O catálogo publicado também aparece na área interna do aluno. */
   function addStudentCatalog(){
-    const page=$id('studentPageCourses');
-    if(!page || page.querySelector('#studentCatalogList')) return;
-    const section=document.createElement('div');
-    section.className='student-catalog';
-    section.innerHTML='<h3>🌍 Explorar todos os cursos</h3><p>Os cursos publicados também estão disponíveis aqui, sem sair da plataforma.</p><div class="courses" id="studentCatalogList"><p>A carregar cursos...</p></div>';
-    page.appendChild(section);
+    const dashboard=$id('dashboard');
+    const menu=$id('studentMenuDropdown');
+    if(!dashboard || !menu) return;
+
+    /* Cria a opção no menu uma única vez. */
+    if(!menu.querySelector('[data-student-panel="catalog"]')){
+      const item=document.createElement('button');
+      item.type='button';
+      item.className='student-menu-button';
+      item.dataset.studentPanel='catalog';
+      item.textContent='🌍 Explorar novos cursos';
+      item.addEventListener('click',()=>window.showStudentPanel('catalog'));
+      const divider=menu.querySelector('.student-menu-divider');
+      menu.insertBefore(item,divider || null);
+    }
+
+    /* Página própria do catálogo dentro do painel do aluno. */
+    if(!$id('studentPageCatalog')){
+      const page=document.createElement('div');
+      page.id='studentPageCatalog';
+      page.className='student-page';
+      page.innerHTML='<div class="student-section-heading"><div><h2>🌍 Explorar novos cursos</h2><p>Consulta os cursos disponíveis e faz a tua inscrição directamente nesta página.</p></div><button type="button" class="btn-outline" onclick="showStudentPanel(\'courses\')">← Voltar aos meus cursos</button></div><div class="student-catalog"><div class="courses" id="studentNewCatalogList"><p>A carregar cursos...</p></div></div>';
+      const anchor=$id('studentPageCourses');
+      if(anchor && anchor.parentNode) anchor.parentNode.insertBefore(page,anchor.nextSibling);
+      else dashboard.appendChild(page);
+    }
   }
 
-  /* Re-renderiza cartões do catálogo em ambos os locais usando a mesma consulta. */
+  /* O mesmo catálogo publicado é apresentado no site e na nova página do aluno. */
   const originalLoadPublicCourses=window.loadPublicCourses;
   if(typeof originalLoadPublicCourses==='function'){
     window.loadPublicCourses=async function(){
       await originalLoadPublicCourses.apply(this,arguments);
       const publicList=$id('courseList');
-      const studentList=$id('studentCatalogList');
-      if(!publicList || !studentList) return;
-      studentList.innerHTML=publicList.innerHTML;
-      const publicButtons=publicList.querySelectorAll('.enroll-button');
-      const studentButtons=studentList.querySelectorAll('.enroll-button');
-      studentButtons.forEach((button,index)=>{
-        const source=publicButtons[index];
-        if(!source) return;
-        button.addEventListener('click',()=>{
-          if(typeof window.enroll==='function'){
-            window.enroll(button.dataset.courseId,button.dataset.courseName,button.dataset.courseType);
-          }
+      if(!publicList) return;
+
+      [$id('studentCatalogList'),$id('studentNewCatalogList')].filter(Boolean).forEach(studentList=>{
+        studentList.innerHTML=publicList.innerHTML;
+        studentList.querySelectorAll('.enroll-button').forEach(button=>{
+          button.addEventListener('click',()=>{
+            if(typeof window.enroll==='function'){
+              window.enroll(button.dataset.courseId,button.dataset.courseName,button.dataset.courseType);
+            }
+          });
         });
       });
     };
