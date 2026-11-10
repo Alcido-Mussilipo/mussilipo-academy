@@ -3447,64 +3447,78 @@ await loadPublicCourses();
   }
 };
 window.loadPublicCourses = async function() {
-  const container = $('courseList');
+  const publicContainer = $('courseList');
+  const studentContainers = [$('studentCatalogList'), $('studentNewCatalogList')].filter(Boolean);
+  const containers = [publicContainer, ...studentContainers].filter(Boolean);
+  if (!containers.length) return;
 
-  container.innerHTML = '<p>A carregar cursos...</p>';
+  containers.forEach(container => {
+    container.innerHTML = '<p class="catalog-status" role="status">A carregar cursos publicados...</p>';
+  });
 
-  const { data: courses, error } = await supabase
-    .from('courses')
-    .select('id, title, description, price_mzn, access_type, thumbnail')
-    .eq('is_published', true)
-    .order('created_at', { ascending: false });
+  try {
+    const query = supabase.from('courses')
+      .select('id, title, description, price_mzn, access_type, thumbnail')
+      .eq('is_published', true)
+      .order('created_at', { ascending: false });
+    const timeout = new Promise((_, reject) => setTimeout(
+      () => reject(new Error('A ligação ao servidor demorou demasiado tempo. Verifica a internet e tenta novamente.')),
+      15000
+    ));
+    const { data: courses, error } = await Promise.race([query, timeout]);
+    if (error) throw error;
 
-  if (error) {
-    console.error('Erro ao carregar catálogo:', error);
-    container.innerHTML = '<p>Não foi possível carregar os cursos.</p>';
-    return;
-  }
+    if (!Array.isArray(courses) || courses.length === 0) {
+      containers.forEach(container => {
+        container.innerHTML = '<p class="catalog-status">Ainda não existem cursos publicados.</p>';
+      });
+      return;
+    }
 
-  if (!courses || courses.length === 0) {
-    container.innerHTML = '<p>Ainda não existem cursos publicados.</p>';
-    return;
-  }
-
-  container.innerHTML = courses.map(course => `
-    <article class="course" data-type="${course.access_type === 'free' ? 'gratuito' : 'pago'}">
-
-      ${course.thumbnail
-        ? `<img src="${escapeHTML(course.thumbnail)}" alt="${escapeHTML(course.title)}" class="course-cover">`
-        : '<div class="course-cover">📚</div>'}
-
-      <div class="course-content">
-        <h3>${escapeHTML(course.title)}</h3>
-
-        <p>${escapeHTML(course.description || 'Conhece este curso na Mussilipo Academy.')}</p>
-
-        <div class="price ${course.access_type === 'free' ? 'free' : ''}">
-          ${course.access_type === 'free'
-            ? 'GRATUITO'
-            : Number(course.price_mzn).toLocaleString('pt-MZ') + ' MT'}
+    const markup = courses.map(course => `
+      <article class="course" data-type="${course.access_type === 'free' ? 'gratuito' : 'pago'}">
+        ${course.thumbnail
+          ? `<img src="${escapeHTML(course.thumbnail)}" alt="${escapeHTML(course.title || 'Capa do curso')}" class="course-cover" loading="lazy">`
+          : '<div class="course-cover" aria-hidden="true">📚</div>'}
+        <div class="course-content">
+          <h3>${escapeHTML(course.title || 'Curso sem título')}</h3>
+          <p>${escapeHTML(course.description || 'Conhece este curso na Mussilipo Academy.')}</p>
+          <div class="price ${course.access_type === 'free' ? 'free' : ''}">
+            ${course.access_type === 'free' ? 'GRATUITO' : Number(course.price_mzn || 0).toLocaleString('pt-MZ') + ' MT'}
+          </div>
+          <button type="button" class="btn enroll-button"
+            data-course-id="${escapeHTML(course.id)}"
+            data-course-name="${escapeHTML(course.title || 'Curso')}"
+            data-course-type="${course.access_type === 'free' ? 'gratuito' : 'pago'}">
+            ${course.access_type === 'free' ? 'Inscrever-me' : 'Ver curso'}
+          </button>
         </div>
-
-        <button class="btn enroll-button"
-  data-course-id="${course.id}"
-  data-course-name="${escapeHTML(course.title)}"
-  data-course-type="${course.access_type === 'free' ? 'gratuito' : 'pago'}">
-  ${course.access_type === 'free' ? 'Inscrever-me' : 'Ver curso'}
-</button>
-      </div>
-    </article>
+      </article>
     `).join('');
 
-  container.querySelectorAll('.enroll-button').forEach(button => {
-    button.addEventListener('click', () => {
-      window.enroll(
-        button.dataset.courseId,
-        button.dataset.courseName,
-        button.dataset.courseType
-      );
+    containers.forEach(container => {
+      container.innerHTML = markup;
+      container.querySelectorAll('.enroll-button').forEach(button => {
+        button.addEventListener('click', () => {
+          if (typeof window.enroll === 'function') {
+            window.enroll(button.dataset.courseId, button.dataset.courseName, button.dataset.courseType);
+          }
+        });
+      });
     });
-  });
+  } catch (error) {
+    console.error('Erro ao carregar cursos publicados:', error);
+    const message = escapeHTML(error?.message || 'Ocorreu um erro inesperado ao carregar os cursos.');
+    const errorMarkup = `<div class="catalog-status" role="alert">
+      <p>Não foi possível carregar os cursos.</p>
+      <p class="catalog-error-detail">${message}</p>
+      <button type="button" class="btn-outline catalog-retry">Tentar novamente</button>
+    </div>`;
+    containers.forEach(container => {
+      container.innerHTML = errorMarkup;
+      container.querySelector('.catalog-retry')?.addEventListener('click', () => window.loadPublicCourses());
+    });
+  }
 };
 
 window.loadAdminCourses = async function() {
@@ -4407,31 +4421,33 @@ window.showAdminPanel = function(panelName) {
     'community'
   ];
 
-  if (!validPanels.includes(panelName)) return;
+  if (!validPanels.includes(panelName)) {
+    console.warn('Secção administrativa desconhecida:', panelName);
+    return;
+  }
 
-  document.querySelectorAll('.admin-page').forEach(panel => {
+  const destinationId = 'adminPage' + panelName.charAt(0).toUpperCase() + panelName.slice(1);
+  const destination = document.getElementById(destinationId);
+  if (!destination) {
+    console.error('Não foi encontrada a secção administrativa:', destinationId);
+    return;
+  }
+
+  document.querySelectorAll('#adminDashboard .admin-page').forEach(panel => {
     panel.classList.remove('active');
   });
 
-  document.querySelectorAll('.admin-menu-button').forEach(button => {
-    button.classList.toggle(
-      'active',
-      button.dataset.adminPanel === panelName
-    );
+  document.querySelectorAll('#adminSidebarNav .admin-menu-button').forEach(button => {
+    const selected = button.dataset.adminPanel === panelName;
+    button.classList.toggle('active', selected);
+    button.setAttribute('aria-current', selected ? 'page' : 'false');
   });
 
-  const destination = document.getElementById(
-    'adminPage' +
-    panelName.charAt(0).toUpperCase() +
-    panelName.slice(1)
-  );
-
-  if (destination) {
-    destination.classList.add('active');
-    requestAnimationFrame(() => {
-      destination.scrollIntoView({behavior:'smooth', block:'start'});
-    });
-  }
+  destination.classList.add('active');
+  destination.setAttribute('aria-current', 'page');
+  requestAnimationFrame(() => {
+    destination.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 
   const sectionNames = {overview:'Visão geral',statistics:'Estatísticas avançadas',reports:'Relatórios e exportação',calendar:'Calendário académico',students:'Gestão dos alunos',courses:'Gestão dos cursos',content:'Módulos e aulas',materials:'Materiais de estudo',enrollments:'Matrículas',support:'Suporte aos alunos',community:'Comunidade e moderação',certificates:'Gestão de certificados',assessments:'Testes, exames e classificações',audit:'Auditoria e histórico de alterações',activity:'Actividade recente',permissions:'Permissões administrativas',bulk:'Gestão de conteúdos em massa'};
   const currentSection = document.getElementById('adminCurrentSection');
@@ -6084,6 +6100,20 @@ body:has(#dashboard.show) > header {
   #dashboard .student-page {scroll-margin-top:20px}
   #dashboard #studentPageCatalog .student-catalog {margin-top:8px}
   #dashboard #studentNewCatalogList {grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:16px}
+</style>
+
+
+<style id="mussilipo-catalog-navigation-reliability">
+  .catalog-status { padding: 18px 4px; color: var(--muted, #718477); }
+  .catalog-error-detail { margin: 6px 0 14px; font-size: .92em; overflow-wrap: anywhere; }
+  #adminDashboard .admin-page { display: none; }
+  #adminDashboard .admin-page.active { display: block; }
+  #adminDashboard .admin-sidebar { position: relative; }
+  #adminDashboard .admin-sidebar.menu-open nav { display: flex !important; }
+  #adminDashboard .admin-sidebar nav .admin-menu-button { cursor: pointer; }
+  @media (max-width: 900px) {
+    #adminDashboard .admin-sidebar.menu-open nav { display: flex !important; max-height: min(65vh, 520px); overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  }
 </style>
 
 <script id="mussilipo-requested-functionality">
